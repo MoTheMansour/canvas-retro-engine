@@ -20,8 +20,9 @@ import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import logoAnimationData from './logoAnimationData';
 import lottie from 'lottie-web';
+
+const logoAnimationData = {"v":"5.8.1","fr":60,"ip":0,"op":240,"w":1500,"h":1500,"nm":"logo flap LOOPED CLOCK WIDGET","ddd":0,"assets":[],"layers":[{"ddd":0,"ind":1,"ty":4,"nm":"dot 3","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,26.51],[26.51,0],[0,-26.51],[-26.51,0]],"o":[[0,-26.51],[-26.51,0],[0,26.51],[26.51,0]],"v":[[48,0],[0,-48],[-48,0],[0,48]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[1152,752],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":120,"op":180,"st":-52,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"dot","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,26.51],[26.51,0],[0,-26.51],[-26.51,0]],"o":[[0,-26.51],[-26.51,0],[0,26.51],[26.51,0]],"v":[[48,0],[0,-48],[-48,0],[0,48]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[1152,752],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":60,"st":-52,"bm":0},{"ddd":0,"ind":3,"ty":4,"nm":"logo docked","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":0,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":6,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[522.5,136.5],[370,-127],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":9,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":12,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[-116.999,-161.5],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":15,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":18,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[522.5,136.5],[370,-127],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":21,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":24,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[-116.999,-161.5],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"t":30,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":96,"ix":5},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[600.23,276],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[-68.053,0],[0,0],[0,-83.947],[68.053,0],[0,0],[0,68.053]],"o":[[0,0],[83.947,0],[0,83.947],[0,0],[-83.947,0],[0,-83.947]],"v":[[-400,-152],[400,-152],[552,0],[400,152],[-400,152],[-552,0]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":96,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[600.23,504],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 2","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":240,"st":-61,"bm":0}],"markers":[]};
 
 // --- THREE.JS WEBGL 3D NES CARTRIDGE PROCEDURAL ENGINE ---
 function createNesCartridgeSpineTexture(romName: string): THREE.CanvasTexture {
@@ -1010,9 +1011,104 @@ export default class CanvasNESEmulatorPlugin extends Plugin {
     private panel: TetrisPanel | null = null;
     settings: CanvasNesPluginSettings = DEFAULT_SETTINGS;
 
+    public async ensureAssetsDownloaded(): Promise<void> {
+        const basePath = (this.app.vault.adapter as any).basePath || '';
+        const pluginDir = path.isAbsolute(this.manifest.dir)
+            ? this.manifest.dir
+            : path.join(basePath, this.manifest.dir);
+
+        const nesModelPath = path.join(pluginDir, 'assets', 'nes', 'NES_nintendo.glb');
+        const psxModelPath = path.join(pluginDir, 'assets', 'psx', 'Sony_Playstation_one_slim.glb');
+
+        if (fs.existsSync(nesModelPath) && fs.existsSync(psxModelPath)) {
+            return;
+        }
+
+        const notice = new Notice("🎮 Canvas Retro Engine: Downloading 3D console models & SFX... (0%)", 0);
+
+        const GITHUB_RAW = "https://raw.githubusercontent.com/MoTheMansour/canvas-retro-engine/main/";
+
+        const sfxList = [
+            "A_circuit_board_edge_#3-1787443748273.wav",
+            "A_clean,_high-freque_#2-1787444205785.wav",
+            "A_clear_acrylic_CD_j_#2-1787443970423.wav",
+            "A_clear_polystyrene__#2-1787444014033.wav",
+            "A_compact_disc_being_#1-1787444515181.wav",
+            "A_compact_disc_being_#2-1787444598345.wav",
+            "A_compact_disc_being_#2-1787444643882.wav",
+            "A_heavy,_solid_mecha_#1-1787443646063.wav",
+            "A_heavy_plastic_cart_#2-1787443562614.wav",
+            "A_heavy_plastic_game_#2-1787443588732.wav",
+            "A_heavy_plastic_game_#3-1787443847892.wav",
+            "A_heavy_round_mechan_#3-1787444245314.wav",
+            "A_round_plastic_cons_#2-1787444451571.wav",
+            "A_single_crisp,_high_#2-1787443894919.wav",
+            "A_small_spring-loade_#3-1787443515538.wav",
+            "A_smooth_acrylic_CD__#1-1787444106325.wav",
+            "A_spring-loaded_rect_#1-1787443803360.wav",
+            "An_authentic_vintage_#1-1787444139060.wav",
+            "An_authentic_vintage_#3-1787444680545.wav",
+            "Low-frequency_airy_p_#3-1787443321587.wav",
+            "Single_isolated_low-_#2-1787442944539.wav",
+            "Soft_textured_plasti_#1-1787443060772.wav",
+            "Soft_textured_plasti_#3-1787443021824.wav",
+            "Spring-loaded_plasti_#1-1787443393191.wav",
+            "Spring_detent_pop_re_#3-1787443272880.wav",
+            "Tactile_pinch_click__#2-1787443242379.wav",
+            "Textured_metal-on-pl_#1-1787443449824.wav",
+            "The_central_multi-to_#4-1787444169389.wav",
+            "The_iconic_heavy_spr_#3-1787443619292.wav",
+            "The_iconic_round_dis_#1-1787444298895.wav",
+            "The_iconic_unmistaka_#1-1787444328835.wav",
+            "The_mechanical_sprin_#3-1787444406960.wav",
+            "The_round_plastic_di_#3-1787444346872.wav",
+            "The_spring-loaded_ca_#1-1787443698290.wav",
+            "psx_laser_seek_spinup.wav"
+        ];
+
+        const files = [
+            "assets/nintendo-entertainment-system-seeklogo.png",
+            "assets/sony-playstation-seeklogo.png",
+            "assets/nes/NES_nintendo.glb",
+            "assets/nes/nes_cartridge.glb",
+            "assets/nes/DecalTemplate.png",
+            "assets/psx/Sony_Playstation_one_slim.glb",
+            "assets/psx/ps1 controller.png",
+            ...sfxList.map(s => `assets/sfx/${s}`)
+        ];
+
+        let downloaded = 0;
+        for (const rel of files) {
+            const fullPath = path.join(pluginDir, rel);
+            if (!fs.existsSync(fullPath)) {
+                const dir = path.dirname(fullPath);
+                if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+                try {
+                    const res = await fetch(GITHUB_RAW + encodeURI(rel.replace(/\\/g, '/')));
+                    if (res.ok) {
+                        const ab = await res.arrayBuffer();
+                        fs.writeFileSync(fullPath, Buffer.from(ab));
+                    }
+                } catch (e) {
+                    console.error("Asset download error:", rel, e);
+                }
+            }
+            downloaded++;
+            const pct = Math.round((downloaded / files.length) * 100);
+            notice.setMessage(`🎮 Canvas Retro Engine: Downloading 3D assets & SFX... (${pct}%)`);
+        }
+
+        notice.hide();
+        new Notice("✅ Canvas Retro Engine: 3D models & sound effects ready! 🕹️", 4000);
+        if (this.panel) {
+            this.panel.renderUnifiedCartridgeSystem();
+        }
+    }
+
     async onload() {
         console.log("Loading Canvas NES Emulator Plugin");
         await this.loadSettings();
+        await this.ensureAssetsDownloaded();
 
         this.app.workspace.onLayoutReady(() => {
             this.initTetrisPanel();
