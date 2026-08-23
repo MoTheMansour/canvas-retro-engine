@@ -1,0 +1,26 @@
+# Obsidian local settings & data
+data.json
+.hotreload
+save-states/
+
+# Node dependencies & logs
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# User ROMs, Disc Images & BIOS firmware (Do not commit copyrighted files)
+assets/nes/roms/*
+!assets/nes/roms/.gitkeep
+assets/psx/roms/*
+!assets/psx/roms/.gitkeep
+assets/psx/bios/*
+!assets/psx/bios/.gitkeep
+assets/nes/covers/*
+!assets/nes/covers/.gitkeep
+assets/psx/covers/*
+!assets/psx/covers/.gitkeep
+
+# OS generated files
+.DS_Store
+Thumbs.db

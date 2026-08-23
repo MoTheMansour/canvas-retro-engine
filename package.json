@@ -1,0 +1,37 @@
+{
+  "name": "canvas-retro-engine",
+  "version": "1.0.0",
+  "description": "Obsidian plugin for retro gaming on Canvas with 3D hardware and CRT TV emulation.",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "node esbuild.config.mjs production"
+  },
+  "keywords": [
+    "obsidian",
+    "canvas",
+    "emulator",
+    "nes",
+    "psx",
+    "retro",
+    "threejs"
+  ],
+  "author": "Canvas Retro Engine Contributors",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^16.11.6",
+    "@typescript-eslint/eslint-plugin": "^5.2.0",
+    "@typescript-eslint/parser": "^5.2.0",
+    "builtin-modules": "^3.2.0",
+    "esbuild": "0.17.3",
+    "obsidian": "latest",
+    "tslib": "2.4.0",
+    "typescript": "4.7.4"
+  },
+  "dependencies": {
+    "jsnes": "^1.2.1",
+    "lottie-web": "^5.12.2",
+    "nostalgist": "^0.9.0",
+    "three": "^0.160.0"
+  }
+}
