@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "minAppVersion": "1.0.0",
   "description": "Play 8-bit NES and 32-bit PlayStation 1 games directly on the Obsidian Canvas with interactive 3D console hardware, CRT screen shaders, and tactile gamepad overlays.",
-  "author": "MoTheMansour",
-  "authorUrl": "https://github.com/MoTheMansour/canvas-retro-engine",
+  "author": "Mo.",
+  "authorUrl": "Momansour.com",
   "isDesktopOnly": true
 }
