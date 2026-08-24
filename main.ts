@@ -1,4 +1,4 @@
-import { Plugin, ItemView, Notice, setIcon, requestUrl } from 'obsidian';
+﻿import { Plugin, ItemView, Notice, setIcon, requestUrl } from 'obsidian';
 // @ts-ignore
 import { NES } from 'jsnes';
 import { PsxEngine } from './psx-engine';
@@ -14,6 +14,7 @@ import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import lottie from 'lottie-web';
+
 
 function createEl<K extends keyof HTMLElementTagNameMap>(
     tag: K,
@@ -42,10 +43,24 @@ function createEl<K extends keyof HTMLElementTagNameMap>(
     return el;
 }
 
-
-const logoAnimationData = {"v":"5.8.1","fr":60,"ip":0,"op":240,"w":1500,"h":1500,"nm":"logo flap LOOPED CLOCK WIDGET","ddd":0,"assets":[],"layers":[{"ddd":0,"ind":1,"ty":4,"nm":"dot 3","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,26.51],[26.51,0],[0,-26.51],[-26.51,0]],"o":[[0,-26.51],[-26.51,0],[0,26.51],[26.51,0]],"v":[[48,0],[0,-48],[-48,0],[0,48]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[1152,752],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":120,"op":180,"st":-52,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"dot","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,26.51],[26.51,0],[0,-26.51],[-26.51,0]],"o":[[0,-26.51],[-26.51,0],[0,26.51],[26.51,0]],"v":[[48,0],[0,-48],[-48,0],[0,48]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[1152,752],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":60,"st":-52,"bm":0},{"ddd":0,"ind":3,"ty":4,"nm":"logo docked","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":0,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":6,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[522.5,136.5],[370,-127],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":9,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":12,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[-116.999,-161.5],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":15,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":18,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[522.5,136.5],[370,-127],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":21,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":24,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[-116.999,-161.5],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"t":30,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":96,"ix":5},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[600.23,276],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[-68.053,0],[0,0],[0,-83.947],[68.053,0],[0,0],[0,68.053]],"o":[[0,0],[83.947,0],[0,83.947],[0,0],[-83.947,0],[0,-83.947]],"v":[[-400,-152],[400,-152],[552,0],[400,152],[-400,152],[-552,0]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":96,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[600.23,504],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 2","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":240,"st":-61,"bm":0}],"markers":[]};
-
-// --- THREE.JS WEBGL 3D NES CARTRIDGE PROCEDURAL ENGINE ---
+export function setCssStyles(el: HTMLElement | SVGElement | any, styles: Record<string, string | number | undefined | null>): void {
+    if (!el || !styles) return;
+    if (typeof (el as any).setCssStyles === 'function') {
+        try {
+            (el as any).setCssStyles(styles);
+            return;
+        } catch (e) {}
+    }
+    if (el.style) {
+        for (const [key, value] of Object.entries(styles)) {
+            if (value !== undefined && value !== null) {
+                try {
+                    (el.style as any)[key] = String(value);
+                } catch (err) {}
+            }
+        }
+    }
+}
 
 export function getPluginDir(plugin: { app: any; manifest: any }): string {
     try {
@@ -63,31 +78,15 @@ export function getPluginDir(plugin: { app: any; manifest: any }): string {
         const configDir = plugin.app?.vault?.configDir || ((this.app?.vault as any)?.configDir || '.obsidian');
         const pluginId = plugin.manifest?.id || 'canvas-retro-engine';
         return basePath ? path.join(basePath, configDir, 'plugins', pluginId) : path.join(configDir, 'plugins', pluginId);
-    } catch {
+    } catch (e) {
         return '';
     }
 }
 
 
-export function setCssStyles(el: HTMLElement | SVGElement | any, styles: Record<string, string | number | undefined | null>): void {
-    if (!el || !styles) return;
-    if (typeof (el as any).setCssStyles === 'function') {
-        try {
-            (el as any).setCssStyles(styles);
-            return;
-        } catch {}
-    }
-    if (el.style) {
-        for (const [key, value] of Object.entries(styles)) {
-            if (value !== undefined && value !== null) {
-                try {
-                    (el.style as any)[key] = String(value);
-                } catch {}
-            }
-        }
-    }
-}
+const logoAnimationData = {"v":"5.8.1","fr":60,"ip":0,"op":240,"w":1500,"h":1500,"nm":"logo flap LOOPED CLOCK WIDGET","ddd":0,"assets":[],"layers":[{"ddd":0,"ind":1,"ty":4,"nm":"dot 3","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,26.51],[26.51,0],[0,-26.51],[-26.51,0]],"o":[[0,-26.51],[-26.51,0],[0,26.51],[26.51,0]],"v":[[48,0],[0,-48],[-48,0],[0,48]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[1152,752],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":120,"op":180,"st":-52,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"dot","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,26.51],[26.51,0],[0,-26.51],[-26.51,0]],"o":[[0,-26.51],[-26.51,0],[0,26.51],[26.51,0]],"v":[[48,0],[0,-48],[-48,0],[0,48]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[1152,752],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":60,"st":-52,"bm":0},{"ddd":0,"ind":3,"ty":4,"nm":"logo docked","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":0,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":6,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[522.5,136.5],[370,-127],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":9,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":12,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[-116.999,-161.5],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":15,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":18,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[522.5,136.5],[370,-127],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":21,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":24,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[-116.999,-161.5],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"t":30,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":96,"ix":5},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[600.23,276],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[-68.053,0],[0,0],[0,-83.947],[68.053,0],[0,0],[0,68.053]],"o":[[0,0],[83.947,0],[0,83.947],[0,0],[-83.947,0],[0,-83.947]],"v":[[-400,-152],[400,-152],[552,0],[400,152],[-400,152],[-552,0]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":96,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[600.23,504],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 2","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":240,"st":-61,"bm":0}],"markers":[]};
 
+// --- THREE.JS WEBGL 3D NES CARTRIDGE PROCEDURAL ENGINE ---
 function createNesCartridgeSpineTexture(romName: string): THREE.CanvasTexture {
     const W = 512, H = 80;
     const canvas = createEl('canvas');
@@ -205,7 +204,7 @@ function createNesCartridgeTexture(romName: string, coverPath: string | null): T
         ctx.font = '900 48px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('🎮', W / 2, H / 2 - 16);
+        ctx.fillText('≡ƒÄ«', W / 2, H / 2 - 16);
 
         ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
         ctx.font = 'bold 16px sans-serif';
@@ -444,7 +443,287 @@ function createPsxJewelCaseTexture(romName: string, coverPath: string | null): T
     return texture;
 }
 
+function createNesConsoleDoorTexture(): THREE.CanvasTexture {
+    const W = 1024, H = 256;
+    const canvas = createEl('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d')!;
 
+    // Official NES Light Gray Casing Color (#d0d2d6)
+    ctx.fillStyle = '#d0d2d6';
+    ctx.fillRect(0, 0, W, H);
+
+    // Bottom lip subtle bevel shadow line
+    ctx.fillStyle = '#b8bac0';
+    ctx.fillRect(0, H - 12, W, 12);
+    ctx.fillStyle = '#a2a4aa';
+    ctx.fillRect(0, H - 4, W, 4);
+
+    // Nintendo Logo (Red #e60012)
+    ctx.fillStyle = '#e60012';
+    ctx.font = 'bold 58px Arial, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText('Nintendo', 72, 44);
+
+    // ENTERTAINMENT SYSTEM (Red #e60012)
+    ctx.font = 'bold 28px Arial, sans-serif';
+    ctx.fillText('ENTERTAINMENT SYSTEMΓäó', 72, 118);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 16;
+    return texture;
+}
+
+function createNesConsoleButtonTexture(label: string): THREE.CanvasTexture {
+    const W = 256, H = 128;
+    const canvas = createEl('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d')!;
+
+    // NES Button Gray (#9ca0a6)
+    ctx.fillStyle = '#9ca0a6';
+    ctx.fillRect(0, 0, W, H);
+
+    // Border bevel highlight/shadow
+    ctx.fillStyle = '#b8bac0';
+    ctx.fillRect(0, 0, W, 6);
+    ctx.fillStyle = '#72747a';
+    ctx.fillRect(0, H - 6, W, 6);
+
+    // Label Text (Dark Gray #323438)
+    ctx.fillStyle = '#323438';
+    ctx.font = 'bold 36px Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(label, W / 2, H / 2);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
+}
+
+function createPsxCdLabelTexture(romName: string, coverPath: string | null): THREE.CanvasTexture {
+    const S = 512;
+    const canvas = createEl('canvas');
+    canvas.width = S;
+    canvas.height = S;
+    const ctx = canvas.getContext('2d')!;
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 16;
+
+    if (coverPath) {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = coverPath;
+        img.onload = () => {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(S/2, S/2, S/2, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.drawImage(img, 0, 0, S, S);
+            ctx.restore();
+
+            // Clear Center Hole Cutout
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(S/2, S/2, S * 0.14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalCompositeOperation = 'source-over';
+
+            // Inner Silver Ring
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.arc(S/2, S/2, S * 0.16, 0, Math.PI * 2);
+            ctx.stroke();
+
+            texture.needsUpdate = true;
+        };
+    } else {
+        const bgGrad = ctx.createRadialGradient(S/2, S/2, S*0.1, S/2, S/2, S*0.5);
+        bgGrad.addColorStop(0, '#e6e8eb');
+        bgGrad.addColorStop(0.5, '#c5cbcf');
+        bgGrad.addColorStop(1, '#9da3a8');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, S, S);
+
+        ctx.fillStyle = '#111';
+        ctx.font = 'bold 28px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(romName.toUpperCase(), S/2, S/2 - 40);
+
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(S/2, S/2, S * 0.14, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalCompositeOperation = 'source-over';
+    }
+
+    return texture;
+}
+
+function createPsxCdDiscMesh(romName: string, coverPath: string | null): THREE.Group {
+    const cdGroup = new THREE.Group();
+
+    // 3D Disc geometry (Cylinder disc)
+    const cdGeo = new THREE.CylinderGeometry(0.76, 0.76, 0.015, 32);
+    
+    // Bottom surface: Authentic PS1 signature Dark Black/Purple disc bottom
+    const bottomMat = new THREE.MeshStandardMaterial({
+        color: 0x12081c,
+        metalness: 0.85,
+        roughness: 0.15
+    });
+
+    // Top surface: Game cover art printed on metallic CD label
+    const topMat = new THREE.MeshStandardMaterial({
+        map: createPsxCdLabelTexture(romName, coverPath),
+        metalness: 0.4,
+        roughness: 0.3
+    });
+
+    const cdMesh = new THREE.Mesh(cdGeo, [bottomMat, topMat, bottomMat]);
+    cdMesh.rotation.x = Math.PI / 2;
+    cdGroup.add(cdMesh);
+
+    // Center spindle ring hole cutout visual
+    const holeGeo = new THREE.CylinderGeometry(0.14, 0.14, 0.005, 16);
+    const holeMat = new THREE.MeshBasicMaterial({ color: 0x050508 });
+    const holeMesh = new THREE.Mesh(holeGeo, holeMat);
+    holeMesh.rotation.x = Math.PI / 2;
+    cdGroup.add(holeMesh);
+
+    return cdGroup;
+}
+
+function createPsxJewelCase3DMesh(romName: string, coverPath: string | null): THREE.Group {
+    const group = new THREE.Group();
+    
+    // Official CD jewel case dimensions (1.95 wide x 2.15 tall x 0.15 deep)
+    const W = 1.95, H = 2.15, D = 0.15;
+
+    // Pristine crystal acrylic glass plastic material (original specular sheen & light response)
+    const plasticMat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        metalness: 0.05,
+        roughness: 0.05,
+        transmission: 0.98,
+        thickness: 0.05,
+        transparent: true,
+        opacity: 0.15,
+        depthWrite: false
+    });
+
+    const spineMat = new THREE.MeshStandardMaterial({
+        map: createPsxJewelCaseSpineTexture(romName),
+        roughness: 0.5, metalness: 0.1
+    });
+
+    const coverMat = new THREE.MeshStandardMaterial({
+        map: createPsxJewelCaseTexture(romName, coverPath),
+        roughness: 0.35, metalness: 0.1
+    });
+    
+    const trayMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8 });
+
+    // Front clear lid + cover art hinged group (opens at left spine)
+    const lidHinge = new THREE.Group();
+    lidHinge.position.set(-W/2, 0, D/2); // Left edge pivot
+
+    const lidGeo = new THREE.BoxGeometry(W, H, 0.018);
+    const lidMesh = new THREE.Mesh(lidGeo, plasticMat);
+    lidMesh.position.set(W/2, 0, -0.009);
+    lidMesh.castShadow = true;
+    lidHinge.add(lidMesh);
+
+    // Cover art paper (recessed inside lid)
+    const artGeo = new THREE.BoxGeometry(W - 0.08, H - 0.08, 0.008);
+    const artMesh = new THREE.Mesh(artGeo, coverMat);
+    artMesh.position.set(W/2 + 0.02, 0, -0.005);
+    lidHinge.add(artMesh);
+
+    group.add(lidHinge);
+    group.userData.jewelLidHinge = lidHinge;
+
+    // Inner black tray liner (recessed back cavity)
+    const trayGeo = new THREE.BoxGeometry(W - 0.04, H - 0.04, 0.04);
+    const trayMesh = new THREE.Mesh(trayGeo, trayMat);
+    trayMesh.position.set(0.005, 0, -0.025);
+    trayMesh.castShadow = true;
+    trayMesh.receiveShadow = true;
+    group.add(trayMesh);
+
+    // Center rosette hub ring
+    const hubGeo = new THREE.CylinderGeometry(0.20, 0.20, 0.012, 24);
+    const hubMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1f, roughness: 0.7 });
+    const hubMesh = new THREE.Mesh(hubGeo, hubMat);
+    hubMesh.rotation.x = Math.PI / 2;
+    hubMesh.position.set(0, 0, -0.002);
+    group.add(hubMesh);
+
+    // 3D PlayStation CD Disc inside tray (sits proud on rosette spindle hub, fully visible when lid opens!)
+    const cdDisc = createPsxCdDiscMesh(romName, coverPath);
+    cdDisc.position.set(0, 0, 0.012);
+    group.add(cdDisc);
+    group.userData.cdDiscMesh = cdDisc;
+
+    // Back clear casing
+    const backGeo = new THREE.BoxGeometry(W, H, 0.022);
+    const backMesh = new THREE.Mesh(backGeo, plasticMat);
+    backMesh.position.set(0, 0, -D/2 + 0.011);
+    backMesh.castShadow = true;
+    group.add(backMesh);
+
+    // Spine (left edge offset by 0.003 to eliminate face collision)
+    const spineGeo = new THREE.BoxGeometry(0.012, H - 0.02, D - 0.004);
+    const spineMesh = new THREE.Mesh(spineGeo, spineMat);
+    spineMesh.position.set(-W/2 - 0.003, 0, 0);
+    spineMesh.renderOrder = 1;
+    group.add(spineMesh);
+
+    // Rotate to match NES cartridge orientation for Rolodex
+    group.rotation.x = Math.PI / 2;
+    group.scale.set(1.1, 1.1, 1.1);
+
+    return group;
+}
+
+function createSynthwaveRoomTexture(): THREE.CanvasTexture {
+    const W = 1024, H = 512;
+    const canvas = createEl('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d')!;
+
+    const grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, '#100b24');
+    grad.addColorStop(0.5, '#1e0c38');
+    grad.addColorStop(1, '#080412');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.15)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < W; x += 32) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H * 0.7); ctx.stroke();
+    }
+    for (let y = 0; y < H * 0.7; y += 24) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+
+    const spot = ctx.createRadialGradient(W / 2, H * 0.35, 10, W / 2, H * 0.35, W * 0.45);
+    spot.addColorStop(0, 'rgba(255, 0, 128, 0.25)');
+    spot.addColorStop(0.6, 'rgba(0, 240, 255, 0.1)');
+    spot.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = spot;
+    ctx.fillRect(0, 0, W, H);
+
+    return new THREE.CanvasTexture(canvas);
+}
 
 function createMidnightRoomTexture(): THREE.CanvasTexture {
     const W = 1024, H = 512;
@@ -1275,9 +1554,9 @@ export default class CanvasNESEmulatorPlugin extends Plugin {
                     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
                     try {
                         const res = await requestUrl({ url: GITHUB_RAW + encodeURI(rel.replace(/\\/g, '/')) });
-                    if (res.status === 200) {
-                        fs.writeFileSync(fullPath, Buffer.from(res.arrayBuffer));
-                    }
+                        if (res.status === 200) {
+                            fs.writeFileSync(fullPath, Buffer.from(res.arrayBuffer));
+                        }
                     } catch (e) {
                         console.error("Asset download error:", rel, e);
                     }
@@ -1293,11 +1572,12 @@ export default class CanvasNESEmulatorPlugin extends Plugin {
                 this.panel.renderUnifiedCartridgeSystem();
             }
         } catch (e) {
-            console.error("Operation error:", e);
+            console.error("ensureAssetsDownloaded error:", e);
         }
     }
 
     async onload() {
+        console.log("Loading Canvas NES Emulator Plugin");
         await this.loadSettings();
         await this.ensureAssetsDownloaded();
 
@@ -1338,6 +1618,7 @@ export default class CanvasNESEmulatorPlugin extends Plugin {
     }
 
     async onunload() {
+        console.log("Unloading Canvas NES Emulator Plugin");
         if (this.panel) {
             this.panel.destroy();
         }
@@ -1399,7 +1680,7 @@ export const SFX_METADATA: Record<string, { code: string; name: string; system: 
     'psx_scroll_hover_riffle': { code: 'P05', name: 'Case Spine Riffle While Hovered', system: 'psx', category: 'Carousel Wheel', description: 'Rapid acrylic spine flicking under cursor', defaultVol: 0.45 },
     'psx_case_click_press': { code: 'P06', name: 'Jewel Case Click Down', system: 'psx', category: 'Selection', description: 'Fingertip tap on polystyrene cover', defaultVol: 0.85 },
     'psx_case_lift_emerge': { code: 'P07', name: 'Jewel Case Emerge', system: 'psx', category: 'Selection', description: 'Jewel case lifting out of CD rack', defaultVol: 0.80 },
-    'psx_case_hinge_creak_open': { code: 'P08', name: 'Jewel Case Hinge Swing Open', system: 'psx', category: '3D Loading', description: 'Case hinge creaking open 180° flat', defaultVol: 0.85 },
+    'psx_case_hinge_creak_open': { code: 'P08', name: 'Jewel Case Hinge Swing Open', system: 'psx', category: '3D Loading', description: 'Case hinge creaking open 180┬░ flat', defaultVol: 0.85 },
     'psx_disc_hub_pop_out': { code: 'P09', name: 'Center Rosette Hub Pop', system: 'psx', category: '3D Loading', description: '3-tooth hub releasing CD center hole', defaultVol: 0.90 },
     'psx_disc_flight_whoosh': { code: 'P10', name: 'Disc 3D Arc Flight', system: 'psx', category: '3D Loading', description: 'Polycarbonate disc flying through air', defaultVol: 0.75 },
     'psx_open_button_plunge': { code: 'P11', name: 'Console OPEN Button Plunge', system: 'psx', category: '3D Loading', description: 'Mechanical push button on PS1 chassis', defaultVol: 0.85 },
@@ -1473,13 +1754,13 @@ class RetroAudioEngine {
                                 ts = st?.ctime || st?.mtime || Date.now();
                             }
                             fileTimestamps.set(filename, ts);
-                        } catch (e) {
-                            console.error("Operation error:", e);
+                        } catch (err) {
+                            console.warn(`Could not decode audio file: ${filename}`, err);
                         }
                     }
                 }
-            } catch (e) {
-                console.error("Operation error:", e);
+            } catch (err) {
+                console.warn("Could not list SFX directory:", sfxDir, err);
             }
         }
 
@@ -1760,7 +2041,7 @@ class RetroAudioEngine {
             try {
                 this.currentAuditionSource.stop();
                 this.currentAuditionSource.disconnect();
-            } catch {}
+            } catch (e) {}
             this.currentAuditionSource = null;
         }
     }
@@ -2094,7 +2375,7 @@ class TetrisPanel {
         curtainPearlSpecular: 0.90,
         curtainPearlColor: "#ffffff",
 
-        // ── 3D Console Celestial Ether & Particle Waterfall ──
+        // ΓöÇΓöÇ 3D Console Celestial Ether & Particle Waterfall ΓöÇΓöÇ
         etherEnabled: true,
         etherMode: "waterfall",
         etherParticleCount: 1200,
@@ -2135,7 +2416,7 @@ class TetrisPanel {
         etherSplashRatio: 0.30,
         crtScreenShape: "modern",
 
-        // ── Atmospheric Carousel Fog Settings ──
+        // ΓöÇΓöÇ Atmospheric Carousel Fog Settings ΓöÇΓöÇ
         fogEnabled: true,
         fogMode: "linear",
         fogColor: "#0b0e17",
@@ -2144,7 +2425,7 @@ class TetrisPanel {
         fogDensity: 0.08,
         fogOpacity: 1.0,
 
-        // ── Camera Depth of Field (DOF) Settings ──
+        // ΓöÇΓöÇ Camera Depth of Field (DOF) Settings ΓöÇΓöÇ
         dofEnabled: true,
         dofAutofocus: "manual",
         dofFocusDistance: 6.2,
@@ -2155,7 +2436,7 @@ class TetrisPanel {
         dofFarBlurMult: 1.0,
         dofAspectRings: 1.0,
 
-        // ── NES Cartridge Decal Dimensions & Elevation Tuning ──
+        // ΓöÇΓöÇ NES Cartridge Decal Dimensions & Elevation Tuning ΓöÇΓöÇ
         nesLabelX0: -0.10,
         nesLabelX1: 0.92,
         nesLabelY0: -0.28,
@@ -2213,7 +2494,7 @@ class TetrisPanel {
     private spinSwitchPhase: 'idle' | 'spinup' | 'spindown' = 'idle';
     private targetSpinSystem: 'nes' | 'psx' | null = null;
     private consoleSpinY = 0.0;
-    // 🎯 Interactive Light Picking Mode & Selection
+    // ≡ƒÄ» Interactive Light Picking Mode & Selection
     private lightPickingMode: 'none' | 'aim_target' | 'place_light' = 'none';
     private activeSelectedLightId = 'key';
     private activeConsoleGroupRef: THREE.Group | null = null;
@@ -2225,7 +2506,7 @@ class TetrisPanel {
     private activeRenderer: THREE.WebGLRenderer | null = null;
     private activeScene: THREE.Scene | null = null;
     private activeComposer: EffectComposer | null = null;
-    // ✨ Celestial Console Ether & Particle Waterfall References
+    // Γ£¿ Celestial Console Ether & Particle Waterfall References
     private etherParticles: THREE.Points | null = null;
     private etherRibbonMesh: THREE.Mesh | null = null;
     private etherParticleMaterial: THREE.ShaderMaterial | null = null;
@@ -2247,7 +2528,7 @@ class TetrisPanel {
     private consoleTiltX = 0;
     private consoleTiltY = 0;
     private consoleTiltZ = 0;
-    // 🎭 Retro Viewport Transition Curtain References
+    // ≡ƒÄ¡ Retro Viewport Transition Curtain References
     private curtainOverlayEl: HTMLElement | null = null;
     private curtainBladeEl: HTMLElement | null = null;
     private curtainLogoWrapperEl: HTMLElement | null = null;
@@ -2300,15 +2581,15 @@ class TetrisPanel {
         }
         if (this.audioCtx) {
             if (this.isMuted && this.audioCtx.state === 'running') {
-                try { this.audioCtx.suspend(); } catch {}
+                try { this.audioCtx.suspend(); } catch (e) {}
             } else if (!this.isMuted && this.audioCtx.state === 'suspended') {
-                try { this.audioCtx.resume(); } catch {}
+                try { this.audioCtx.resume(); } catch (e) {}
             }
         }
         if (this.psxEngine && typeof (this.psxEngine as any).setMuted === 'function') {
             (this.psxEngine as any).setMuted(this.isMuted);
         }
-        new Notice(this.isMuted ? "🔇 Audio Muted" : "🔊 Audio Unmuted");
+        new Notice(this.isMuted ? "≡ƒöç Audio Muted" : "≡ƒöè Audio Unmuted");
         return this.isMuted;
     }
 
@@ -2360,7 +2641,7 @@ class TetrisPanel {
 
         const miniIcon = createEl('div');
         miniIcon.className = 'tetris-mini-icon';
-        miniIcon.innerText = '👾';
+        miniIcon.innerText = '≡ƒæ╛';
         miniIcon.onclick = () => this.toggleMinimize();
         this.containerEl.appendChild(miniIcon);
 
@@ -2541,12 +2822,12 @@ class TetrisPanel {
         resHeaderRow.appendChild(resBadge);
 
         const resMap: [number, number, string][] = [
-            [16, 15, '1x (16×15 — 240 nodes)'],
-            [32, 30, '2x (32×30 — 960 nodes)'],
-            [64, 60, '3x (64×60 — 3.8K nodes)'],
-            [128, 120, '4x (128×120 — 15.3K nodes)'],
-            [256, 240, '5x (256×240 — Native 1:1)'],
-            [512, 480, '6x (512×480 — Super-Res)']
+            [16, 15, '1x (16├ù15 ΓÇö 240 nodes)'],
+            [32, 30, '2x (32├ù30 ΓÇö 960 nodes)'],
+            [64, 60, '3x (64├ù60 ΓÇö 3.8K nodes)'],
+            [128, 120, '4x (128├ù120 ΓÇö 15.3K nodes)'],
+            [256, 240, '5x (256├ù240 ΓÇö Native 1:1)'],
+            [512, 480, '6x (512├ù480 ΓÇö Super-Res)']
         ];
 
         const resSlider = createEl('input');
@@ -2735,16 +3016,16 @@ class TetrisPanel {
         const ctrlToggleBtn = createEl('button');
         ctrlToggleBtn.className = 'tetris-btn secondary';
         setCssStyles(ctrlToggleBtn as any, { flex: '1' });
-        ctrlToggleBtn.innerText = this.isControllerVisible ? '🎮 GAMEPAD ON' : '🎮 GAMEPAD OFF';
+        ctrlToggleBtn.innerText = this.isControllerVisible ? '≡ƒÄ« GAMEPAD ON' : '≡ƒÄ« GAMEPAD OFF';
         ctrlToggleBtn.onclick = () => {
             this.toggleControllerVisibility();
-            ctrlToggleBtn.innerText = this.isControllerVisible ? '🎮 GAMEPAD ON' : '🎮 GAMEPAD OFF';
+            ctrlToggleBtn.innerText = this.isControllerVisible ? '≡ƒÄ« GAMEPAD ON' : '≡ƒÄ« GAMEPAD OFF';
         };
 
         const crtToggleBtn = createEl('button');
         crtToggleBtn.className = 'tetris-btn secondary';
         setCssStyles(crtToggleBtn as any, { flex: '1' });
-        crtToggleBtn.innerText = this.isCrtActive ? '📺 CRT ON' : '📺 CRT OFF';
+        crtToggleBtn.innerText = this.isCrtActive ? '≡ƒô║ CRT ON' : '≡ƒô║ CRT OFF';
         crtToggleBtn.onclick = () => {
             this.isCrtActive = !this.isCrtActive;
             if (this.crtOverlayEl) {
@@ -2753,8 +3034,8 @@ class TetrisPanel {
             if (this.overlayCanvas) {
                 this.overlayCanvas.classList.toggle('crt-curved', this.isCrtActive);
             }
-            crtToggleBtn.innerText = this.isCrtActive ? '📺 CRT ON' : '📺 CRT OFF';
-            new Notice(this.isCrtActive ? "3D CRT Filter Enabled 📺" : "CRT Filter Disabled");
+            crtToggleBtn.innerText = this.isCrtActive ? '≡ƒô║ CRT ON' : '≡ƒô║ CRT OFF';
+            new Notice(this.isCrtActive ? "3D CRT Filter Enabled ≡ƒô║" : "CRT Filter Disabled");
         };
 
         const shapeToggleBtn = createEl('button');
@@ -2762,7 +3043,7 @@ class TetrisPanel {
         setCssStyles(shapeToggleBtn as any, { flex: '1' });
         const updateShapeToggleText = () => {
             const isBubble = (this.masterState as any).crtScreenShape === 'vintage_bubble';
-            shapeToggleBtn.innerText = isBubble ? '🕹️ BUBBLE CRT' : '📺 FLAT CRT';
+            shapeToggleBtn.innerText = isBubble ? '≡ƒò╣∩╕Å BUBBLE CRT' : '≡ƒô║ FLAT CRT';
         };
         updateShapeToggleText();
         shapeToggleBtn.onclick = () => {
@@ -2775,7 +3056,7 @@ class TetrisPanel {
                 this.plugin.saveSettings();
             }
             const isBubble = (this.masterState as any).crtScreenShape === 'vintage_bubble';
-            new Notice(isBubble ? '🕹️ Vintage 1980s Bubble CRT Shape Enabled (SMB3 Style)' : '📺 Modern Flat CRT Shape Enabled');
+            new Notice(isBubble ? '≡ƒò╣∩╕Å Vintage 1980s Bubble CRT Shape Enabled (SMB3 Style)' : '≡ƒô║ Modern Flat CRT Shape Enabled');
         };
 
         displayControlsRow.appendChild(ctrlToggleBtn);
@@ -2797,27 +3078,27 @@ class TetrisPanel {
 
         const ctrlBtn = createEl('button');
         ctrlBtn.className = 'tetris-btn secondary';
-        ctrlBtn.innerText = this.isControllerVisible ? '🎮 GAMEPAD CONTROLLER: ON' : '🎮 GAMEPAD CONTROLLER: OFF';
+        ctrlBtn.innerText = this.isControllerVisible ? '≡ƒÄ« GAMEPAD CONTROLLER: ON' : '≡ƒÄ« GAMEPAD CONTROLLER: OFF';
         ctrlBtn.onclick = () => {
             this.toggleControllerVisibility();
-            ctrlBtn.innerText = this.isControllerVisible ? '🎮 GAMEPAD CONTROLLER: ON' : '🎮 GAMEPAD CONTROLLER: OFF';
+            ctrlBtn.innerText = this.isControllerVisible ? '≡ƒÄ« GAMEPAD CONTROLLER: ON' : '≡ƒÄ« GAMEPAD CONTROLLER: OFF';
         };
 
         const crtBtn = createEl('button');
         crtBtn.className = 'tetris-btn secondary';
-        crtBtn.innerText = this.isCrtActive ? '📺 CRT SCANLINE SHADER: ON' : '📺 CRT SCANLINE SHADER: OFF';
+        crtBtn.innerText = this.isCrtActive ? '≡ƒô║ CRT SCANLINE SHADER: ON' : '≡ƒô║ CRT SCANLINE SHADER: OFF';
         crtBtn.onclick = () => {
             this.isCrtActive = !this.isCrtActive;
             if (this.crtOverlayEl) this.crtOverlayEl.classList.toggle('active', this.isCrtActive);
             if (this.overlayCanvas) this.overlayCanvas.classList.toggle('crt-curved', this.isCrtActive);
-            crtBtn.innerText = this.isCrtActive ? '📺 CRT SCANLINE SHADER: ON' : '📺 CRT SCANLINE SHADER: OFF';
+            crtBtn.innerText = this.isCrtActive ? '≡ƒô║ CRT SCANLINE SHADER: ON' : '≡ƒô║ CRT SCANLINE SHADER: OFF';
         };
 
         const screenShapeBtn = createEl('button');
         screenShapeBtn.className = 'tetris-btn secondary';
         const updateShapeBtnText = () => {
             const isBubble = (this.masterState as any).crtScreenShape === 'vintage_bubble';
-            screenShapeBtn.innerText = isBubble ? '🕹️ SCREEN SHAPE: VINTAGE 1980s BUBBLE' : '📺 SCREEN SHAPE: MODERN FLAT CRT';
+            screenShapeBtn.innerText = isBubble ? '≡ƒò╣∩╕Å SCREEN SHAPE: VINTAGE 1980s BUBBLE' : '≡ƒô║ SCREEN SHAPE: MODERN FLAT CRT';
         };
         updateShapeBtnText();
         screenShapeBtn.onclick = () => {
@@ -2830,7 +3111,7 @@ class TetrisPanel {
                 this.plugin.saveSettings();
             }
             const isBubble = (this.masterState as any).crtScreenShape === 'vintage_bubble';
-            new Notice(isBubble ? '🕹️ Vintage 1980s Bubble CRT Shape Enabled (SMB3 Style)' : '📺 Modern Flat CRT Shape Enabled');
+            new Notice(isBubble ? '≡ƒò╣∩╕Å Vintage 1980s Bubble CRT Shape Enabled (SMB3 Style)' : '≡ƒô║ Modern Flat CRT Shape Enabled');
         };
 
         overlayControlsGroup.appendChild(ctrlBtn);
@@ -2860,7 +3141,7 @@ class TetrisPanel {
 
         this.containerEl.appendChild(advContent);
 
-        // ── SLEEK ICON ACTION BAR ───────────────────────────────────────────
+        // ΓöÇΓöÇ SLEEK ICON ACTION BAR ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
         const actionBar = createEl('div');
         actionBar.className = 'tetris-icon-action-bar';
 
@@ -2904,13 +3185,13 @@ class TetrisPanel {
                     if (buf) {
                         this.persistentSaveStates.set(romKey, buf);
                         const savedDisk = await this.saveRomStateToDisk(romKey, buf, true);
-                        if (savedDisk) new Notice("💾 PS1 Game State Saved to Disk!");
-                        else new Notice("⚠️ Failed to Save PS1 State to Disk");
+                        if (savedDisk) new Notice("≡ƒÆ╛ PS1 Game State Saved to Disk!");
+                        else new Notice("ΓÜá∩╕Å Failed to Save PS1 State to Disk");
                     } else {
-                        new Notice("⚠️ Failed to Capture PS1 State");
+                        new Notice("ΓÜá∩╕Å Failed to Capture PS1 State");
                     }
                 } else {
-                    new Notice("⚠️ PS1 Engine not running");
+                    new Notice("ΓÜá∩╕Å PS1 Engine not running");
                 }
             } else {
                 if (this.nes) {
@@ -2918,13 +3199,13 @@ class TetrisPanel {
                     if (nesState) {
                         this.persistentSaveStates.set(romKey, nesState);
                         const savedDisk = await this.saveRomStateToDisk(romKey, nesState, false);
-                        if (savedDisk) new Notice("💾 NES Game State Saved to Disk!");
-                        else new Notice("⚠️ Failed to Save NES State to Disk");
+                        if (savedDisk) new Notice("≡ƒÆ╛ NES Game State Saved to Disk!");
+                        else new Notice("ΓÜá∩╕Å Failed to Save NES State to Disk");
                     } else {
-                        new Notice("⚠️ Failed to Capture NES State");
+                        new Notice("ΓÜá∩╕Å Failed to Capture NES State");
                     }
                 } else {
-                    new Notice("⚠️ NES Engine not running");
+                    new Notice("ΓÜá∩╕Å NES Engine not running");
                 }
             }
         });
@@ -2940,10 +3221,10 @@ class TetrisPanel {
                 }
                 if (this.psxEngine && savedData) {
                     const ok = await this.psxEngine.loadState(savedData);
-                    if (ok) new Notice("📂 PS1 Game State Restored from Disk!");
-                    else new Notice("⚠️ Failed to Restore PS1 State");
+                    if (ok) new Notice("≡ƒôé PS1 Game State Restored from Disk!");
+                    else new Notice("ΓÜá∩╕Å Failed to Restore PS1 State");
                 } else {
-                    new Notice("⚠️ No Save State Found on Disk for this ROM");
+                    new Notice("ΓÜá∩╕Å No Save State Found on Disk for this ROM");
                 }
             } else {
                 let savedData = this.persistentSaveStates.get(romKey);
@@ -2953,9 +3234,9 @@ class TetrisPanel {
                 }
                 if (this.nes && savedData) {
                     this.nes.fromJSON(savedData);
-                    new Notice("📂 NES Game State Restored from Disk!");
+                    new Notice("≡ƒôé NES Game State Restored from Disk!");
                 } else {
-                    new Notice("⚠️ No Save State Found on Disk for this ROM");
+                    new Notice("ΓÜá∩╕Å No Save State Found on Disk for this ROM");
                 }
             }
         });
@@ -3081,14 +3362,14 @@ class TetrisPanel {
 
         const nesTabBtn = createEl('button');
         nesTabBtn.className = 'tetris-btn ' + (activeTab === 'nes' ? 'primary' : 'secondary');
-        nesTabBtn.innerText = '🎮 NES SAMPLES (17)';
+        nesTabBtn.innerText = '≡ƒÄ« NES SAMPLES (17)';
         setCssStyles(nesTabBtn as any, { flex: '1' });
         setCssStyles(nesTabBtn as any, { fontSize: '10px' });
         setCssStyles(nesTabBtn as any, { padding: '4px 6px' });
 
         const psxTabBtn = createEl('button');
         psxTabBtn.className = 'tetris-btn ' + (activeTab === 'psx' ? 'primary' : 'secondary');
-        psxTabBtn.innerText = '🕹️ PS1 SAMPLES (21)';
+        psxTabBtn.innerText = '≡ƒò╣∩╕Å PS1 SAMPLES (21)';
         setCssStyles(psxTabBtn as any, { flex: '1' });
         setCssStyles(psxTabBtn as any, { fontSize: '10px' });
         setCssStyles(psxTabBtn as any, { padding: '4px 6px' });
@@ -3158,11 +3439,11 @@ class TetrisPanel {
 
                 const triggerLabel = createEl('span');
                 setCssStyles(triggerLabel as any, {"overflow":"hidden","textOverflow":"ellipsis","whiteSpace":"nowrap","flex":"1"});
-                triggerLabel.innerText = currentAssigned || '— None / Muted —';
+                triggerLabel.innerText = currentAssigned || 'ΓÇö None / Muted ΓÇö';
 
                 const arrowIcon = createEl('span');
                 setCssStyles(arrowIcon as any, {"marginLeft":"4px","color":"#888","fontSize":"8px"});
-                arrowIcon.innerText = '▼';
+                arrowIcon.innerText = 'Γû╝';
 
                 triggerBtn.appendChild(triggerLabel);
                 triggerBtn.appendChild(arrowIcon);
@@ -3183,7 +3464,7 @@ class TetrisPanel {
                 // Option: None / Muted
                 const noneItem = createEl('div');
                 setCssStyles(noneItem as any, {"display":"flex","alignItems":"center","flexShrink":"0","height":"28px","minHeight":"28px","padding":"0 8px","fontSize":"11px","fontFamily":"monospace","color":"#888","borderRadius":"4px","cursor":"pointer","overflow":"hidden","textOverflow":"ellipsis","whiteSpace":"nowrap","boxSizing":"border-box","marginBottom":"2px"});
-                noneItem.innerText = '— None / Muted —';
+                noneItem.innerText = 'ΓÇö None / Muted ΓÇö';
                 noneItem.onmouseenter = () => {
                     setCssStyles(noneItem as any, { background: 'rgba(255,255,255,0.1)' });
                     this.sfxEngine.stopAudition();
@@ -3195,7 +3476,7 @@ class TetrisPanel {
                     e.stopPropagation();
                     this.sfxEngine.assignSample(id, '');
                     currentAssigned = '';
-                    triggerLabel.innerText = '— None / Muted —';
+                    triggerLabel.innerText = 'ΓÇö None / Muted ΓÇö';
                     closeMenu();
                 };
                 menuList.appendChild(noneItem);
@@ -3248,7 +3529,7 @@ class TetrisPanel {
                 const playBtn = createEl('button');
                 playBtn.className = 'tetris-btn';
                 setCssStyles(playBtn as any, {"padding":"2px 8px","fontSize":"10px","whiteSpace":"nowrap","background":"#00ffaa","color":"#000","fontWeight":"bold","cursor":"pointer"});
-                playBtn.innerText = '▶ Test';
+                playBtn.innerText = 'Γû╢ Test';
                 playBtn.onclick = () => {
                     const selectedFile = currentAssigned;
                     if (selectedFile) {
@@ -3347,7 +3628,7 @@ class TetrisPanel {
         return studioContainer;
     }
 
-    // ── POWER TOGGLE (single source of truth) ──
+    // ΓöÇΓöÇ POWER TOGGLE (single source of truth) ΓöÇΓöÇ
     public triggerPowerToggle() {
         const isOn = this.isConsolePowerOn || this.isControllerVisible ||
                      (!!this.overlayCanvas && this.overlayCanvas.style.display !== 'none') ||
@@ -3449,7 +3730,7 @@ class TetrisPanel {
     private floatingGamepadBtn: HTMLElement | null = null;
     private floatingGamepadPos: { x: number; y: number } | null = null;
 
-    // ── 🏁 TRUE 3D CTR WAVY SILK MESH TRANSITION ENGINE ──────────────
+    // ΓöÇΓöÇ ≡ƒÅü TRUE 3D CTR WAVY SILK MESH TRANSITION ENGINE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     private flagCanvasEl: HTMLCanvasElement | null = null;
     private flagRenderer: THREE.WebGLRenderer | null = null;
     private flagScene: THREE.Scene | null = null;
@@ -3518,12 +3799,12 @@ class TetrisPanel {
                 }
                 this.showFloatingGamepadTrigger();
             };
-        } catch {
+        } catch (e) {
             setCssStyles(this.containerEl as any, { display: 'none' });
             this.showFloatingGamepadTrigger();
         }
 
-        // 🛑 PAUSE 3D RENDER LOOP: 100% compute freed for testing zero-overhead emulation
+        // ≡ƒ¢æ PAUSE 3D RENDER LOOP: 100% compute freed for testing zero-overhead emulation
         if (this.animationFrameId !== null) {
             window.cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;
@@ -3572,9 +3853,9 @@ class TetrisPanel {
                 easing: 'cubic-bezier(0.34, 1.4, 0.64, 1)',
                 fill: 'forwards'
             });
-        } catch {}
+        } catch (e) {}
 
-        // ▶️ RESUME 3D RENDER LOOP & ENSURE START BUTTON
+        // Γû╢∩╕Å RESUME 3D RENDER LOOP & ENSURE START BUTTON
         if (this.animationFrameId === null) {
             this.build3DScene();
         }
@@ -3594,7 +3875,7 @@ class TetrisPanel {
         btn.title = 'Click to Restore HUD (Drag to Move)';
         setIcon(btn, 'gamepad-2');
 
-        // 🌟 Sub-Buttons Mini Action Dock (Appears smoothly on hover underneath floating button)
+        // ≡ƒîƒ Sub-Buttons Mini Action Dock (Appears smoothly on hover underneath floating button)
         const dock = createEl('div');
         dock.className = 'floating-hud-dock';
 
@@ -3633,14 +3914,14 @@ class TetrisPanel {
                 if (buf) {
                     this.persistentSaveStates.set(romKey, buf);
                     await this.saveRomStateToDisk(romKey, buf, true);
-                    new Notice("💾 PS1 Game State Saved!");
+                    new Notice("≡ƒÆ╛ PS1 Game State Saved!");
                 }
             } else if (this.nes) {
                 const nesState = this.nes.toJSON();
                 if (nesState) {
                     this.persistentSaveStates.set(romKey, nesState);
                     await this.saveRomStateToDisk(romKey, nesState, false);
-                    new Notice("💾 NES Game State Saved!");
+                    new Notice("≡ƒÆ╛ NES Game State Saved!");
                 }
             }
         });
@@ -3652,13 +3933,13 @@ class TetrisPanel {
                 let savedData = this.persistentSaveStates.get(romKey) || await this.loadRomStateFromDisk(romKey, true);
                 if (this.psxEngine && savedData) {
                     await this.psxEngine.loadState(savedData);
-                    new Notice("📂 PS1 Game State Restored!");
+                    new Notice("≡ƒôé PS1 Game State Restored!");
                 }
             } else {
                 let savedData = this.persistentSaveStates.get(romKey) || await this.loadRomStateFromDisk(romKey, false);
                 if (this.nes && savedData) {
                     this.nes.fromJSON(savedData);
-                    new Notice("📂 NES Game State Restored!");
+                    new Notice("≡ƒôé NES Game State Restored!");
                 }
             }
         });
@@ -3716,7 +3997,7 @@ class TetrisPanel {
             startPointerY = e.clientY;
             initialLeft = wrapper.offsetLeft;
             initialTop = wrapper.offsetTop;
-            try { btn.setPointerCapture(e.pointerId); } catch {}
+            try { btn.setPointerCapture(e.pointerId); } catch (err) {}
         };
 
         const onPointerMove = (e: PointerEvent) => {
@@ -3745,7 +4026,7 @@ class TetrisPanel {
             e.preventDefault();
             e.stopPropagation();
             isDragging = false;
-            try { btn.releasePointerCapture(e.pointerId); } catch {}
+            try { btn.releasePointerCapture(e.pointerId); } catch (err) {}
 
             if (this.plugin && this.plugin.settings) {
                 this.plugin.settings.floatingGamepadPos = this.floatingGamepadPos;
@@ -3766,7 +4047,7 @@ class TetrisPanel {
         this.floatingGamepadWrapper = wrapper;
     }
 
-    // ── ✨ CELESTIAL ETHER WATERFALL & CONSOLE TRAILS ENGINE ──────────────
+    // ΓöÇΓöÇ Γ£¿ CELESTIAL ETHER WATERFALL & CONSOLE TRAILS ENGINE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     private initConsoleEtherSystem(scene: THREE.Scene) {
         if (this.etherParticles && this.etherParticles.parent) {
             this.etherParticles.parent.remove(this.etherParticles);
@@ -3909,7 +4190,7 @@ class TetrisPanel {
                     col = mix(vec3(lum), col, uHueSat);
                 }
                 
-                // ✨ Multi-harmonic starburst scintillation & diamond sparkle glints
+                // Γ£¿ Multi-harmonic starburst scintillation & diamond sparkle glints
                 float twTime = uTime * 4.2 + vPhase * 9.0;
                 float tw = sin(twTime) * cos(twTime * 1.618);
                 float sparkle = pow(max(0.0, tw), 4.5) * (uTwinkleIntensity * 2.2);
@@ -3953,7 +4234,7 @@ class TetrisPanel {
         scene.add(particles);
         this.etherParticles = particles;
 
-        // 🌌 Ethereal Aurora Ribbons Mesh behind console (with amphitheater curve to prevent clipping)
+        // ≡ƒîî Ethereal Aurora Ribbons Mesh behind console (with amphitheater curve to prevent clipping)
         const ribbonGeo = new THREE.PlaneGeometry(10.0, 6.0, 48, 32);
         const ribbonVertexShader = `
             uniform float uTime;
@@ -4059,7 +4340,7 @@ class TetrisPanel {
         scene.add(ribbonMesh);
         this.etherRibbonMesh = ribbonMesh;
 
-        // 💡 Floor Caustics Light Pool Mesh
+        // ≡ƒÆí Floor Caustics Light Pool Mesh
         const floorGeo = new THREE.PlaneGeometry(8.0, 6.0, 32, 32);
         const floorVertexShader = `
             varying vec2 vUv;
@@ -4525,7 +4806,7 @@ class TetrisPanel {
 
         const resetBtn = createEl('button');
         resetBtn.className = 'tetris-suite-btn';
-        resetBtn.innerText = '↺ RESET COLOR CORRECTION TO DEFAULT';
+        resetBtn.innerText = 'Γå║ RESET COLOR CORRECTION TO DEFAULT';
         resetBtn.onclick = () => {
             (this.masterState as any).viewportBrightness = 1.0;
             (this.masterState as any).viewportContrast = 1.0;
@@ -4535,7 +4816,7 @@ class TetrisPanel {
             (this.masterState as any).viewportGamma = 1.0;
             this.updateViewportColorCorrection();
             debouncedSave();
-            new Notice("🎨 Viewport Color Correction Reset to Defaults!");
+            new Notice("≡ƒÄ¿ Viewport Color Correction Reset to Defaults!");
             if (container.parentElement) {
                 container.replaceWith(this.buildViewportColorCorrectionContainer());
             }
@@ -4621,9 +4902,9 @@ class TetrisPanel {
         };
 
         container.appendChild(makeSlider('NES CARTRIDGE SCALE (3D SIZE)', 0.40, 1.80, 0.01, () => (typeof (this.masterState as any).nesCartScale === 'number' ? (this.masterState as any).nesCartScale : 0.85), v => (this.masterState as any).nesCartScale = v, 'Adjusts the physical 3D size of NES cartridges (0.85 = Default). Only affects NES.'));
-        container.appendChild(makeSlider('SLOT POS X (LEFT ◄ ► RIGHT)', -3.0, 3.0, 0.01, () => (typeof (this.masterState as any).nesSlotX === 'number' ? (this.masterState as any).nesSlotX : (typeof (this.masterState as any).slotX === 'number' ? (this.masterState as any).slotX : -0.575)), v => { (this.masterState as any).nesSlotX = v; (this.masterState as any).slotX = v; }, 'Horizontal center position inside the NES front-loading chamber.'));
-        container.appendChild(makeSlider('SLOT POS Y (UP ▲ ▼ DOWN)', 0.5, 3.5, 0.01, () => (typeof (this.masterState as any).nesSlotY === 'number' ? (this.masterState as any).nesSlotY : (typeof (this.masterState as any).slotY === 'number' ? (this.masterState as any).slotY : 1.95)), v => { (this.masterState as any).nesSlotY = v; (this.masterState as any).slotY = v; }, 'Height elevation of the cartridge when seated inside the NES slot.'));
-        container.appendChild(makeSlider('SLOT POS Z (DEPTH IN ◄ ► OUT)', -1.0, 2.0, 0.01, () => (typeof (this.masterState as any).nesSlotZ === 'number' ? (this.masterState as any).nesSlotZ : (typeof (this.masterState as any).slotZ === 'number' ? (this.masterState as any).slotZ : 0.20)), v => { (this.masterState as any).nesSlotZ = v; (this.masterState as any).slotZ = v; }, 'How deep the cartridge sits inside the console connector when seated.'));
+        container.appendChild(makeSlider('SLOT POS X (LEFT Γùä Γû║ RIGHT)', -3.0, 3.0, 0.01, () => (typeof (this.masterState as any).nesSlotX === 'number' ? (this.masterState as any).nesSlotX : (typeof (this.masterState as any).slotX === 'number' ? (this.masterState as any).slotX : -0.575)), v => { (this.masterState as any).nesSlotX = v; (this.masterState as any).slotX = v; }, 'Horizontal center position inside the NES front-loading chamber.'));
+        container.appendChild(makeSlider('SLOT POS Y (UP Γû▓ Γû╝ DOWN)', 0.5, 3.5, 0.01, () => (typeof (this.masterState as any).nesSlotY === 'number' ? (this.masterState as any).nesSlotY : (typeof (this.masterState as any).slotY === 'number' ? (this.masterState as any).slotY : 1.95)), v => { (this.masterState as any).nesSlotY = v; (this.masterState as any).slotY = v; }, 'Height elevation of the cartridge when seated inside the NES slot.'));
+        container.appendChild(makeSlider('SLOT POS Z (DEPTH IN Γùä Γû║ OUT)', -1.0, 2.0, 0.01, () => (typeof (this.masterState as any).nesSlotZ === 'number' ? (this.masterState as any).nesSlotZ : (typeof (this.masterState as any).slotZ === 'number' ? (this.masterState as any).slotZ : 0.20)), v => { (this.masterState as any).nesSlotZ = v; (this.masterState as any).slotZ = v; }, 'How deep the cartridge sits inside the console connector when seated.'));
         container.appendChild(makeSlider('SLOT ROT X (PITCH TILT)', -3.14, 3.14, 0.02, () => (typeof (this.masterState as any).nesSlotRotX === 'number' ? (this.masterState as any).nesSlotRotX : (typeof (this.masterState as any).slotRotX === 'number' ? (this.masterState as any).slotRotX : 1.45)), v => { (this.masterState as any).nesSlotRotX = v; (this.masterState as any).slotRotX = v; }, 'Tilts the cartridge forward or backward inside the chamber.'));
         container.appendChild(makeSlider('SLOT ROT Y (YAW TURN)', -3.14, 3.14, 0.02, () => (typeof (this.masterState as any).nesSlotRotY === 'number' ? (this.masterState as any).nesSlotRotY : (typeof (this.masterState as any).slotRotY === 'number' ? (this.masterState as any).slotRotY : 0.00)), v => { (this.masterState as any).nesSlotRotY = v; (this.masterState as any).slotRotY = v; }, 'Swivels the cartridge left or right inside the chamber.'));
         container.appendChild(makeSlider('SLOT ROT Z (ROLL LEAN)', -1.50, 1.50, 0.02, () => (typeof (this.masterState as any).nesSlotRotZ === 'number' ? (this.masterState as any).nesSlotRotZ : (typeof (this.masterState as any).slotRotZ === 'number' ? (this.masterState as any).slotRotZ : 0.00)), v => { (this.masterState as any).nesSlotRotZ = v; (this.masterState as any).slotRotZ = v; }, 'Levels the cartridge sideways inside the chamber.'));
@@ -4631,7 +4912,7 @@ class TetrisPanel {
 
         const resetBtn = createEl('button');
         resetBtn.className = 'tetris-suite-btn pin-btn';
-        resetBtn.innerText = '↺ RESET NES CARTRIDGE ALIGNMENT TO DEFAULT';
+        resetBtn.innerText = 'Γå║ RESET NES CARTRIDGE ALIGNMENT TO DEFAULT';
         setCssStyles(resetBtn as any, { marginTop: '4px' });
         resetBtn.onclick = () => {
             (this.masterState as any).nesCartScale = 0.85;
@@ -4896,18 +5177,18 @@ class TetrisPanel {
                     return s;
                 };
 
-                const upBtn = cross.createDiv({ cls: 'dpad-btn dpad-up', attr: { title: 'Up (W / ↑)' } });
+                const upBtn = cross.createDiv({ cls: 'dpad-btn dpad-up', attr: { title: 'Up (W / Γåæ)' } });
                 upBtn.appendChild(makeArrowSvg('M12 4L5 13h4v7h6v-7h4z'));
 
-                const leftBtn = cross.createDiv({ cls: 'dpad-btn dpad-left', attr: { title: 'Left (A / ←)' } });
+                const leftBtn = cross.createDiv({ cls: 'dpad-btn dpad-left', attr: { title: 'Left (A / ΓåÉ)' } });
                 leftBtn.appendChild(makeArrowSvg('M4 12l9-7v4h7v6h-7v4z'));
 
                 cross.createDiv({ cls: 'dpad-center-hole' });
 
-                const rightBtn = cross.createDiv({ cls: 'dpad-btn dpad-right', attr: { title: 'Right (D / →)' } });
+                const rightBtn = cross.createDiv({ cls: 'dpad-btn dpad-right', attr: { title: 'Right (D / ΓåÆ)' } });
                 rightBtn.appendChild(makeArrowSvg('M20 12l-9 7v-4H4v-6h7V5z'));
 
-                const downBtn = cross.createDiv({ cls: 'dpad-btn dpad-down', attr: { title: 'Down (S / ↓)' } });
+                const downBtn = cross.createDiv({ cls: 'dpad-btn dpad-down', attr: { title: 'Down (S / Γåô)' } });
                 downBtn.appendChild(makeArrowSvg('M12 20l7-9h-4V4H9v7H5z'));
 
                 // CENTER SECTION
@@ -4926,7 +5207,7 @@ class TetrisPanel {
                 const rightSec = decal.createDiv({ cls: 'nes-right-section' });
                 const brand = rightSec.createDiv({ cls: 'nes-brand' });
                 brand.appendText('Nintendo');
-                brand.createEl('sup', { text: '®' });
+                brand.createEl('sup', { text: '┬«' });
 
                 const btnGroup = rightSec.createDiv({ cls: 'nes-buttons-group' });
                 const wrapB = btnGroup.createDiv({ cls: 'nes-sharp-square-wrapper' });
@@ -4949,7 +5230,7 @@ class TetrisPanel {
                         const data = fs.readFileSync(fullImgPath);
                         controllerImgSrc = `data:image/png;base64,${data.toString('base64')}`;
                     }
-                } catch (e) {
+                } catch(e) {
                     console.error("Failed to load PS1 controller PNG:", e);
                 }
 
@@ -5099,14 +5380,14 @@ class TetrisPanel {
             this.isUpdatingDummy = true;
             try {
                 this.canvasView.canvas?.removeNode(this.dummyNode);
-            } catch {}
+            } catch (e) {}
             this.dummyNode = null;
             this.isUpdatingDummy = false;
         }
         this.updateStatus();
     }
 
-    // ── DOOM-STYLE DUMMY NODE & SELECTION LOGIC ──
+    // ΓöÇΓöÇ DOOM-STYLE DUMMY NODE & SELECTION LOGIC ΓöÇΓöÇ
 
     private getWorkspaceCoords(e: MouseEvent) {
         if (!this.canvasView.canvas) return { x: 0, y: 0 };
@@ -5585,7 +5866,7 @@ class TetrisPanel {
 
         this.overlayCtx.clearRect(0, 0, w, h);
 
-        // ── GPU ACCELERATED FAST PATH: ALWAYS 1-SHOT BLIT ───────
+        // ΓöÇΓöÇ GPU ACCELERATED FAST PATH: ALWAYS 1-SHOT BLIT ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
         if (this.isRunning && (this.selectedVaultRomPath || this.customRomString)) {
             if (this.plugin.settings.activeSystem === 'psx' && this.psxEngine) {
                 const psxCanvas = this.psxEngine.getCanvas();
@@ -5626,7 +5907,7 @@ class TetrisPanel {
             }
         }
 
-        // ── RETRO STANDBY DISPLAY: Console Powered ON with Empty Bay ─────────
+        // ΓöÇΓöÇ RETRO STANDBY DISPLAY: Console Powered ON with Empty Bay ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
         if (!this.selectedVaultRomPath && !this.customRomString) {
             const isPSX = (this.plugin.settings.activeSystem === 'psx');
             this.overlayCtx.fillStyle = isPSX ? '#0a0d14' : '#05070a';
@@ -5640,7 +5921,7 @@ class TetrisPanel {
             return;
         }
 
-        // ── SLOW PATH: selection/drag active or emulator stopped ─────────────────
+        // ΓöÇΓöÇ SLOW PATH: selection/drag active or emulator stopped ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
         const colorMap = new Map<string, number[]>();
         const total = this.fakePixels.length;
         for (let i = 0; i < total; i++) {
@@ -6280,7 +6561,7 @@ private updateDummyNode(preventSelect = false) {
         return '';
     }
 
-    // ── 🧹 DEEP RECURSIVE THREE.JS RESOURCE DISPOSAL (ZERO MEMORY LEAKS) ──────────
+    // ΓöÇΓöÇ ≡ƒº╣ DEEP RECURSIVE THREE.JS RESOURCE DISPOSAL (ZERO MEMORY LEAKS) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     private disposeThreeObject(obj: any) {
         if (!obj) return;
         try {
@@ -6325,7 +6606,7 @@ private updateDummyNode(preventSelect = false) {
         }
     }
 
-    // ── 🏁 TRUE 3D CTR WAVY SILK MESH TRANSITION ENGINE (VIEWPORT ANCHORED) ────────────────
+    // ΓöÇΓöÇ ≡ƒÅü TRUE 3D CTR WAVY SILK MESH TRANSITION ENGINE (VIEWPORT ANCHORED) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     private ensureCurtainOverlay() {
         if (!this.boxArtEl) return;
         if (this.curtainOverlayEl && this.curtainOverlayEl.parentElement === this.boxArtEl) return;
@@ -6346,7 +6627,7 @@ private updateDummyNode(preventSelect = false) {
         blade.appendChild(flagCanvas);
         this.flagCanvasEl = flagCanvas;
 
-        // 🌟 Center Animated Author Logo (Title Pill Lottie Animation)
+        // ≡ƒîƒ Center Animated Author Logo (Title Pill Lottie Animation)
         const logoWrapper = createEl('div');
         logoWrapper.className = 'curtain-author-logo-wrapper';
         const logoSize = (this.masterState as any).curtainLogoSize ?? 95;
@@ -6461,7 +6742,7 @@ private updateDummyNode(preventSelect = false) {
                 float normX = clamp((position.x / 16.0) + 0.5, 0.0, 1.0);
                 
                 if (uSweepMode < 0.5) {
-                    // 🌊 TRUE BILLOWING WAVE-IN UNFURL (Left to Right)
+                    // ≡ƒîè TRUE BILLOWING WAVE-IN UNFURL (Left to Right)
                     float front = uSweepProgress * 1.32 - 0.16;
                     float d = normX - front;
                     
@@ -6478,7 +6759,7 @@ private updateDummyNode(preventSelect = false) {
                     pos.x -= foldCompression;
                     pos.z -= (1.0 - unfold) * 3.2;
                 } else {
-                    // 🌊 TRUE BILLOWING WAVE-OUT FLUTTER (Left to Right Dissolve)
+                    // ≡ƒîè TRUE BILLOWING WAVE-OUT FLUTTER (Left to Right Dissolve)
                     float front = uSweepProgress * 1.32 - 0.16;
                     float d = normX - front;
                     
@@ -6564,7 +6845,7 @@ private updateDummyNode(preventSelect = false) {
                 
                 vec3 shadedColor = baseColor * mix(1.0, totalDiff, uContrast);
                 
-                // 🦪 Pearlescent & Iridescent Optical Sheen Model
+                // ≡ƒª¬ Pearlescent & Iridescent Optical Sheen Model
                 float NdotV = max(dot(normal, viewDir), 0.0);
                 float NdotL1 = max(dot(normal, lightDir1), 0.0);
                 
@@ -6992,7 +7273,7 @@ private updateDummyNode(preventSelect = false) {
         if (allRoms.length === 0) {
             const p = createEl('div');
             p.className = 'nes-slot-prompt';
-            p.innerText = '— NO ROMS FOUND —';
+            p.innerText = 'ΓÇö NO ROMS FOUND ΓÇö';
             this.boxArtEl.appendChild(p);
             return;
         }
@@ -7031,7 +7312,7 @@ private updateDummyNode(preventSelect = false) {
         const scene = new THREE.Scene();
         this.activeScene = scene;
 
-        // ── DYNAMIC 3D ROOM ENVIRONMENT & LIGHTING ────────────────────────────
+        // ΓöÇΓöÇ DYNAMIC 3D ROOM ENVIRONMENT & LIGHTING ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
         let roomTex: THREE.CanvasTexture;
         let deskColor: number, deskRough: number, deskMetal: number, trimColor: number;
         let keyCol: number, keyPwr: number, fillCol: number, fillPwr: number;
@@ -7065,7 +7346,7 @@ private updateDummyNode(preventSelect = false) {
         roomMesh.position.set(0, 4, 0);
         scene.add(roomMesh);
 
-        // 🌫️ Atmospheric Carousel Fog Engine
+        // ≡ƒî½∩╕Å Atmospheric Carousel Fog Engine
         if (masterState.fogEnabled !== false) {
             const fogColor = masterState.fogColor || '#0b0e17';
             if (masterState.fogMode === 'exp2') {
@@ -7168,7 +7449,7 @@ private updateDummyNode(preventSelect = false) {
         scene.add(rimHelper);
         scene.add(key2Helper);
 
-        // ── Custom Dynamic Lights Array & Spawner ─────────────────────────────
+        // ΓöÇΓöÇ Custom Dynamic Lights Array & Spawner ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
         interface LiveCustomLight {
             config: any;
             light: THREE.Light;
@@ -7232,7 +7513,7 @@ private updateDummyNode(preventSelect = false) {
             masterState.customLights.forEach(cfg => spawnCustomLightInScene(cfg));
         }
 
-        // ── POST-PROCESSING RETRO BLOOM & HALATION SHADER PIPELINE ─────────────
+        // ΓöÇΓöÇ POST-PROCESSING RETRO BLOOM & HALATION SHADER PIPELINE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
         const pixelRatio = Math.max(window.devicePixelRatio || 1, 2);
         const composer = new EffectComposer(renderer);
         this.activeComposer = composer;
@@ -7284,7 +7565,7 @@ private updateDummyNode(preventSelect = false) {
                 '}\n'
         };
 
-        // 📷 Camera Depth of Field (DOF) Bokeh Pass
+        // ≡ƒô╖ Camera Depth of Field (DOF) Bokeh Pass
         let bokehPass: BokehPass | null = null;
         try {
             bokehPass = new BokehPass(scene, camera, {
@@ -7309,7 +7590,7 @@ private updateDummyNode(preventSelect = false) {
         const outputPass = new OutputPass();
         composer.addPass(outputPass);
 
-        // ── 3D CONSOLE ASSEMBLY (NES PROCEDURAL OR PS1 GLB) ───────────────
+        // ΓöÇΓöÇ 3D CONSOLE ASSEMBLY (NES PROCEDURAL OR PS1 GLB) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
         const isLocked = !!this.selectedVaultRomPath;
         const consoleGroup = new THREE.Group();
         this.activeConsoleGroupRef = consoleGroup;
@@ -7434,7 +7715,9 @@ private updateDummyNode(preventSelect = false) {
 
         scene.add(consoleGroup);
 
-        // ── RACK STACK GEOMETRY CONFIGURATION & WHEEL SCROLL STATE ──────────
+        // ΓöÇΓöÇ RACK STACK GEOMETRY CONFIGURATION & WHEEL SCROLL STATE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+        const STACK_BASE_Y = -1.4;
+        const STACK_BASE_Z = 1.0;
         const REST_ROT_X = 0.38;  
 
         interface BiomechanicalProfile {
@@ -7532,7 +7815,7 @@ private updateDummyNode(preventSelect = false) {
             });
         });
 
-        // ── Eject Helper Callback for Power Off & Hot-Swap ──────────────────
+        // ΓöÇΓöÇ Eject Helper Callback for Power Off & Hot-Swap ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
         (this as any).ejectBayCartridge = () => {
             const currentBayEntry = entries.find(e => e.state === 'BAY' || e.state === 'ANIM_TO_BAY');
             if (currentBayEntry) {
@@ -7553,7 +7836,7 @@ private updateDummyNode(preventSelect = false) {
             }
         };
 
-        // ── Bulletproof Raycaster Mouse Hover & Click ───────────────────────
+        // ΓöÇΓöÇ Bulletproof Raycaster Mouse Hover & Click ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
         let pendingInsertEntry: CartEntry | null = null;
 
         const getEntryUnderMouse = (): CartEntry | null => {
@@ -7677,7 +7960,7 @@ private updateDummyNode(preventSelect = false) {
             mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
             mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
-            // ── 🎯 INTERACTIVE VIEWPORT LIGHT PICKING HANDLER ─────────────────
+            // ΓöÇΓöÇ ≡ƒÄ» INTERACTIVE VIEWPORT LIGHT PICKING HANDLER ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
             if (this.lightPickingMode !== 'none') {
                 raycaster.setFromCamera(mouse, camera);
                 const pickTargets = [consoleGroup, deskMesh, roomMesh, ...entries.map(e => e.mesh)];
@@ -7702,7 +7985,7 @@ private updateDummyNode(preventSelect = false) {
                             this.masterState[selKey + 'TargetY'] = ty;
                             this.masterState[selKey + 'TargetZ'] = tz;
                         }
-                        new Notice(`🎯 Light aimed at (${tx}, ${ty}, ${tz})`);
+                        new Notice(`≡ƒÄ» Light aimed at (${tx}, ${ty}, ${tz})`);
                     } else if (this.lightPickingMode === 'place_light') {
                         const px = parseFloat(pt.x.toFixed(2));
                         const py = parseFloat((pt.y + 1.2).toFixed(2));
@@ -7716,7 +7999,7 @@ private updateDummyNode(preventSelect = false) {
                             this.masterState[selKey + 'Y'] = py;
                             this.masterState[selKey + 'Z'] = pz;
                         }
-                        new Notice(`📍 Light placed at (${px}, ${py}, ${pz})`);
+                        new Notice(`≡ƒôì Light placed at (${px}, ${py}, ${pz})`);
                     }
 
                     if (this.plugin && this.plugin.settings) {
@@ -7845,7 +8128,7 @@ private updateDummyNode(preventSelect = false) {
         renderer.domElement.addEventListener('wheel', onWheel, { passive: false });
         renderer.domElement.addEventListener('click', onClick);
 
-        // ── 60FPS Render & Bezier Trajectory Animation Loop ─────────────────
+        // ΓöÇΓöÇ 60FPS Render & Bezier Trajectory Animation Loop ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
         const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
         const easeInOutQuad = (t: number) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
         let lastEtherFrameTime = performance.now();
@@ -7854,7 +8137,7 @@ private updateDummyNode(preventSelect = false) {
             try {
             this.animationFrameId = window.requestAnimationFrame(animate);
 
-            // 🛑 FREE 100% GPU & CPU POWER FOR THE 3D FLAG DURING SYSTEM TRANSITIONS
+            // ≡ƒ¢æ FREE 100% GPU & CPU POWER FOR THE 3D FLAG DURING SYSTEM TRANSITIONS
             if (this.isCurtainTransitioning || this.isMinimized) {
                 return;
             }
@@ -7863,10 +8146,10 @@ private updateDummyNode(preventSelect = false) {
             const deltaSec = Math.min((nowMs - lastEtherFrameTime) * 0.001, 0.05);
             lastEtherFrameTime = nowMs;
 
-            // ✨ Live 60 FPS Celestial Console Ether Waterfall & Trails Simulation
+            // Γ£¿ Live 60 FPS Celestial Console Ether Waterfall & Trails Simulation
             this.updateConsoleEtherSystem(deltaSec, nowMs * 0.001);
 
-            // 🌫️ Live 60 FPS Atmospheric Fog Updates
+            // ≡ƒî½∩╕Å Live 60 FPS Atmospheric Fog Updates
             if (masterState.fogEnabled !== false) {
                 const fogColor = masterState.fogColor || '#0b0e17';
                 if (masterState.fogMode === 'exp2') {
@@ -7887,11 +8170,11 @@ private updateDummyNode(preventSelect = false) {
                 scene.fog = null;
             }
 
-            // 📷 Live 60 FPS Depth of Field (DOF) Bokeh & Cinematic Autofocus Rack-Tracking
+            // ≡ƒô╖ Live 60 FPS Depth of Field (DOF) Bokeh & Cinematic Autofocus Rack-Tracking
             if (bokehPass) {
                 bokehPass.enabled = (masterState.dofEnabled !== false);
 
-                // 🎥 Camera FOV calculation: baseline 50mm maps 1:1 to masterState.camFov (43°)
+                // ≡ƒÄÑ Camera FOV calculation: baseline 50mm maps 1:1 to masterState.camFov (43┬░)
                 if (camera) {
                     const baseFov = typeof masterState.camFov === 'number' ? masterState.camFov : 43;
                     const focalLength = typeof masterState.dofLensFocalLength === 'number' ? masterState.dofLensFocalLength : 50;
@@ -7905,7 +8188,7 @@ private updateDummyNode(preventSelect = false) {
                 let rawTargetFocus = typeof masterState.dofFocusDistance === 'number' ? masterState.dofFocusDistance : 6.2;
                 const isPSXSystem = (this.plugin.settings.activeSystem === 'psx');
 
-                // 🌟 Smart Mid-Air Flight Focus Shift: Cinematically track flying cartridge / CD in 3D space!
+                // ≡ƒîƒ Smart Mid-Air Flight Focus Shift: Cinematically track flying cartridge / CD in 3D space!
                 const flyingEntry = entries.find(e => e.state === 'ANIM_TO_BAY' || e.state === 'ANIM_TO_DECK');
                 if (flyingEntry && camera) {
                     const flightWorldPos = new THREE.Vector3();
@@ -8110,7 +8393,7 @@ private updateDummyNode(preventSelect = false) {
             const rY = Number.isFinite(masterState.nesRotY) ? masterState.nesRotY : 0;
             const rZ = Number.isFinite(masterState.nesRotZ) ? masterState.nesRotZ : 0;
 
-            // ── 🍃 PERFECT HARMONIC LOOPING ZERO-G LEVITATION ENGINE ─────────
+            // ΓöÇΓöÇ ≡ƒìâ PERFECT HARMONIC LOOPING ZERO-G LEVITATION ENGINE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
             const floatTime = performance.now() * 0.001;
             // Harmonic figure-8 Lissajous trajectory with exact 2:1 harmonic ratio:
             const consoleFloatY = Math.sin(floatTime * 1.2) * 0.022;
@@ -8123,7 +8406,7 @@ private updateDummyNode(preventSelect = false) {
             consoleGroup.position.set(nX + consoleFloatX, nY + consoleFloatY, nZ + consoleFloatZ);
             consoleGroup.rotation.set(rX + consoleFloatRotX, rY + this.consoleSpinY + consoleFloatRotY, rZ + consoleFloatRotZ);
 
-            // ── Live 60 FPS Desk Surface Position & Dimension Transforms ──────
+            // ΓöÇΓöÇ Live 60 FPS Desk Surface Position & Dimension Transforms ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
             const dX = Number.isFinite(masterState.deskX) ? masterState.deskX : 0.0;
             const dY = Number.isFinite(masterState.deskY) ? masterState.deskY : -1.9;
             const dZ = Number.isFinite(masterState.deskZ) ? masterState.deskZ : -0.4;
@@ -8137,7 +8420,7 @@ private updateDummyNode(preventSelect = false) {
             trimMesh.position.set(dX, dY + (dH / 2) + 0.02, dZ);
             trimMesh.scale.set(dW / 10.0, 1.0, dD / 7.5);
 
-            // ── Live 60 FPS Dynamic Light Rig Transforms & System Scoping ─────
+            // ΓöÇΓöÇ Live 60 FPS Dynamic Light Rig Transforms & System Scoping ΓöÇΓöÇΓöÇΓöÇΓöÇ
             const currentSys = this.plugin.settings.activeSystem;
             const checkLightScope = (scope?: string) => {
                 if (!scope || scope === 'all') return true;
@@ -8174,7 +8457,7 @@ private updateDummyNode(preventSelect = false) {
             );
             fillLight.target.updateMatrixWorld();
 
-            // ── Live 60 FPS Dynamic Rim Light Edge Silhouette ─────────────────
+            // ΓöÇΓöÇ Live 60 FPS Dynamic Rim Light Edge Silhouette ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
             rimLight.visible = (masterState.rimLightEnabled !== false) && checkLightScope(masterState.rimSystemScope);
             let rColHex = 0xffb060;
             if (masterState.rimColor === 'cyan') rColHex = 0x00f0ff;
@@ -8199,7 +8482,7 @@ private updateDummyNode(preventSelect = false) {
             hemi.intensity = masterState.hemiPower;
             renderer.toneMappingExposure = masterState.exposure;
 
-            // ── Live 60 FPS Key Light 2 ────────────────────────────────────────
+            // ΓöÇΓöÇ Live 60 FPS Key Light 2 ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
             key2Light.visible = (masterState.key2LightEnabled !== false) && checkLightScope(masterState.key2SystemScope);
             let k2ColHex = 0xfff8e8;
             if (masterState.key2Color === 'coolBlue')  k2ColHex = 0x80a0ff;
@@ -8220,7 +8503,7 @@ private updateDummyNode(preventSelect = false) {
             );
             key2Light.target.updateMatrixWorld();
 
-            // ── Live 60 FPS 3D Light Gizmos Visibility & Position Updates ──────
+            // ΓöÇΓöÇ Live 60 FPS 3D Light Gizmos Visibility & Position Updates ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
             const showGizmos = (masterState.showLightGizmos === true);
             keyHelper.visible = showGizmos && keyLight.visible;
             fillHelper.visible = showGizmos && fillLight.visible;
@@ -8234,7 +8517,7 @@ private updateDummyNode(preventSelect = false) {
                 key2Helper.update();
             }
 
-            // ── Live 60 FPS Custom Dynamic Lights Updates ──────────────────────
+            // ΓöÇΓöÇ Live 60 FPS Custom Dynamic Lights Updates ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
             liveCustomLights.forEach(item => {
                 const cfg = item.config;
                 const l = item.light;
@@ -8262,7 +8545,7 @@ private updateDummyNode(preventSelect = false) {
                 }
             });
 
-            // ── 🌀 TRUE 3D SPIN TRANSITION ENGINE ────────────────────────────
+            // ΓöÇΓöÇ ≡ƒîÇ TRUE 3D SPIN TRANSITION ENGINE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
             if (this.isSpinSwitching) {
                 if (this.spinSwitchPhase === 'spinup') {
                     this.spinSwitchProgress += 0.035;
@@ -8272,7 +8555,7 @@ private updateDummyNode(preventSelect = false) {
                     this.targetScrollOffset += eased * 2.2;
 
                     if (this.spinSwitchProgress >= 1.0) {
-                        // MID-SPIN SWAP AT PEAK VELOCITY (360° rotation point):
+                        // MID-SPIN SWAP AT PEAK VELOCITY (360┬░ rotation point):
                         this.spinSwitchPhase = 'spindown';
                         this.spinSwitchProgress = 0.0;
                         if (this.targetSpinSystem) {
@@ -8379,14 +8662,14 @@ private updateDummyNode(preventSelect = false) {
                 const baseRotY = baseRotYParam + wRotY;
                 const baseRotZ = baseRotZParam + wRotZ;
 
-                // ── Scale fix: always reset to correct per-system base scale before any state touches it
+                // ΓöÇΓöÇ Scale fix: always reset to correct per-system base scale before any state touches it
                 const isNes = (this.plugin.settings.activeSystem === 'nes');
                 const baseScale = isNes ? (typeof masterState.nesCartScale === 'number' ? masterState.nesCartScale : 0.85) : 1.0;
 
                 if (e.state === 'DECK') {
                     const isHovered = (e.idx === hoveredStackIdx);
 
-                    // 🍃 Harmonically synchronized carousel breathing (figure-8 Lissajous matching console)
+                    // ≡ƒìâ Harmonically synchronized carousel breathing (figure-8 Lissajous matching console)
                     const deckPhase = (virtualIdx * 0.38) + floatTime * 0.6;
                     const itemBobY = Math.sin(deckPhase * 2.0) * 0.012;
                     const itemBobZ = Math.cos(deckPhase * 2.0) * 0.006;
@@ -8424,7 +8707,7 @@ private updateDummyNode(preventSelect = false) {
                     // Render depth sorting: items closest to front (smallest virtualIdx absolute distance) render on top
                     e.mesh.renderOrder = isHovered ? 500 : (100 - Math.round(Math.abs(virtualIdx)));
 
-                    // 🔮 INFINITE CAROUSEL CULLING & FADE ARC MAGIC HACK:
+                    // ≡ƒö« INFINITE CAROUSEL CULLING & FADE ARC MAGIC HACK:
                     const maxSpan = 6.8;
                     const absV = Math.abs(virtualIdx);
 
@@ -8510,7 +8793,7 @@ private updateDummyNode(preventSelect = false) {
                     const s = bio.seed;
                     const t = floatTime * bio.swayFreq;
 
-                    // ── 🖐️ BIOMECHANICAL GHOST-HAND KINEMATICS LAYER ───────────────
+                    // ΓöÇΓöÇ ≡ƒûÉ∩╕Å BIOMECHANICAL GHOST-HAND KINEMATICS LAYER ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
                     // Continuous C2 smooth envelope across the entire handling sequence:
                     const env = Math.sin(Math.min(1.0, Math.max(0.0, progress)) * Math.PI);
                     const envSmooth = env * env;
@@ -8540,7 +8823,7 @@ private updateDummyNode(preventSelect = false) {
                         const peakX = baseX - 0.55;
                         const peakTiltZ = 0.14;
 
-                        // ── 💿 PS1 JEWEL CASE HANDLING BY GHOST HANDS ────────────────
+                        // ΓöÇΓöÇ ≡ƒÆ┐ PS1 JEWEL CASE HANDLING BY GHOST HANDS ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
                         // 0.00 -> 0.18: Grip & Lift forward from shelf with human wrist presentation
                         // 0.18 -> 0.58: Hold at showcase height while two-handed lid open & disc takeout occur
                         // 0.58 -> 0.74: Descend & curve back into carousel shelf slot
@@ -8586,7 +8869,7 @@ private updateDummyNode(preventSelect = false) {
                             caseRotZ + wristRotZ * caseEnv
                         );
 
-                        // ── 📖 TWO-HANDED JEWEL LID HINGE OPENING DYNAMICS ────────────
+                        // ΓöÇΓöÇ ≡ƒôû TWO-HANDED JEWEL LID HINGE OPENING DYNAMICS ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
                         if (jewelHinge) {
                             if (progress < 0.24) {
                                 jewelHinge.rotation.y = 0;
@@ -8604,7 +8887,7 @@ private updateDummyNode(preventSelect = false) {
                             }
                         }
 
-                        // ── 💿 CD DISC POP-OUT & FLIGHT TRAJECTORY ────────────────────
+                        // ΓöÇΓöÇ ≡ƒÆ┐ CD DISC POP-OUT & FLIGHT TRAJECTORY ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
                         if (cdDisc) {
                             if (progress < 0.38) {
                                 if (cdDisc.userData.detached) {
@@ -8702,7 +8985,7 @@ private updateDummyNode(preventSelect = false) {
                             }
                         }
                     } else {
-                        // ── 🎮 NES CARTRIDGE HANDLING BY GHOST HANDS ─────────────────
+                        // ΓöÇΓöÇ ≡ƒÄ« NES CARTRIDGE HANDLING BY GHOST HANDS ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
                         const targetSlotX = typeof masterState.nesSlotX === 'number' ? masterState.nesSlotX : (typeof masterState.slotX === 'number' ? masterState.slotX : -0.575);
                         const targetSlotY = typeof masterState.nesSlotY === 'number' ? masterState.nesSlotY : (typeof masterState.slotY === 'number' ? masterState.slotY : 1.95);
                         const targetSlotZ = typeof masterState.nesSlotZ === 'number' ? masterState.nesSlotZ : (typeof masterState.slotZ === 'number' ? masterState.slotZ : 0.20);
@@ -8725,7 +9008,7 @@ private updateDummyNode(preventSelect = false) {
                             currRotY = 0.0;
                         }
                         else if (progress < 0.42) {
-                            // Phase 1b: Showcase Linger — Holds presentation tilt directly facing player before flight
+                            // Phase 1b: Showcase Linger ΓÇö Holds presentation tilt directly facing player before flight
                             const lingerT = (progress - 0.20) / 0.22;
                             const lingerBreath = Math.sin(lingerT * Math.PI) * 0.018;
                             currY = masterState.peakY * bio.liftArcHeight + lingerBreath;
@@ -8756,7 +9039,7 @@ private updateDummyNode(preventSelect = false) {
                             currRotY = targetSlotRotY + consoleFloatRotY;
                         }
                         else {
-                            // Phase 4: THE CHUNK — Hand firmly presses spring tray DOWN into mechanical lock with damped bounce!
+                            // Phase 4: THE CHUNK ΓÇö Hand firmly presses spring tray DOWN into mechanical lock with damped bounce!
                             const lockT = (progress - 0.88) / 0.12;
                             const tProg = easeInOutQuad(lockT);
                             const baseDownY = THREE.MathUtils.lerp(targetSlotY + 0.18 + consoleFloatY, targetSlotY + consoleFloatY, tProg);
@@ -8844,7 +9127,7 @@ private updateDummyNode(preventSelect = false) {
                     const s = bio.seed;
                     const t = floatTime * bio.swayFreq;
 
-                    // ── 🖐️ BIOMECHANICAL GHOST-HAND KINEMATICS LAYER ───────────────
+                    // ΓöÇΓöÇ ≡ƒûÉ∩╕Å BIOMECHANICAL GHOST-HAND KINEMATICS LAYER ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
                     const env = Math.sin(Math.min(1.0, Math.max(0.0, progress)) * Math.PI);
                     const envSmooth = env * env;
 
@@ -8870,7 +9153,7 @@ private updateDummyNode(preventSelect = false) {
                         const peakX = baseX - 0.55;
                         const peakTiltZ = 0.14;
 
-                        // ── 💿 PS1 JEWEL CASE RETURN SEQUENCE (GHOST HANDS) ──────────
+                        // ΓöÇΓöÇ ≡ƒÆ┐ PS1 JEWEL CASE RETURN SEQUENCE (GHOST HANDS) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
                         // 0.00 -> 0.28: Rest at Shelf
                         // 0.28 -> 0.44: Rise to meet returning disc & open lid
                         // 0.44 -> 0.82: Hold while disc seats into rosette hub
@@ -9020,7 +9303,7 @@ private updateDummyNode(preventSelect = false) {
                             }
                         }
                     } else {
-                        // ── 🎮 NES CARTRIDGE EJECTION (GHOST HANDS) ──────────────────
+                        // ΓöÇΓöÇ ≡ƒÄ« NES CARTRIDGE EJECTION (GHOST HANDS) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
                         const targetSlotX = typeof masterState.nesSlotX === 'number' ? masterState.nesSlotX : (typeof masterState.slotX === 'number' ? masterState.slotX : -0.575);
                         const targetSlotY = typeof masterState.nesSlotY === 'number' ? masterState.nesSlotY : (typeof masterState.slotY === 'number' ? masterState.slotY : 1.95);
                         const targetSlotZ = typeof masterState.nesSlotZ === 'number' ? masterState.nesSlotZ : (typeof masterState.slotZ === 'number' ? masterState.slotZ : 0.20);
@@ -9120,6 +9403,7 @@ private updateDummyNode(preventSelect = false) {
                 }
             });
 
+            const isAnyCartAnimating = entries.some(e => e.state === 'ANIM_TO_BAY' || e.state === 'ANIM_TO_DECK');
             const requiresComposer = masterState.bloomEnabled || masterState.dofEnabled;
             if (requiresComposer) {
                 bloomPass.strength = masterState.bloomIntensity;
@@ -9130,16 +9414,16 @@ private updateDummyNode(preventSelect = false) {
             } else {
                 renderer.render(scene, camera);
             }
-            } catch (e) {
-                console.error("Error in animate loop:", e);
+            } catch (err) {
+                console.error("Error in animate loop:", err);
                 if (this.animationFrameId !== null) window.cancelAnimationFrame(this.animationFrameId);
-                new Notice("3D Render Error: " + ((e as any)?.message || e));
+                new Notice("3D Render Error: " + err.message);
             }
         };
         animate();
 
         } catch (e) {
-            new Notice("Error in build3DScene: " + ((e as any)?.message || e));
+            new Notice("Error in build3DScene: " + e.message);
             console.error("build3DScene error:", e);
         }
     }
@@ -9152,13 +9436,13 @@ private updateDummyNode(preventSelect = false) {
         allRoms.forEach((rom) => {
             const opt = createEl('option');
             opt.value = rom.path;
-            opt.text = rom.isAsset ? ('🎮 ' + rom.name + ' (Plugin Assets)') : ('📁 ' + rom.name + ' (Vault)');
+            opt.text = rom.isAsset ? ('≡ƒÄ« ' + rom.name + ' (Plugin Assets)') : ('≡ƒôü ' + rom.name + ' (Vault)');
             this.romSelectEl.appendChild(opt);
         });
 
         const uploadOption = createEl('option');
         uploadOption.value = 'upload';
-        uploadOption.text = '📤 Load External .NES File...';
+        uploadOption.text = '≡ƒôñ Load External .NES File...';
         this.romSelectEl.appendChild(uploadOption);
 
         if (this.selectedVaultRomPath) {
@@ -9388,7 +9672,7 @@ private updateDummyNode(preventSelect = false) {
             this.isControllerVisible = false;
             this.isControllerAnimatingIn = false;
             this.stopEmulator();
-            // System is now OFF — show START button
+            // System is now OFF ΓÇö show START button
             this.ensureRetroStartButton();
         }, 900);
     }
@@ -9569,7 +9853,7 @@ private updateDummyNode(preventSelect = false) {
                 }
                 this.updateControllerTransform();
             };
-        } catch {
+        } catch (e) {
             this.isControllerAnimatingIn = false;
             if (this.controllerPadEl) {
                 setCssStyles(this.controllerPadEl as any, { opacity: '1' });
@@ -9618,7 +9902,7 @@ private updateDummyNode(preventSelect = false) {
         }
     }
 
-    // ── EMULATOR LOGIC ──
+    // ΓöÇΓöÇ EMULATOR LOGIC ΓöÇΓöÇ
 
     private async startEmulator() {
         const isScreenAlreadyMounted = !!(this.overlayCanvas && this.overlayCanvas.style.display !== 'none');
@@ -9711,7 +9995,7 @@ private updateDummyNode(preventSelect = false) {
         this.persistentBg = new Uint32Array(this.SCREEN_WIDTH * this.SCREEN_HEIGHT).fill(0);
         this.isRunning = true;
         if (this.startBtn) {
-            this.startBtn.innerText = '■  STOP';
+            this.startBtn.innerText = 'Γûá  STOP';
             this.startBtn.classList.add('running');
         }
         this.updateStatus();
@@ -9750,7 +10034,7 @@ private updateDummyNode(preventSelect = false) {
                 if (document.hidden) {
                     // Only pause audio when the tab/window is truly hidden (actual app switch)
                     if (this.audioCtx && this.audioCtx.state === 'running') {
-                        try { this.audioCtx.suspend(); } catch {}
+                        try { this.audioCtx.suspend(); } catch (e) {}
                     }
                     if (this.psxEngine) {
                         this.psxEngine.pause();
@@ -9760,7 +10044,7 @@ private updateDummyNode(preventSelect = false) {
             this.onWindowFocus = () => {
                 if (!document.hidden) {
                     if (this.isRunning && this.audioCtx && this.audioCtx.state === 'suspended') {
-                        try { this.audioCtx.resume(); } catch {}
+                        try { this.audioCtx.resume(); } catch (e) {}
                     }
                     if (this.psxEngine) {
                         this.psxEngine.resume();
@@ -9781,7 +10065,7 @@ private updateDummyNode(preventSelect = false) {
             // NES
             this.audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
             if (this.audioCtx.state === 'suspended') {
-                try { await this.audioCtx.resume(); } catch {}
+                try { await this.audioCtx.resume(); } catch (e) {}
             }
             
             this.nes = new NES({
@@ -9875,7 +10159,7 @@ private updateDummyNode(preventSelect = false) {
             });
             this.scriptNode.connect(this.audioCtx.destination);
             if (this.audioCtx.state === 'suspended') {
-                try { await this.audioCtx.resume(); } catch {}
+                try { await this.audioCtx.resume(); } catch (e) {}
             }
 
             this.nes.loadROM(romString);
@@ -9929,7 +10213,7 @@ private updateDummyNode(preventSelect = false) {
                     if (currentTransform !== this.lastTransform) {
                         this.lastTransform = currentTransform;
                         this.updateOverlayCanvasSize();
-                        // During active PS1 play the RAF loop already blits every frame — skip the double call
+                        // During active PS1 play the RAF loop already blits every frame ΓÇö skip the double call
                         if (!(this.isRunning && this.plugin.settings.activeSystem === 'psx')) {
                             this.drawOverlay();
                         }
@@ -9944,7 +10228,7 @@ private updateDummyNode(preventSelect = false) {
         this.isRunning = false;
         
         if (this.startBtn) {
-            this.startBtn.innerText = '▶  START';
+            this.startBtn.innerText = 'Γû╢  START';
             this.startBtn.classList.remove('running');
         }
         this.updateStatus();
@@ -10005,8 +10289,8 @@ private updateDummyNode(preventSelect = false) {
             if (typeof nes.ppu.updatePalettes === 'function') {
                 nes.ppu.updatePalettes();
             }
-        } catch (e) {
-            console.error("Operation error:", e);
+        } catch (err) {
+            console.warn("Could not apply custom NES palette:", err);
         }
     }
 
@@ -10237,7 +10521,7 @@ private updateDummyNode(preventSelect = false) {
         // Play high-end transition audio cue consistently on every system switch
         this.sfxEngine.play('psx_disc_flight_whoosh', 0.85);
 
-        // 🎭 Play CTR-style wavy checkered flag sweep across the 3D viewport
+        // ≡ƒÄ¡ Play CTR-style wavy checkered flag sweep across the 3D viewport
         this.playCurtainSweepIn(target, async () => {
             try {
                 // Viewport is now 100% occluded by the wavy checkered flag curtain.
@@ -10259,7 +10543,7 @@ private updateDummyNode(preventSelect = false) {
                         } else {
                             this.activeRenderer.render(this.activeScene, this.current3DCamera);
                         }
-                    } catch {}
+                    } catch (e) {}
                 }
 
                 // User-controlled flag linger / occlusion delay to ensure target scene has fully settled
@@ -10271,7 +10555,7 @@ private updateDummyNode(preventSelect = false) {
                 // Sweep the checkered flag away to the right, revealing the pristine 60 FPS scene with 0 pop-in
                 this.playCurtainSweepOut(() => {
                     this.isCurtainTransitioning = false;
-                    // Arrive in OFF state on new system — show START button
+                    // Arrive in OFF state on new system ΓÇö show START button
                     this.ensureRetroStartButton();
                 });
             }
@@ -10297,7 +10581,7 @@ private updateDummyNode(preventSelect = false) {
         if (this.nesBtnRef) this.nesBtnRef.className = 'system-logo-btn nes-logo-btn' + (targetSys === 'nes' ? ' active' : '');
         if (this.psxBtnRef) this.psxBtnRef.className = 'system-logo-btn psx-logo-btn' + (targetSys === 'psx' ? ' active' : '');
 
-        // 🧹 Cleanly dispose and rebuild Console 3D Model in-place (ZERO LEAKS)
+        // ≡ƒº╣ Cleanly dispose and rebuild Console 3D Model in-place (ZERO LEAKS)
         if (this.activeConsoleGroupRef) {
             const cg = this.activeConsoleGroupRef;
             while (cg.children.length > 0) {
@@ -10388,7 +10672,7 @@ private updateDummyNode(preventSelect = false) {
                                 applyConsoleModel(gltf.scene);
                                 resolve();
                             }, (err) => {
-                                console.error("Operation error:", e);
+                                console.error("Failed to parse GLTF:", err);
                                 resolve();
                             });
                         });
@@ -10399,7 +10683,7 @@ private updateDummyNode(preventSelect = false) {
 
         await new Promise(r => window.setTimeout(r, 0));
 
-        // 🧹 Cleanly dispose and rebuild Cartridges / Jewel Cases in-place (ZERO LEAKS)
+        // ≡ƒº╣ Cleanly dispose and rebuild Cartridges / Jewel Cases in-place (ZERO LEAKS)
         if (this.activeSceneRef && this.activeEntriesRef) {
             const scene = this.activeSceneRef;
             const entries = this.activeEntriesRef;
