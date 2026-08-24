@@ -90,7 +90,7 @@ export function setCssStyles(el: HTMLElement | SVGElement | any, styles: Record<
 
 function createNesCartridgeSpineTexture(romName: string): THREE.CanvasTexture {
     const W = 512, H = 80;
-    const _canvas = createEl('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext('2d')!;
@@ -175,7 +175,7 @@ function createNesCartridgeSpineTexture(romName: string): THREE.CanvasTexture {
 
 function createNesCartridgeTexture(romName: string, coverPath: string | null): THREE.CanvasTexture {
     const W = 512, H = 768;
-    const _canvas = createEl('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext('2d')!;
@@ -391,7 +391,7 @@ function createNesCartridge3DMesh(romName: string, coverPath: string | null, plu
 
 function createPsxJewelCaseSpineTexture(romName: string): THREE.CanvasTexture {
     const W = 512, H = 60;
-    const _canvas = createEl('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext('2d')!;
@@ -414,7 +414,7 @@ function createPsxJewelCaseSpineTexture(romName: string): THREE.CanvasTexture {
 
 function createPsxJewelCaseTexture(romName: string, coverPath: string | null): THREE.CanvasTexture {
     const W = 500, H = 500;
-    const _canvas = createEl('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext('2d')!;
@@ -448,7 +448,7 @@ function createPsxJewelCaseTexture(romName: string, coverPath: string | null): T
 
 function createMidnightRoomTexture(): THREE.CanvasTexture {
     const W = 1024, H = 512;
-    const _canvas = createEl('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
@@ -477,7 +477,7 @@ function createMidnightRoomTexture(): THREE.CanvasTexture {
 
 function create3D80sRoomTexture(): THREE.CanvasTexture {
     const W = 1024, H = 512;
-    const _canvas = createEl('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
@@ -508,7 +508,7 @@ function create3D80sRoomTexture(): THREE.CanvasTexture {
 
 function createMinimalRoomTexture(): THREE.CanvasTexture {
     const W = 1024, H = 512;
-    const _canvas = createEl('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
@@ -4411,7 +4411,7 @@ class TetrisPanel {
 
     private updateViewportColorCorrection() {
         if (!this.boxArtEl) return;
-        const _canvas = this.boxArtEl.querySelector('canvas:not(.curtain-3d-flag-canvas)') as HTMLCanvasElement;
+        const canvas = this.boxArtEl.querySelector('canvas:not(.curtain-3d-flag-canvas)') as HTMLCanvasElement;
         if (!canvas) return;
 
         const s = this.masterState as any;
@@ -4687,7 +4687,7 @@ class TetrisPanel {
         this.pixelColors = new Array(total).fill('#000000');
         this.pixelColors24 = new Uint32Array(total).fill(0);
         
-        const _canvas = this.canvasView.canvas;
+        const canvas = this.canvasView.canvas;
         const size = this.PIXEL_SCALE;
         const fullWidth = this.NES_WIDTH * size;
         const fullHeight = this.NES_HEIGHT * size;
@@ -5110,7 +5110,7 @@ class TetrisPanel {
 
     private getWorkspaceCoords(e: MouseEvent) {
         if (!this.canvasView.canvas) return { x: 0, y: 0 };
-        const _canvas = this.canvasView.canvas;
+        const canvas = this.canvasView.canvas;
         if (typeof canvas.posFromClient === 'function') {
             return canvas.posFromClient({ x: e.clientX, y: e.clientY });
         }
@@ -5373,7 +5373,7 @@ class TetrisPanel {
 
     private checkGroupMovements(skipRedraw = false) {
         if (!this.canvasView.canvas) return;
-        const _canvas = this.canvasView.canvas;
+        const canvas = this.canvasView.canvas;
         if (!canvas.nodes) return;
 
         let movedAny = false;
@@ -5464,7 +5464,7 @@ class TetrisPanel {
 
     private syncGroupSelection() {
         if (!this.canvasView.canvas) return;
-        const _canvas = this.canvasView.canvas;
+        const canvas = this.canvasView.canvas;
         
         const selectedGroupNodes: any[] = [];
         if (canvas.nodes) {
@@ -5667,7 +5667,7 @@ class TetrisPanel {
 
 private updateDummyNode(preventSelect = false) {
         if (!this.canvasView.canvas) return;
-        const _canvas = this.canvasView.canvas;
+        const canvas = this.canvasView.canvas;
 
         // Calculate bounding box of selected pixels
         let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
@@ -9923,7 +9923,7 @@ private updateDummyNode(preventSelect = false) {
                     }
                 }
 
-                const _canvas = this.canvasView.canvas;
+                const canvas = this.canvasView.canvas;
                 if (canvas) {
                     const currentTransform = canvas.tx + ',' + canvas.ty + ',' + canvas.zoom;
                     if (currentTransform !== this.lastTransform) {
