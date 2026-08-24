@@ -1,37 +1,6 @@
 # Canvas Retro Engine 🕹️
 
-<div align="center">
-
-**Play 8-bit NES and 32-bit PlayStation 1 games directly on the Obsidian Canvas with interactive 3D console hardware, tactile mechanical controls, vintage CRT TV shaders, and draggable gamepads.**
-
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](manifest.json)
-[![Obsidian](https://img.shields.io/badge/Obsidian-1.5.0+-purple.svg)](https://obsidian.md)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Crystal Canvas](https://img.shields.io/badge/Powered%20By-Crystal%20Canvas-6366f1.svg?style=flat&logo=obsidian)](https://www.momansour.com/crystal-canvas)
-
-*✨ From the creator of [Crystal Canvas](https://www.momansour.com/crystal-canvas) — The ultimate spatial layout & visual intelligence engine for Obsidian.*
-
-</div>
-
----
-
-## 💎 Take Your Obsidian Canvas to the Next Level
-
-If you love interactive 3D hardware and spatial canvas workflows, check out **[Crystal Canvas](https://www.momansour.com/crystal-canvas)** — the flagship intelligent spatial layout engine for Obsidian.
-
-<div align="center">
-
-[![Explore Crystal Canvas](https://img.shields.io/badge/Explore%20Crystal%20Canvas-momansour.com%2Fcrystal--canvas-6366f1?style=for-the-badge&logo=obsidian)](https://www.momansour.com/crystal-canvas)
-[![Read Documentation](https://img.shields.io/badge/Documentation-momansour.com%2Fdocs-059669?style=for-the-badge&logo=googledocs)](https://www.momansour.com/docs)
-
-</div>
-
-- 🫧 **Intelligent Soap-Bubble Auto-Layout**: Automatic node spacing, zero-overlap physics, and dynamic group clustering that cleans up your canvas instantly.
-- 🗺️ **Interactive Mini-Map & Viewport HUD**: Real-time canvas radar with cluster shadows, movement tracking, and instant spatial navigation.
-- 🎨 **Deep Visual Aesthetics**: Dynamic corner radius based on nesting depth, smooth WebGL particle backgrounds, and glassmorphism styling.
-- ⚡ **Built for Visual Thinkers**: Designed to transform visual brainstorming, mind-mapping, worldbuilding, and complex research graphs into an effortless workflow.
-
-👉 **[Discover Crystal Canvas →](https://www.momansour.com/crystal-canvas)** | 📖 **[Read the Documentation →](https://www.momansour.com/docs)**
+Play 8-bit NES and 32-bit PlayStation 1 games directly on the Obsidian Canvas with interactive 3D console hardware, tactile mechanical controls, vintage CRT TV shaders, and draggable gamepads.
 
 ---
 
@@ -67,13 +36,12 @@ Place your files in the respective folders inside the plugin's `assets/` directo
 
 ---
 
-## 👨‍💻 Creator & Support
+## 💎 Also Check Out: Crystal Canvas
 
-Created by **Mo Mansour**. 
+If you enjoy 3D and spatial experiences on Obsidian Canvas, check out **[Crystal Canvas](https://www.momansour.com/crystal-canvas)** — the ultimate visual workspace and 3D spatial organization experience for Obsidian Canvas.
 
-- 🌐 Website: [momansour.com](https://www.momansour.com)
-- 💎 Flagship Plugin: [Crystal Canvas](https://www.momansour.com/crystal-canvas)
-- 📚 Documentation: [momansour.com/docs](https://www.momansour.com/docs)
+- 🌐 **[Explore Crystal Canvas](https://www.momansour.com/crystal-canvas)**
+- 📚 **[Documentation & Guides](https://www.momansour.com/docs)**
 
 ---
 
