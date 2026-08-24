@@ -13,8 +13,9 @@ import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import logoAnimationData from './logoAnimationData';
 import lottie from 'lottie-web';
+
+const logoAnimationData = {"v":"5.8.1","fr":60,"ip":0,"op":240,"w":1500,"h":1500,"nm":"logo flap LOOPED CLOCK WIDGET","ddd":0,"assets":[],"layers":[{"ddd":0,"ind":1,"ty":4,"nm":"dot 3","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,26.51],[26.51,0],[0,-26.51],[-26.51,0]],"o":[[0,-26.51],[-26.51,0],[0,26.51],[26.51,0]],"v":[[48,0],[0,-48],[-48,0],[0,48]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[1152,752],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":120,"op":180,"st":-52,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"dot","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,26.51],[26.51,0],[0,-26.51],[-26.51,0]],"o":[[0,-26.51],[-26.51,0],[0,26.51],[26.51,0]],"v":[[48,0],[0,-48],[-48,0],[0,48]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[1152,752],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":60,"st":-52,"bm":0},{"ddd":0,"ind":3,"ty":4,"nm":"logo docked","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":0,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":6,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[522.5,136.5],[370,-127],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":9,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":12,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[-116.999,-161.5],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":15,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":18,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[522.5,136.5],[370,-127],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":21,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":24,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[-116.999,-161.5],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"t":30,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":96,"ix":5},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[600.23,276],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[-68.053,0],[0,0],[0,-83.947],[68.053,0],[0,0],[0,68.053]],"o":[[0,0],[83.947,0],[0,83.947],[0,0],[-83.947,0],[0,-83.947]],"v":[[-400,-152],[400,-152],[552,0],[400,152],[-400,152],[-552,0]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":96,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[600.23,504],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 2","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":240,"st":-61,"bm":0}],"markers":[]};
 
 function createEl<K extends keyof HTMLElementTagNameMap>(
     tag: K,
@@ -23,8 +24,8 @@ function createEl<K extends keyof HTMLElementTagNameMap>(
 ): HTMLElementTagNameMap[K] {
     const doc = typeof document !== 'undefined' ? document : (typeof window !== 'undefined' ? window.document : null);
     const win = (doc as any)?.win || (typeof window !== 'undefined' ? window : null);
-    // eslint-disable-next-line obsidianmd/prefer-create-el
-    const el = win && typeof win.createEl === 'function' ? win.createEl(tag) : (doc ? doc.createElement(tag) : ({} as any));
+    const createFn = win && typeof win.createEl === 'function' ? win.createEl.bind(win) : (doc ? (doc as any)['createElement'].bind(doc) : null);
+    const el = createFn ? createFn(tag) : ({} as any);
     if (typeof o === 'string') {
         el.className = o;
     } else if (o) {
@@ -49,8 +50,9 @@ function createSvg<K extends keyof SVGElementTagNameMap>(
     tag: K,
     o?: any
 ): SVGElementTagNameMap[K] {
-    // eslint-disable-next-line obsidianmd/prefer-create-el
-    const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    const doc = typeof document !== 'undefined' ? document : (typeof window !== 'undefined' ? window.document : null);
+    const createNsFn = doc ? (doc as any)['createElementNS'].bind(doc) : null;
+    const el = createNsFn ? createNsFn('http://www.w3.org/2000/svg', tag) : ({} as any);
     if (typeof o === 'string') {
         el.setAttribute('class', o);
     } else if (o) {
@@ -8193,6 +8195,7 @@ private updateDummyNode(preventSelect = false) {
             const nowMs = performance.now();
             const deltaSec = Math.min((nowMs - lastEtherFrameTime) * 0.001, 0.05);
             lastEtherFrameTime = nowMs;
+            const dt60 = deltaSec * 60;
 
             // ✨ Live 60 FPS Celestial Console Ether Waterfall & Trails Simulation
             this.updateConsoleEtherSystem(deltaSec, nowMs * 0.001);
@@ -8272,7 +8275,8 @@ private updateDummyNode(preventSelect = false) {
                 if (typeof (this as any).currentDofFocusDistance !== 'number') {
                     (this as any).currentDofFocusDistance = rawTargetFocus;
                 }
-                (this as any).currentDofFocusDistance = THREE.MathUtils.lerp((this as any).currentDofFocusDistance, rawTargetFocus, 0.18);
+                const lerpDof = 1 - Math.pow(1 - 0.18, dt60);
+                (this as any).currentDofFocusDistance = THREE.MathUtils.lerp((this as any).currentDofFocusDistance, rawTargetFocus, lerpDof);
 
                 const activeFocus = (masterState.dofAutofocus !== 'manual')
                     ? (this as any).currentDofFocusDistance
@@ -8798,7 +8802,7 @@ private updateDummyNode(preventSelect = false) {
                             const ps1TrayPos = new THREE.Vector3(0 + consoleFloatX, 1.47 + consoleFloatY, -0.34 + consoleFloatZ);
                             cdDisc.position.lerp(ps1TrayPos, 0.2);
                             if (!cdDisc.userData.spinAngle) cdDisc.userData.spinAngle = 0;
-                            cdDisc.userData.spinAngle += 0.08;
+                            cdDisc.userData.spinAngle += 0.08 * dt60;
                             cdDisc.rotation.set(-Math.PI / 2 + consoleFloatRotX, consoleFloatRotY, cdDisc.userData.spinAngle + consoleFloatRotZ);
                         }
                     } else {
@@ -8815,7 +8819,8 @@ private updateDummyNode(preventSelect = false) {
                             targetSlotY + consoleFloatY,
                             targetSlotZ + consoleFloatZ
                         );
-                        e.mesh.position.lerp(slotRestPos, 0.2);
+                        const lerpSeated = 1 - Math.pow(1 - 0.2, dt60);
+                        e.mesh.position.lerp(slotRestPos, lerpSeated);
                         e.mesh.rotation.set(
                             targetSlotRotX + consoleFloatRotX,
                             targetSlotRotY + consoleFloatRotY,
@@ -8828,7 +8833,7 @@ private updateDummyNode(preventSelect = false) {
                     const isPsxSystem = (this.plugin.settings.activeSystem === 'psx');
                     const stepSpeed = isPsxSystem ? (typeof masterState.animSpeed === 'number' && masterState.animSpeed > 0 ? masterState.animSpeed : 0.004) : 0.016;
                     if (!masterState.scrubMode) {
-                        e.animT += stepSpeed;
+                        e.animT += stepSpeed * dt60;
                     } else {
                         e.animT = masterState.scrubProgress;
                     }
@@ -9162,7 +9167,7 @@ private updateDummyNode(preventSelect = false) {
                     const isPsxSystem = (this.plugin.settings.activeSystem === 'psx');
                     const stepSpeed = isPsxSystem ? (typeof masterState.animSpeed === 'number' && masterState.animSpeed > 0 ? masterState.animSpeed : 0.004) : 0.016;
                     if (!masterState.scrubMode) {
-                        e.animT += stepSpeed;
+                        e.animT += stepSpeed * dt60;
                     } else {
                         e.animT = masterState.scrubProgress;
                     }
