@@ -1,4 +1,4 @@
-﻿import { Plugin, ItemView, Notice, setIcon, requestUrl } from 'obsidian';
+import { Plugin, ItemView, Notice, setIcon, requestUrl } from 'obsidian';
 // @ts-ignore
 import { NES } from 'jsnes';
 import { PsxEngine } from './psx-engine';
@@ -179,37 +179,24 @@ function createNesCartridgeTexture(romName: string, coverPath: string | null): T
     canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
-    // 1. Cover Art (Fills 100% of the front label area edge-to-edge with no bottom strip)
-    if (coverPath) {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.src = coverPath;
-        img.onload = () => {
-            ctx.imageSmoothingEnabled = true;
-            ctx.imageSmoothingQuality = 'high';
-            ctx.drawImage(img, 0, 0, W, H);
-            texture.needsUpdate = true;
-        };
-    } else {
-        ctx.fillStyle = '#14151a';
-        ctx.fillRect(0, 0, W, H);
+    // 1. Draw base styling
+    ctx.fillStyle = '#14151a';
+    ctx.fillRect(0, 0, W, H);
 
-        // Retro diagonal accent stripes
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
-        for (let r = 0; r < 24; r++) {
-            ctx.fillRect(0, r * 32, W, 14);
-        }
-
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-        ctx.font = '900 48px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('≡ƒÄ«', W / 2, H / 2 - 16);
-
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-        ctx.font = 'bold 16px sans-serif';
-        ctx.fillText(romName.toUpperCase(), W / 2, H / 2 + 36);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+    for (let r = 0; r < 24; r++) {
+        ctx.fillRect(0, r * 32, W, 14);
     }
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.font = '900 48px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('🎮', W / 2, H / 2 - 16);
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.font = 'bold 16px sans-serif';
+    ctx.fillText(romName.toUpperCase(), W / 2, H / 2 + 36);
 
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
@@ -217,6 +204,26 @@ function createNesCartridgeTexture(romName: string, coverPath: string | null): T
     texture.minFilter = THREE.LinearMipmapLinearFilter;
     texture.magFilter = THREE.LinearFilter;
     texture.generateMipmaps = true;
+
+    // 2. If cover art path exists, paint it
+    if (coverPath) {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, 0, 0, W, H);
+            texture.needsUpdate = true;
+        };
+        img.src = coverPath;
+        if (img.complete && img.naturalWidth > 0) {
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, 0, 0, W, H);
+            texture.needsUpdate = true;
+        }
+    }
+
     return texture;
 }
 
@@ -228,11 +235,29 @@ interface NesCartridgeGeometries {
 
 let cachedNesCartridgeGeometries: NesCartridgeGeometries | null = null;
 
-function loadNesCartridgeGeometriesSync(): NesCartridgeGeometries | null {
+function loadNesCartridgeGeometriesSync(plugin?: TetrisCanvasPlugin): NesCartridgeGeometries | null {
     if (cachedNesCartridgeGeometries) return cachedNesCartridgeGeometries;
     try {
-        const gltfPath = 'd:/test vault/.obsidian/plugins/canvas-nes-emulator/assets/nes/nes_cartridge.glb';
-        if (fs.existsSync(gltfPath)) {
+        const candidates: string[] = [];
+        if (plugin) {
+            const pluginDir = getPluginDir(plugin);
+            if (pluginDir) candidates.push(path.join(pluginDir, 'assets', 'nes', 'nes_cartridge.glb'));
+        }
+        candidates.push(
+            'd:/test vault/.obsidian/plugins/canvas-retro-engine/assets/nes/nes_cartridge.glb',
+            'd:/test vault/.obsidian/plugins/canvas-nes-emulator/assets/nes/nes_cartridge.glb',
+            'd:/test vault/github-release/canvas-retro-engine/assets/nes/nes_cartridge.glb'
+        );
+
+        let gltfPath = '';
+        for (const c of candidates) {
+            if (fs.existsSync(c)) {
+                gltfPath = c;
+                break;
+            }
+        }
+
+        if (gltfPath && fs.existsSync(gltfPath)) {
             const buf = fs.readFileSync(gltfPath);
             const dataView = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
             const chunk0Len = dataView.getUint32(12, true);
@@ -315,7 +340,7 @@ function createNesCartridge3DMesh(romName: string, coverPath: string | null, plu
         metalness: 0.03
     });
 
-    const geos = loadNesCartridgeGeometriesSync();
+    const geos = loadNesCartridgeGeometriesSync(plugin);
     if (geos) {
         // 1. Authentic CAD Cartridge Body
         const bodyMesh = new THREE.Mesh(geos.body, grayMat);
@@ -3680,7 +3705,7 @@ class TetrisPanel {
     private async saveRomStateToDisk(romKey: string, data: any, isBinary: boolean): Promise<boolean> {
         try {
             const adapter = this.plugin.app.vault.adapter;
-            const dir = '.obsidian/plugins/canvas-nes-emulator/save-states';
+            const dir = path.join(getPluginDir(this.plugin), 'save-states');
             if (!(await adapter.exists(dir))) {
                 await adapter.mkdir(dir);
             }
@@ -3704,7 +3729,7 @@ class TetrisPanel {
     private async loadRomStateFromDisk(romKey: string, isBinary: boolean): Promise<any> {
         try {
             const adapter = this.plugin.app.vault.adapter;
-            const dir = '.obsidian/plugins/canvas-nes-emulator/save-states';
+            const dir = path.join(getPluginDir(this.plugin), 'save-states');
             const safeKey = romKey.replace(/[^a-zA-Z0-9_\-\.]/g, '_');
             const filePath = `${dir}/${safeKey}.state`;
 
@@ -6407,39 +6432,66 @@ private updateDummyNode(preventSelect = false) {
 
         try {
             const baseName = romPath.replace(/\.(nes|bin|cue|iso|chd|pbp)$/i, '');
+            const romBasenameOnly = path.basename(baseName).toLowerCase();
             const extensions = ['png', 'jpg', 'jpeg', 'webp'];
             const dir = path.dirname(romPath);
 
-            // 1. First scan the plugin assets directory for built-in ROM covers
-            if (romPath.includes(path.join('plugins', 'canvas-nes-emulator', 'assets'))) {
-                for (const ext of extensions) {
-                    const imgPath = path.join(dir, '..', 'covers', path.basename(baseName) + '.' + ext);
-                    if (fs.existsSync(imgPath)) {
-                        const data = fs.readFileSync(imgPath);
-                        const mimeType = ext === 'jpg' ? 'image/jpeg' : `image/${ext}`;
-                        const result = `data:${mimeType};base64,${data.toString('base64')}`;
-                        this.coverCache.set(romPath, result);
-                        return result;
+            // 1. Scan plugin asset cover directories (NES & PSX)
+            const pluginDir = getPluginDir(this.plugin);
+            const coversFolder = system === 'nes'
+                ? path.join(pluginDir, 'assets', 'nes', 'covers')
+                : path.join(pluginDir, 'assets', 'psx', 'covers');
+
+            const searchFolders = [
+                path.join(dir, '..', 'covers'),
+                path.join(dir, 'covers'),
+                coversFolder,
+                'd:/test vault/.obsidian/plugins/canvas-retro-engine/assets/nes/covers',
+                'd:/test vault/.obsidian/plugins/canvas-retro-engine/assets/psx/covers',
+                'd:/test vault/.obsidian/plugins/canvas-nes-emulator/assets/nes/covers'
+            ];
+
+            for (const fld of searchFolders) {
+                if (fs.existsSync(fld)) {
+                    const coverFiles = fs.readdirSync(fld);
+                    for (const cf of coverFiles) {
+                        const cfLower = cf.toLowerCase();
+                        const cfBase = cfLower.replace(/\.(png|jpg|jpeg|webp)$/i, '');
+                        if (
+                            cfBase === romBasenameOnly ||
+                            cfBase.startsWith(romBasenameOnly) ||
+                            romBasenameOnly.startsWith(cfBase) ||
+                            romBasenameOnly.replace(/[^a-z0-9]/g, '') === cfBase.replace(/[^a-z0-9]/g, '')
+                        ) {
+                            const fullImgPath = path.join(fld, cf);
+                            const data = fs.readFileSync(fullImgPath);
+                            const ext = path.extname(cf).substring(1).toLowerCase();
+                            const mimeType = ext === 'jpg' ? 'image/jpeg' : `image/${ext}`;
+                            const result = `data:${mimeType};base64,${data.toString('base64')}`;
+                            this.coverCache.set(romPath, result);
+                            return result;
+                        }
                     }
                 }
             }
 
-            // 2. Scan the direct filesystem directory where the ROM is located
-            const adapter = this.plugin.app.vault.adapter;
-            const basePath = (adapter as any).basePath || '';
-            const absDir = path.isAbsolute(dir) ? dir : path.join(basePath, dir);
+            // 2. Scan the direct directory of the ROM file
+            const adapter = this.plugin.app?.vault?.adapter;
+            const basePath = (adapter as any)?.basePath || '';
+            const absDir = path.isAbsolute(dir) ? dir : (basePath ? path.join(basePath, dir) : dir);
 
             if (fs.existsSync(absDir)) {
                 const dirFiles = fs.readdirSync(absDir);
-                const romBaseBasename = path.basename(baseName).toLowerCase();
-                
-                // Priority A: Matching image name (e.g. game.png / game.jpg)
                 for (const file of dirFiles) {
                     const fileLower = file.toLowerCase();
                     const ext = path.extname(fileLower).substring(1);
                     if (extensions.includes(ext)) {
                         const nameWithoutExt = path.basename(fileLower, '.' + ext);
-                        if (nameWithoutExt === romBaseBasename) {
+                        if (
+                            nameWithoutExt === romBasenameOnly ||
+                            nameWithoutExt.startsWith(romBasenameOnly) ||
+                            romBasenameOnly.startsWith(nameWithoutExt)
+                        ) {
                             const fullImgPath = path.join(absDir, file);
                             const data = fs.readFileSync(fullImgPath);
                             const mimeType = ext === 'jpg' ? 'image/jpeg' : `image/${ext}`;
@@ -6447,47 +6499,17 @@ private updateDummyNode(preventSelect = false) {
                             this.coverCache.set(romPath, result);
                             return result;
                         }
-                    }
-                }
-
-                // Priority B: Common cover names (cover, folder, front, boxart)
-                const genericNames = ['cover', 'folder', 'front', 'boxart', 'album', 'poster'];
-                for (const file of dirFiles) {
-                    const fileLower = file.toLowerCase();
-                    const ext = path.extname(fileLower).substring(1);
-                    if (extensions.includes(ext)) {
-                        const nameWithoutExt = path.basename(fileLower, '.' + ext);
-                        if (genericNames.includes(nameWithoutExt)) {
-                            const fullImgPath = path.join(absDir, file);
-                            const data = fs.readFileSync(fullImgPath);
-                            const mimeType = ext === 'jpg' ? 'image/jpeg' : `image/${ext}`;
-                            const result = `data:${mimeType};base64,${data.toString('base64')}`;
-                            this.coverCache.set(romPath, result);
-                            return result;
-                        }
-                    }
-                }
-
-                // Priority C: ANY image file in the game folder
-                for (const file of dirFiles) {
-                    const fileLower = file.toLowerCase();
-                    const ext = path.extname(fileLower).substring(1);
-                    if (extensions.includes(ext)) {
-                        const fullImgPath = path.join(absDir, file);
-                        const data = fs.readFileSync(fullImgPath);
-                        const mimeType = ext === 'jpg' ? 'image/jpeg' : `image/${ext}`;
-                        const result = `data:${mimeType};base64,${data.toString('base64')}`;
-                        this.coverCache.set(romPath, result);
-                        return result;
                     }
                 }
             }
 
-            // 3. Fallback: Search inside the Obsidian vault files
-            const files = this.plugin.app.vault.getFiles();
+            // 3. Fallback: Search inside Obsidian vault files
+            const vaultFiles = this.plugin.app?.vault?.getFiles?.() || [];
             for (const ext of extensions) {
-                const targetPath = (baseName + '.' + ext).toLowerCase();
-                const match = files.find((f: any) => f.path.toLowerCase() === targetPath);
+                const match = vaultFiles.find((f: any) => {
+                    const p = f.path.toLowerCase();
+                    return p.includes(romBasenameOnly) && p.endsWith('.' + ext);
+                });
                 if (match) {
                     const fullPath = path.join(basePath, match.path);
                     if (fs.existsSync(fullPath)) {
@@ -6502,7 +6524,7 @@ private updateDummyNode(preventSelect = false) {
         } catch (e) {
             console.error("Error finding cover image:", e);
         }
-        this.coverCache.set(romPath, null);
+
         return null;
     }
 
