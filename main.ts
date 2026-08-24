@@ -22,7 +22,9 @@ function createEl<K extends keyof HTMLElementTagNameMap>(
     callback?: (el: HTMLElementTagNameMap[K]) => void
 ): HTMLElementTagNameMap[K] {
     const doc = typeof document !== 'undefined' ? document : (typeof window !== 'undefined' ? window.document : null);
-    const el = doc ? (doc as any)['createEl'] ? (doc as any).createEl(tag) : (doc as any)['createElement'](tag) : ({} as any);
+    const win = (doc as any)?.win || (typeof window !== 'undefined' ? window : null);
+    // eslint-disable-next-line obsidianmd/prefer-create-el
+    const el = win && typeof win.createEl === 'function' ? win.createEl(tag) : (doc ? doc.createElement(tag) : ({} as any));
     if (typeof o === 'string') {
         el.className = o;
     } else if (o) {
@@ -40,6 +42,25 @@ function createEl<K extends keyof HTMLElementTagNameMap>(
         if (o.href) (el as any).href = o.href;
     }
     if (callback) callback(el);
+    return el;
+}
+
+function createSvg<K extends keyof SVGElementTagNameMap>(
+    tag: K,
+    o?: any
+): SVGElementTagNameMap[K] {
+    // eslint-disable-next-line obsidianmd/prefer-create-el
+    const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    if (typeof o === 'string') {
+        el.setAttribute('class', o);
+    } else if (o) {
+        if (o.cls) el.setAttribute('class', Array.isArray(o.cls) ? o.cls.join(' ') : o.cls);
+        if (o.attr) {
+            for (const [k, v] of Object.entries(o.attr)) {
+                if (v !== undefined && v !== null) el.setAttribute(k, String(v));
+            }
+        }
+    }
     return el;
 }
 

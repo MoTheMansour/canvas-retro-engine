@@ -9,7 +9,9 @@ function createEl<K extends keyof HTMLElementTagNameMap>(
     callback?: (el: HTMLElementTagNameMap[K]) => void
 ): HTMLElementTagNameMap[K] {
     const doc = typeof document !== 'undefined' ? document : (typeof window !== 'undefined' ? window.document : null);
-    const el = doc ? (doc as any)['createEl'] ? (doc as any).createEl(tag) : (doc as any)['createElement'](tag) : ({} as any);
+    const win = (doc as any)?.win || (typeof window !== 'undefined' ? window : null);
+    // eslint-disable-next-line obsidianmd/prefer-create-el
+    const el = win && typeof win.createEl === 'function' ? win.createEl(tag) : (doc ? doc.createElement(tag) : ({} as any));
     if (typeof o === 'string') {
         el.className = o;
     } else if (o) {
