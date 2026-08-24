@@ -1,3 +1,10 @@
+if (typeof window !== 'undefined') {
+    window.addEventListener('error', (e) => {
+        try {
+            require('fs').appendFileSync('d:\\test vault\\obsidian-error.log', new Date().toISOString() + ': ' + e.message + '\n' + (e.error?.stack || '') + '\n\n');
+        } catch (err) {}
+    });
+}
 import { Plugin, ItemView, Notice, setIcon, requestUrl } from 'obsidian';
 // @ts-ignore
 import { NES } from 'jsnes';
@@ -13,6 +20,7 @@ import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import logoAnimationData from './logoAnimationData';
 import lottie from 'lottie-web';
 
 
@@ -83,8 +91,6 @@ export function getPluginDir(plugin: { app: any; manifest: any }): string {
     }
 }
 
-
-const logoAnimationData = {"v":"5.8.1","fr":60,"ip":0,"op":240,"w":1500,"h":1500,"nm":"logo flap LOOPED CLOCK WIDGET","ddd":0,"assets":[],"layers":[{"ddd":0,"ind":1,"ty":4,"nm":"dot 3","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,26.51],[26.51,0],[0,-26.51],[-26.51,0]],"o":[[0,-26.51],[-26.51,0],[0,26.51],[26.51,0]],"v":[[48,0],[0,-48],[-48,0],[0,48]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[1152,752],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":120,"op":180,"st":-52,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"dot","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,26.51],[26.51,0],[0,-26.51],[-26.51,0]],"o":[[0,-26.51],[-26.51,0],[0,26.51],[26.51,0]],"v":[[48,0],[0,-48],[-48,0],[0,48]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[1152,752],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":60,"st":-52,"bm":0},{"ddd":0,"ind":3,"ty":4,"nm":"logo docked","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":0,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":6,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[522.5,136.5],[370,-127],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":9,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":12,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[-116.999,-161.5],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":15,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":18,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[522.5,136.5],[370,-127],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":21,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":24,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[-116.999,-161.5],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"t":30,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":96,"ix":5},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[600.23,276],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[-68.053,0],[0,0],[0,-83.947],[68.053,0],[0,0],[0,68.053]],"o":[[0,0],[83.947,0],[0,83.947],[0,0],[-83.947,0],[0,-83.947]],"v":[[-400,-152],[400,-152],[552,0],[400,152],[-400,152],[-552,0]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":96,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[600.23,504],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 2","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":240,"st":-61,"bm":0}],"markers":[]};
 
 // --- THREE.JS WEBGL 3D NES CARTRIDGE PROCEDURAL ENGINE ---
 function createNesCartridgeSpineTexture(romName: string): THREE.CanvasTexture {
@@ -179,24 +185,37 @@ function createNesCartridgeTexture(romName: string, coverPath: string | null): T
     canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
-    // 1. Draw base styling
-    ctx.fillStyle = '#14151a';
-    ctx.fillRect(0, 0, W, H);
+    // 1. Cover Art (Fills 100% of the front label area edge-to-edge with no bottom strip)
+    if (coverPath) {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = coverPath;
+        img.onload = () => {
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, 0, 0, W, H);
+            texture.needsUpdate = true;
+        };
+    } else {
+        ctx.fillStyle = '#14151a';
+        ctx.fillRect(0, 0, W, H);
 
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
-    for (let r = 0; r < 24; r++) {
-        ctx.fillRect(0, r * 32, W, 14);
+        // Retro diagonal accent stripes
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+        for (let r = 0; r < 24; r++) {
+            ctx.fillRect(0, r * 32, W, 14);
+        }
+
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.font = '900 48px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🎮', W / 2, H / 2 - 16);
+
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.font = 'bold 16px sans-serif';
+        ctx.fillText(romName.toUpperCase(), W / 2, H / 2 + 36);
     }
-
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-    ctx.font = '900 48px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('🎮', W / 2, H / 2 - 16);
-
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-    ctx.font = 'bold 16px sans-serif';
-    ctx.fillText(romName.toUpperCase(), W / 2, H / 2 + 36);
 
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
@@ -204,26 +223,6 @@ function createNesCartridgeTexture(romName: string, coverPath: string | null): T
     texture.minFilter = THREE.LinearMipmapLinearFilter;
     texture.magFilter = THREE.LinearFilter;
     texture.generateMipmaps = true;
-
-    // 2. If cover art path exists, paint it
-    if (coverPath) {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = () => {
-            ctx.imageSmoothingEnabled = true;
-            ctx.imageSmoothingQuality = 'high';
-            ctx.drawImage(img, 0, 0, W, H);
-            texture.needsUpdate = true;
-        };
-        img.src = coverPath;
-        if (img.complete && img.naturalWidth > 0) {
-            ctx.imageSmoothingEnabled = true;
-            ctx.imageSmoothingQuality = 'high';
-            ctx.drawImage(img, 0, 0, W, H);
-            texture.needsUpdate = true;
-        }
-    }
-
     return texture;
 }
 
@@ -493,7 +492,7 @@ function createNesConsoleDoorTexture(): THREE.CanvasTexture {
 
     // ENTERTAINMENT SYSTEM (Red #e60012)
     ctx.font = 'bold 28px Arial, sans-serif';
-    ctx.fillText('ENTERTAINMENT SYSTEMΓäó', 72, 118);
+    ctx.fillText('ENTERTAINMENT SYSTEM™', 72, 118);
 
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
@@ -843,70 +842,70 @@ interface CanvasNesPluginSettings {
 }
 
 const DEFAULT_SETTINGS: CanvasNesPluginSettings = {
-    "hudPosition": {
-        "left": 36,
-        "top": 78
+    hudPosition: {
+        left: 48,
+        top: -8
     },
-    "selectedRoomEnvironment": "midnight",
-    "activeSystem": "psx",
-    "masterState": {
-        "ps1PosX": 0,
-        "ps1PosY": 1.45,
-        "ps1PosZ": -0.3,
-        "ps1RotX": 1.66,
-        "ps1RotY": -3.14,
-        "ps1RotZ": -3.14,
-        "ps1Scale": 0.2,
-        "camX": 0,
-        "camY": 4.4,
-        "camZ": 7.15,
-        "camFov": 43,
-        "lookAtY": 0.95,
-        "lookAtZ": 0.2,
-        "keyLightEnabled": true,
-        "key2LightEnabled": true,
-        "fillLightEnabled": true,
-        "rimLightEnabled": true,
-        "hemiLightEnabled": true,
-        "keyPower": 2.6,
-        "keyX": -1.7,
-        "keyY": 2.9,
-        "keyZ": 1.7,
-        "keyTargetX": 0,
-        "keyTargetY": 0.3,
-        "keyTargetZ": 1.2,
-        "key2Power": 0.7,
-        "key2X": 10,
-        "key2Y": 0,
-        "key2Z": 8.6,
-        "key2TargetX": 8,
-        "key2TargetY": -2,
-        "key2TargetZ": 4.2,
-        "key2Color": "warmWhite",
-        "fillPower": 2.65,
-        "fillX": 3.8,
-        "fillY": 7.1,
-        "fillZ": 8.3,
-        "fillTargetX": -0.6,
-        "fillTargetY": 4.1,
-        "fillTargetZ": -3.6,
-        "rimPower": 1.05,
-        "rimX": -1.8,
-        "rimY": 2.8,
-        "rimZ": 1.4,
-        "rimTargetX": -0.8,
-        "rimTargetY": 2.4,
-        "rimTargetZ": 5.3,
-        "rimColor": "warmGold",
-        "bloomEnabled": true,
-        "bloomIntensity": 0.15,
-        "bloomRadius": 1.1,
-        "bloomThreshold": 0.7,
-        "halationGlow": 0.95,
-        "hemiPower": 1.5,
-        "exposure": 0.7,
-        "showLightGizmos": false,
-        "customLights": [
+    selectedRoomEnvironment: 'midnight',
+    activeSystem: 'psx',
+    masterState: {
+        ps1PosX: 0,
+        ps1PosY: 1.45,
+        ps1PosZ: -0.3,
+        ps1RotX: 1.66,
+        ps1RotY: -3.14,
+        ps1RotZ: -3.14,
+        ps1Scale: 0.2,
+        camX: 0,
+        camY: 4.4,
+        camZ: 7.15,
+        camFov: 43,
+        lookAtY: 0.95,
+        lookAtZ: 0.2,
+        keyLightEnabled: true,
+        key2LightEnabled: true,
+        fillLightEnabled: true,
+        rimLightEnabled: true,
+        hemiLightEnabled: true,
+        keyPower: 2.6,
+        keyX: -1.7,
+        keyY: 2.9,
+        keyZ: 1.7,
+        keyTargetX: 0,
+        keyTargetY: 0.3,
+        keyTargetZ: 1.2,
+        key2Power: 0.7,
+        key2X: 10,
+        key2Y: 0,
+        key2Z: 8.6,
+        key2TargetX: 8,
+        key2TargetY: -2,
+        key2TargetZ: 4.2,
+        key2Color: "warmWhite",
+        fillPower: 2.65,
+        fillX: 3.8,
+        fillY: 7.1,
+        fillZ: 8.3,
+        fillTargetX: -0.6,
+        fillTargetY: 4.1,
+        fillTargetZ: -3.6,
+        rimPower: 1.05,
+        rimX: -1.8,
+        rimY: 2.8,
+        rimZ: 1.4,
+        rimTargetX: -0.8,
+        rimTargetY: 2.4,
+        rimTargetZ: 5.3,
+        rimColor: "warmGold",
+        bloomEnabled: true,
+        bloomIntensity: 0.15,
+        bloomRadius: 1.1,
+        bloomThreshold: 0.7,
+        halationGlow: 0.95,
+        hemiPower: 1.5,
+        exposure: 0.75,
+        showLightGizmos: false,
+        customLights: [
             {
                 "id": "custom_1786649105705",
                 "name": "Custom DIRECTIONAL #1",
@@ -976,635 +975,131 @@ const DEFAULT_SETTINGS: CanvasNesPluginSettings = {
                 "name": "Custom DIRECTIONAL #5",
                 "type": "directional",
                 "enabled": true,
-                "color": "#ffffff",
-                "power": 2.6,
-                "x": 2.1,
-                "y": 2.9,
-                "z": 2.1,
-                "targetX": 1.8,
-                "targetY": 0.3,
-                "targetZ": 0,
+                "color": "#bfe7eb",
+                "power": 3.7,
+                "x": -0.3,
+                "y": 1.3,
+                "z": -1.9,
+                "targetX": 0.2,
+                "targetY": 1.3,
+                "targetZ": 2.5,
                 "distance": 25,
-                "decay": 2,
-                "systemScope": "nes"
+                "decay": 2
             }
         ],
-        "slotX": -0.43,
-        "slotY": 2.095,
-        "slotZ": -0.525,
-        "slotRotX": 1.58,
-        "slotRotZ": 0,
-        "dofEnabled": true,
-        "dofFocus": 7.25,
-        "dofAperture": 0.0125,
-        "dofMaxBlur": 0.015,
-        "ambientPower": 1,
-        "ambientColor": "#ffffff",
-        "keyColor": "daylight",
-        "fillColor": "coolBlue",
-        "hemiSkyColor": "daylight",
-        "hemiGroundColor": "warmGold",
-        "cartScale": 1.1,
-        "rolodexR": 2.42,
-        "rolodexCY": -2.55,
-        "rolodexCZ": 1.26,
-        "rolodexAngle": 0.4,
-        "sideRollZ": 0.4,
-        "ejectPopZ": 0.84,
-        "peakY": 2.25,
-        "peakZ": 1.6,
-        "snapT": 0.8,
-        "bioTremorAmp": 0.003,
-        "bioTremorFreq": 11,
-        "bioSwayAmp": 0.018,
-        "bioSwayFreq": 1.8,
-        "bioGripPitch": 0.05,
-        "bioGripYaw": 0.04,
-        "bioGripRoll": 0.06,
-        "bioWristSnap": 0.12,
-        "bioLiftArcHeight": 1.15,
-        "bioInsertResist": 0.06,
-        "bioPopVelocity": 1.3,
-        "bioMicroBounces": 3,
-        "scrubMode": false,
-        "scrubProgress": 0,
-        "animSpeed": 0.004,
-        "nesBayElevation": 1.45,
-        "nesBayDepth": -0.3,
-        "nesBayRotX": 1.66,
-        "nesLabelX0": -0.2,
-        "nesLabelX1": 0.795,
-        "nesLabelY0": -0.385,
-        "nesLabelY1": 1.175,
-        "nesLabelZ": 0.15,
-        "nesSpineX0": -0.23,
-        "nesSpineX1": 0.765,
-        "nesSpineZ0": -0.035,
-        "nesSpineZ1": 0.12,
-        "nesSpineY": 1.25,
-        "curtainPearlIntensity": 0.55,
-        "curtainPearlSpread": 2.3,
-        "curtainPearlPhase": 4.35,
-        "curtainPearlBrightness": 0.25,
-        "curtainPearlSaturation": 0.1,
-        "curtainPearlFresnelPower": 1.6,
-        "curtainPearlSpecular": 1.3,
-        "curtainPearlColor": "#ecc2ff",
-        "etherEnabled": true,
-        "etherMode": "waterfall",
-        "etherParticleCount": 100,
-        "etherParticleSize": 0.05,
-        "etherFlowSpeed": 0.1,
-        "etherTurbulence": 3,
-        "etherTrailSpread": 1.7,
-        "etherSpreadX": 1.7,
-        "etherSpreadZ": 2.6,
-        "etherDropHeight": 2.4,
-        "etherCurlSwayX": 3,
-        "etherCurlSwayZ": 0.5,
-        "etherCurlFreq": 1.1,
-        "etherCurlSpeed": 1,
-        "etherGravity": 0.4,
-        "etherHueShiftSpeed": 0.4,
-        "etherHueCycleFreq": 0.2,
-        "etherAuroraPosZ": -2.7,
-        "etherAuroraPosY": -2,
-        "etherAuroraScaleX": 16,
-        "etherOpacity": 0.3,
-        "etherColor1": "#fec320",
-        "etherColor2": "#d76060",
-        "etherColor3": "#d2b6b6",
-        "etherColor4": "#d94f45",
-        "etherHoverEnabled": true,
-        "etherHoverAmplitude": 0.04,
-        "etherHoverSpeed": 1.4,
-        "etherSpinVortexMult": 3.6,
-        "etherMouseInteraction": true,
-        "etherMouseForce": 3,
-        "etherTwinkleIntensity": 0,
-        "etherParallaxTilt": true,
-        "etherParallaxStrength": 0.25,
-        "etherFloorLightEnabled": true,
-        "etherFloorLightIntensity": 0.25,
-        "etherSplashEmbers": true,
-        "etherSplashRatio": 0.3,
-        "crtScreenShape": "modern",
-        "shadowsEnabled": true,
-        "shadowBias": 0,
-        "deskX": 0,
-        "deskY": -3.2,
-        "deskZ": -2.1,
-        "deskW": 16.6,
-        "deskH": 0.25,
-        "deskD": 9.6,
-        "nesX": 0,
-        "nesY": 0.3,
-        "nesZ": -0.1,
-        "nesRotX": 0,
-        "nesRotY": 0,
-        "nesRotZ": 0,
-        "ps1LedX": -1.43,
-        "ps1LedY": 1.905,
-        "ps1LedZ": 1.145,
-        "stackStepY": 0.28,
-        "stackStepZ": -0.45,
-        "hoverLiftY": 1.02,
-        "hoverForwardZ": 0.35,
-        "hoverTiltRotX": 0.35,
-        "hoverRollRotZ": 0.15,
-        "hoverSpeed": 0.15,
-        "nesCartScale": 0.67,
-        "nesSlotX": -0.43,
-        "nesSlotY": 2.095,
-        "nesSlotZ": -0.525,
-        "nesSlotRotX": 1.45,
-        "nesSlotRotY": 0,
-        "nesSlotRotZ": 0,
-        "nesEjectPopZ": 0.89,
-        "slotRotY": 0,
-        "introEnabled": true,
-        "introDurationSec": 2.5,
-        "introEasing": "cubicOut",
-        "introCamX": -4.3,
-        "introCamY": 5.5,
-        "introCamZ": 4.95,
-        "introCamFov": 57,
-        "introLookAtY": 0.95,
-        "introLookAtZ": 0.2,
-        "introEndCamX": 0,
-        "introEndCamY": 4.4,
-        "introEndCamZ": 7.15,
-        "introEndCamFov": 43,
-        "introEndLookAtY": 0.95,
-        "introEndLookAtZ": 0.2,
-        "rolodexCX": 0,
-        "wheelRotX": -0.0016,
-        "wheelRotY": 0.3784,
-        "wheelRotZ": -0.081592653589793,
-        "rolodexRotX": -0.301592653589793,
-        "rolodexRotY": -0.126,
-        "rolodexRotZ": -0.141592653589793,
-        "rolodexHoverPop": 0.4,
-        "curtainPrimaryColor": "#949699",
-        "curtainSecondaryColor": "#525866",
-        "curtainCheckSize": 21,
-        "curtainWaveSpeed": 1.2,
-        "curtainWaveContrast": 0.38,
-        "curtainLeadingEdgeEnabled": false,
-        "curtainLeadingEdgeColor": "#00f0ff",
-        "curtainDurationMs": 420,
-        "fogEnabled": true,
-        "fogMode": "exp2",
-        "fogColor": "#0a0d14",
-        "fogNear": 1,
-        "fogFar": 10,
-        "fogDensity": 0.026,
-        "fogOpacity": 1,
-        "dofAutofocus": "manual",
-        "dofFocusDistance": 6.65,
-        "dofLensFocalLength": 47,
-        "dofNearBlurMult": 1,
-        "dofFarBlurMult": 1,
-        "dofAspectRings": 0.75,
-        "curtainPearlSpeed": 0.4,
-        "curtainPearlRoughness": 0.8,
-        "rolodexHoverTilt": 0,
-        "curtainPinned": false,
-        "curtainInDurationMs": 1000,
-        "curtainLingerMs": 1310,
-        "curtainOutDurationMs": 1000,
-        "curtainRotX": 0.49,
-        "curtainRotY": -0.53,
-        "curtainRotZ": -0.07,
-        "curtainAmplitude": 0.2,
-        "curtainWavelength": 7.4,
-        "curtainWaveFreq": 0.95,
-        "curtainSpecularGloss": 0.44,
-        "curtainPosY": 1,
-        "curtainFlagScale": 1.2,
-        "curtainFlagScaleY": 1,
-        "curtainCheckScaleX": 23,
-        "curtainCheckScaleY": 15,
-        "curtainRampExponent": 1.5,
-        "curtainPeakSpeed": 6,
-        "curtainLogoSize": 76,
-        "viewportWarmth": 0.45,
-        "viewportGamma": 1,
-        "viewportBrightness": 0.94,
-        "viewportContrast": 1,
-        "viewportSaturate": 1,
-        "etherHueSat": 0.45
+        slotX: 0,
+        slotY: 0.445,
+        slotZ: 0.16,
+        slotRotX: 0.2,
+        slotRotZ: 0,
+        dofEnabled: true,
+        dofFocus: 7.25,
+        dofAperture: 0.008,
+        dofMaxBlur: 0.015,
+        ambientPower: 1,
+        ambientColor: "#ffffff",
+        keyColor: "daylight",
+        fillColor: "coolBlue",
+        hemiSkyColor: "daylight",
+        hemiGroundColor: "warmGold",
+        cartScale: 1.1,
+        rolodexR: 1.7,
+        rolodexCY: -3.2,
+        rolodexCZ: 2.5,
+        rolodexAngle: 0.38,
+        sideRollZ: 0,
+        ejectPopZ: 0.86,
+        peakY: 2.1,
+        peakZ: 0.6,
+        snapT: 0.8,
+        bioTremorAmp: 0.003,
+        bioTremorFreq: 11,
+        bioSwayAmp: 0.018,
+        bioSwayFreq: 1.8,
+        bioGripPitch: 0.05,
+        bioGripYaw: 0.04,
+        bioGripRoll: 0.06,
+        bioWristSnap: 0.12,
+        bioLiftArcHeight: 1.15,
+        bioInsertResist: 0.06,
+        bioPopVelocity: 1.3,
+        bioMicroBounces: 3,
+        scrubMode: false,
+        scrubProgress: 0.5,
+        animSpeed: 1,
+        nesBayElevation: 1.45,
+        nesBayDepth: -0.3,
+        nesBayRotX: 1.66,
+        nesLabelX0: -0.10,
+        nesLabelX1: 0.92,
+        nesLabelY0: -0.28,
+        nesLabelY1: 1.24,
+        nesLabelZ: 0.1625,
+        nesSpineX0: -0.10,
+        nesSpineX1: 0.92,
+        nesSpineZ0: -0.15,
+        nesSpineZ1: 0.15,
+        nesSpineY: 1.2405,
+        curtainPearlIntensity: 0.85,
+        curtainPearlSpread: 2.2,
+        curtainPearlPhase: 0.40,
+        curtainPearlBrightness: 0.68,
+        curtainPearlSaturation: 0.42,
+        curtainPearlFresnelPower: 2.5,
+        curtainPearlSpecular: 0.90,
+        curtainPearlColor: "#ffffff",
+
+        // ── 3D Console Celestial Ether & Particle Waterfall ──
+        etherEnabled: true,
+        etherMode: "waterfall", // 'waterfall' | 'aurora' | 'nebula' | 'vortex'
+        etherParticleCount: 1200,
+        etherParticleSize: 0.22,
+        etherFlowSpeed: 1.20,
+        etherTurbulence: 0.65,
+        etherTrailSpread: 2.4,
+        etherSpreadX: 2.6,
+        etherSpreadZ: 1.8,
+        etherDropHeight: 4.5,
+        etherCurlSwayX: 0.65,
+        etherCurlSwayZ: 0.55,
+        etherCurlFreq: 1.6,
+        etherCurlSpeed: 1.3,
+        etherGravity: 1.0,
+        etherHueShiftSpeed: 0.80,
+        etherHueCycleFreq: 2.0,
+        etherAuroraPosZ: -2.5,
+        etherAuroraPosY: 0.4,
+        etherAuroraScaleX: 7.5,
+        etherOpacity: 0.75,
+        etherColor1: "#d8b4fe", // Pastel Lilac
+        etherColor2: "#7dd3fc", // Celestial Cyan
+        etherColor3: "#f472b6", // Rose Opal
+        etherColor4: "#fef08a", // Champagne Gold
+        etherHoverEnabled: true,
+        etherHoverAmplitude: 0.06,
+        etherHoverSpeed: 1.5,
+        etherSpinVortexMult: 2.2,
+        etherMouseInteraction: true,
+        etherMouseForce: 1.2,
+        etherTwinkleIntensity: 1.0,
+        etherParallaxTilt: true,
+        etherParallaxStrength: 0.08,
+        etherFloorLightEnabled: true,
+        etherFloorLightIntensity: 0.85,
+        etherSplashEmbers: true,
+        etherSplashRatio: 0.30,
+        crtScreenShape: "vintage_bubble" // 'modern' | 'vintage_bubble'
     },
-    "sfxConfigs": {
-        "nes_scroll_notch_up": {
-            "enabled": true,
-            "sampleFile": "Single_isolated_low-_#2-1787442944539.wav",
-            "volume": 0.85,
-            "startTime": 0.04,
-            "endTime": 0.15,
-            "pitchShift": 1
-        },
-        "nes_scroll_notch_down": {
-            "enabled": true,
-            "sampleFile": "Single_isolated_low-_#2-1787442944539.wav",
-            "volume": 0.85,
-            "startTime": 0.04,
-            "endTime": 0.15,
-            "pitchShift": 1
-        },
-        "psx_scroll_notch_up": {
-            "enabled": true,
-            "sampleFile": "Single_isolated_low-_#2-1787442944539.wav",
-            "volume": 0.85,
-            "startTime": 0.04,
-            "endTime": 0.15,
-            "pitchShift": 1
-        },
-        "psx_scroll_notch_down": {
-            "enabled": true,
-            "sampleFile": "Single_isolated_low-_#2-1787442944539.wav",
-            "volume": 0.85,
-            "startTime": 0.04,
-            "endTime": 0.15,
-            "pitchShift": 1
-        },
-        "psx_case_hover_leave": {
-            "enabled": true,
-            "sampleFile": "A_single_crisp,_high_#2-1787443894919.wav",
-            "volume": 0.2,
-            "startTime": 0.19,
-            "endTime": 0.34,
-            "pitchShift": 1
-        },
-        "nes_card_hover_enter": {
-            "enabled": true,
-            "sampleFile": "Soft_textured_plasti_#1-1787443060772.wav",
-            "volume": 0.75,
-            "startTime": 0.08,
-            "endTime": 0.41,
-            "pitchShift": 1
-        },
-        "nes_scroll_hover_riffle": {
-            "enabled": true,
-            "volume": 0.85,
-            "startTime": 0.04,
-            "endTime": 0.15,
-            "pitchShift": 1
-        },
-        "nes_card_hover_leave": {
-            "enabled": true,
-            "sampleFile": "Soft_textured_plasti_#1-1787443060772.wav",
-            "volume": 0.4,
-            "startTime": 0,
-            "endTime": 0.2,
-            "pitchShift": 1
-        },
-        "psx_disc_return_flight": {
-            "enabled": true,
-            "sampleFile": "A_clean,_high-freque_#2-1787444205785.wav",
-            "volume": 0.75,
-            "startTime": 0,
-            "endTime": 0.3,
-            "pitchShift": 1
-        },
-        "psx_laser_seek_spinup": {
-            "enabled": true,
-            "volume": 0.85,
-            "startTime": 5.32,
-            "endTime": 14.9,
-            "pitchShift": 1
-        },
-        "psx_disc_flight_whoosh": {
-            "enabled": true,
-            "sampleFile": "A_clean,_high-freque_#2-1787444205785.wav",
-            "volume": 0.45,
-            "startTime": 0,
-            "endTime": 0.3,
-            "pitchShift": 1.15
-        },
-        "psx_case_hinge_creak_open": {
-            "enabled": true,
-            "sampleFile": "An_authentic_vintage_#1-1787444139060.wav",
-            "volume": 0.55,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        },
-        "psx_scroll_hover_riffle": {
-            "enabled": true,
-            "volume": 0,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        },
-        "psx_case_hover_enter": {
-            "enabled": true,
-            "sampleFile": "A_clear_acrylic_CD_j_#2-1787443970423.wav",
-            "volume": 0.25,
-            "startTime": 0,
-            "endTime": 0.15,
-            "pitchShift": 1
-        },
-        "psx_disc_reseat_rosette_snap": {
-            "enabled": true,
-            "sampleFile": "A_compact_disc_being_#2-1787444598345.wav",
-            "volume": 0.4,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        },
-        "psx_spindle_ball_unsnap": {
-            "enabled": true,
-            "sampleFile": "A_heavy_round_mechan_#3-1787444245314.wav",
-            "volume": 0.25,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        },
-        "psx_lid_open_again": {
-            "enabled": true,
-            "sampleFile": "A_clear_acrylic_CD_j_#2-1787443970423.wav",
-            "volume": 0.3,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        },
-        "psx_lid_push_down_latch": {
-            "enabled": true,
-            "sampleFile": "A_heavy_round_mechan_#3-1787444245314.wav",
-            "volume": 0.5,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        },
-        "psx_lid_spring_damper_pop": {
-            "enabled": true,
-            "sampleFile": "The_iconic_unmistaka_#1-1787444328835.wav",
-            "volume": 0.55,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        },
-        "psx_open_button_plunge": {
-            "enabled": true,
-            "sampleFile": "The_iconic_round_dis_#1-1787444298895.wav",
-            "volume": 0.65,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        },
-        "nes_flap_snap_shut": {
-            "enabled": true,
-            "sampleFile": "A_spring-loaded_rect_#1-1787443803360.wav",
-            "volume": 0.45,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        },
-        "nes_connector_unseat_pull": {
-            "enabled": true,
-            "sampleFile": "Spring_detent_pop_re_#3-1787443272880.wav",
-            "volume": 0.1,
-            "startTime": 0,
-            "endTime": 0.88,
-            "pitchShift": 1
-        },
-        "nes_zif_spring_pop_up": {
-            "enabled": true,
-            "sampleFile": "Tactile_pinch_click__#2-1787443242379.wav",
-            "volume": 0.65,
-            "startTime": 0,
-            "endTime": 0.88,
-            "pitchShift": 1
-        },
-        "nes_power_switch_on": {
-            "enabled": true,
-            "sampleFile": "The_spring-loaded_ca_#1-1787443698290.wav",
-            "volume": 0.65,
-            "startTime": 0,
-            "endTime": 0.88,
-            "pitchShift": 1
-        },
-        "nes_zif_chamber_lock_chunk": {
-            "enabled": true,
-            "sampleFile": "A_heavy_plastic_game_#2-1787443588732.wav",
-            "volume": 0.75,
-            "startTime": 0,
-            "endTime": 0.88,
-            "pitchShift": 1
-        },
-        "nes_connector_72pin_seat": {
-            "enabled": true,
-            "volume": 0.5,
-            "startTime": 0,
-            "endTime": 0.88,
-            "pitchShift": 1
-        },
-        "nes_chamber_rail_slide": {
-            "enabled": true,
-            "sampleFile": "Textured_metal-on-pl_#1-1787443449824.wav",
-            "volume": 0.1,
-            "startTime": 0,
-            "endTime": 0.88,
-            "pitchShift": 1
-        },
-        "nes_front_flap_push": {
-            "enabled": true,
-            "sampleFile": "A_small_spring-loade_#3-1787443515538.wav",
-            "volume": 0.6,
-            "startTime": 0,
-            "endTime": 0.88,
-            "pitchShift": 1
-        },
-        "nes_card_lift_emerge": {
-            "enabled": true,
-            "sampleFile": "A_small_spring-loade_#3-1787443515538.wav",
-            "volume": 0.45,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        },
-        "nes_card_click_press": {
-            "enabled": true,
-            "sampleFile": "Spring_detent_pop_re_#3-1787443272880.wav",
-            "volume": 0.2,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        },
-        "nes_flight_glide_whoosh": {
-            "enabled": true,
-            "sampleFile": "Spring-loaded_plasti_#1-1787443393191.wav",
-            "volume": 0.75,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        },
-        "nes_return_slot_reseat": {
-            "enabled": true,
-            "sampleFile": "A_heavy_plastic_game_#3-1787443847892.wav",
-            "volume": 0.85,
-            "startTime": 0,
-            "endTime": 0.5999773242630385,
-            "pitchShift": 1
-        },
-        "psx_case_click_press": {
-            "enabled": true,
-            "sampleFile": "A_clear_polystyrene__#2-1787444014033.wav",
-            "volume": 0.85,
-            "startTime": 0,
-            "endTime": 0.5999773242630385,
-            "pitchShift": 1
-        },
-        "psx_case_clasp_snap_shut": {
-            "enabled": true,
-            "sampleFile": "A_clear_acrylic_CD_j_#2-1787443970423.wav",
-            "volume": 0.9,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        },
-        "psx_eject_button_click": {
-            "enabled": true,
-            "sampleFile": "A_heavy,_solid_mecha_#1-1787443646063.wav",
-            "volume": 0.85,
-            "startTime": 0,
-            "endTime": 0.88,
-            "pitchShift": 1
-        },
-        "psx_disc_hub_pop_out": {
-            "enabled": true,
-            "sampleFile": "The_central_multi-to_#4-1787444169389.wav",
-            "volume": 0.9,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        },
-        "psx_case_lift_emerge": {
-            "enabled": true,
-            "sampleFile": "A_clear_acrylic_CD_j_#2-1787443970423.wav",
-            "volume": 0.8,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        },
-        "psx_spindle_3ball_snap": {
-            "enabled": true,
-            "sampleFile": "The_central_multi-to_#4-1787444169389.wav",
-            "volume": 0.95,
-            "startTime": 0,
-            "endTime": 0.6,
-            "pitchShift": 1
-        }
-    },
-    "floatingGamepadPos": {
-        "x": 26,
-        "y": 81
-    }
+    sfxConfigs: {}
 };
 
 export default class CanvasNESEmulatorPlugin extends Plugin {
     private panel: TetrisPanel | null = null;
     settings: CanvasNesPluginSettings = DEFAULT_SETTINGS;
 
-    public async ensureAssetsDownloaded(): Promise<void> {
-        try {
-            const pluginDir = getPluginDir(this);
-            if (!pluginDir) return;
-
-            const nesModelPath = path.join(pluginDir, 'assets', 'nes', 'NES_nintendo.glb');
-            const psxModelPath = path.join(pluginDir, 'assets', 'psx', 'Sony_Playstation_one_slim.glb');
-
-            if (fs.existsSync(nesModelPath) && fs.existsSync(psxModelPath)) {
-                return;
-            }
-
-            const notice = new Notice("🎮 Canvas Retro Engine: Downloading 3D console models & SFX... (0%)", 0);
-            const GITHUB_RAW = "https://raw.githubusercontent.com/MoTheMansour/canvas-retro-engine/main/";
-
-            const sfxList = [
-                "A_circuit_board_edge_#3-1787443748273.wav",
-                "A_clean,_high-freque_#2-1787444205785.wav",
-                "A_clear_acrylic_CD_j_#2-1787443970423.wav",
-                "A_clear_polystyrene__#2-1787444014033.wav",
-                "A_compact_disc_being_#1-1787444515181.wav",
-                "A_compact_disc_being_#2-1787444598345.wav",
-                "A_compact_disc_being_#2-1787444643882.wav",
-                "A_heavy,_solid_mecha_#1-1787443646063.wav",
-                "A_heavy_plastic_cart_#2-1787443562614.wav",
-                "A_heavy_plastic_game_#2-1787443588732.wav",
-                "A_heavy_plastic_game_#3-1787443847892.wav",
-                "A_heavy_round_mechan_#3-1787444245314.wav",
-                "A_round_plastic_cons_#2-1787444451571.wav",
-                "A_single_crisp,_high_#2-1787443894919.wav",
-                "A_small_spring-loade_#3-1787443515538.wav",
-                "A_smooth_acrylic_CD__#1-1787444106325.wav",
-                "A_spring-loaded_rect_#1-1787443803360.wav",
-                "An_authentic_vintage_#1-1787444139060.wav",
-                "An_authentic_vintage_#3-1787444680545.wav",
-                "Low-frequency_airy_p_#3-1787443321587.wav",
-                "Single_isolated_low-_#2-1787442944539.wav",
-                "Soft_textured_plasti_#1-1787443060772.wav",
-                "Soft_textured_plasti_#3-1787443021824.wav",
-                "Spring-loaded_plasti_#1-1787443393191.wav",
-                "Spring_detent_pop_re_#3-1787443272880.wav",
-                "Tactile_pinch_click__#2-1787443242379.wav",
-                "Textured_metal-on-pl_#1-1787443449824.wav",
-                "The_central_multi-to_#4-1787444169389.wav",
-                "The_iconic_heavy_spr_#3-1787443619292.wav",
-                "The_iconic_round_dis_#1-1787444298895.wav",
-                "The_iconic_unmistaka_#1-1787444328835.wav",
-                "The_mechanical_sprin_#3-1787444406960.wav",
-                "The_round_plastic_di_#3-1787444346872.wav",
-                "The_spring-loaded_ca_#1-1787443698290.wav",
-                "psx_laser_seek_spinup.wav"
-            ];
-
-            const files = [
-                "assets/nintendo-entertainment-system-seeklogo.png",
-                "assets/sony-playstation-seeklogo.png",
-                "assets/nes/NES_nintendo.glb",
-                "assets/nes/nes_cartridge.glb",
-                "assets/nes/DecalTemplate.png",
-                "assets/psx/Sony_Playstation_one_slim.glb",
-                "assets/psx/ps1 controller.png",
-                ...sfxList.map(s => `assets/sfx/${s}`)
-            ];
-
-            let downloaded = 0;
-            for (const rel of files) {
-                const fullPath = path.join(pluginDir, rel);
-                if (!fs.existsSync(fullPath)) {
-                    const dir = path.dirname(fullPath);
-                    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-                    try {
-                        const res = await requestUrl({ url: GITHUB_RAW + encodeURI(rel.replace(/\\/g, '/')) });
-                        if (res.status === 200) {
-                            fs.writeFileSync(fullPath, Buffer.from(res.arrayBuffer));
-                        }
-                    } catch (e) {
-                        console.error("Asset download error:", rel, e);
-                    }
-                }
-                downloaded++;
-                const pct = Math.round((downloaded / files.length) * 100);
-                notice.setMessage(`🎮 Canvas Retro Engine: Downloading 3D assets & SFX... (${pct}%)`);
-            }
-
-            notice.hide();
-            new Notice("✅ Canvas Retro Engine: 3D models & sound effects ready! 🕹️", 4000);
-            if (this.panel) {
-                this.panel.renderUnifiedCartridgeSystem();
-            }
-        } catch (e) {
-            console.error("ensureAssetsDownloaded error:", e);
-        }
-    }
-
     async onload() {
         console.log("Loading Canvas NES Emulator Plugin");
         await this.loadSettings();
-        await this.ensureAssetsDownloaded();
 
         this.app.workspace.onLayoutReady(() => {
             this.initTetrisPanel();
@@ -1705,7 +1200,7 @@ export const SFX_METADATA: Record<string, { code: string; name: string; system: 
     'psx_scroll_hover_riffle': { code: 'P05', name: 'Case Spine Riffle While Hovered', system: 'psx', category: 'Carousel Wheel', description: 'Rapid acrylic spine flicking under cursor', defaultVol: 0.45 },
     'psx_case_click_press': { code: 'P06', name: 'Jewel Case Click Down', system: 'psx', category: 'Selection', description: 'Fingertip tap on polystyrene cover', defaultVol: 0.85 },
     'psx_case_lift_emerge': { code: 'P07', name: 'Jewel Case Emerge', system: 'psx', category: 'Selection', description: 'Jewel case lifting out of CD rack', defaultVol: 0.80 },
-    'psx_case_hinge_creak_open': { code: 'P08', name: 'Jewel Case Hinge Swing Open', system: 'psx', category: '3D Loading', description: 'Case hinge creaking open 180┬░ flat', defaultVol: 0.85 },
+    'psx_case_hinge_creak_open': { code: 'P08', name: 'Jewel Case Hinge Swing Open', system: 'psx', category: '3D Loading', description: 'Case hinge creaking open 180° flat', defaultVol: 0.85 },
     'psx_disc_hub_pop_out': { code: 'P09', name: 'Center Rosette Hub Pop', system: 'psx', category: '3D Loading', description: '3-tooth hub releasing CD center hole', defaultVol: 0.90 },
     'psx_disc_flight_whoosh': { code: 'P10', name: 'Disc 3D Arc Flight', system: 'psx', category: '3D Loading', description: 'Polycarbonate disc flying through air', defaultVol: 0.75 },
     'psx_open_button_plunge': { code: 'P11', name: 'Console OPEN Button Plunge', system: 'psx', category: '3D Loading', description: 'Mechanical push button on PS1 chassis', defaultVol: 0.85 },
@@ -2400,7 +1895,7 @@ class TetrisPanel {
         curtainPearlSpecular: 0.90,
         curtainPearlColor: "#ffffff",
 
-        // ΓöÇΓöÇ 3D Console Celestial Ether & Particle Waterfall ΓöÇΓöÇ
+        // ── 3D Console Celestial Ether & Particle Waterfall ──
         etherEnabled: true,
         etherMode: "waterfall",
         etherParticleCount: 1200,
@@ -2439,9 +1934,9 @@ class TetrisPanel {
         etherFloorLightIntensity: 0.85,
         etherSplashEmbers: true,
         etherSplashRatio: 0.30,
-        crtScreenShape: "modern",
+        crtScreenShape: "vintage_bubble",
 
-        // ΓöÇΓöÇ Atmospheric Carousel Fog Settings ΓöÇΓöÇ
+        // ── Atmospheric Carousel Fog Settings ──
         fogEnabled: true,
         fogMode: "linear",
         fogColor: "#0b0e17",
@@ -2450,7 +1945,7 @@ class TetrisPanel {
         fogDensity: 0.08,
         fogOpacity: 1.0,
 
-        // ΓöÇΓöÇ Camera Depth of Field (DOF) Settings ΓöÇΓöÇ
+        // ── Camera Depth of Field (DOF) Settings ──
         dofEnabled: true,
         dofAutofocus: "manual",
         dofFocusDistance: 6.2,
@@ -2461,7 +1956,7 @@ class TetrisPanel {
         dofFarBlurMult: 1.0,
         dofAspectRings: 1.0,
 
-        // ΓöÇΓöÇ NES Cartridge Decal Dimensions & Elevation Tuning ΓöÇΓöÇ
+        // ── NES Cartridge Decal Dimensions & Elevation Tuning ──
         nesLabelX0: -0.10,
         nesLabelX1: 0.92,
         nesLabelY0: -0.28,
@@ -2519,7 +2014,7 @@ class TetrisPanel {
     private spinSwitchPhase: 'idle' | 'spinup' | 'spindown' = 'idle';
     private targetSpinSystem: 'nes' | 'psx' | null = null;
     private consoleSpinY = 0.0;
-    // ≡ƒÄ» Interactive Light Picking Mode & Selection
+    // 🎯 Interactive Light Picking Mode & Selection
     private lightPickingMode: 'none' | 'aim_target' | 'place_light' = 'none';
     private activeSelectedLightId = 'key';
     private activeConsoleGroupRef: THREE.Group | null = null;
@@ -2531,7 +2026,7 @@ class TetrisPanel {
     private activeRenderer: THREE.WebGLRenderer | null = null;
     private activeScene: THREE.Scene | null = null;
     private activeComposer: EffectComposer | null = null;
-    // Γ£¿ Celestial Console Ether & Particle Waterfall References
+    // ✨ Celestial Console Ether & Particle Waterfall References
     private etherParticles: THREE.Points | null = null;
     private etherRibbonMesh: THREE.Mesh | null = null;
     private etherParticleMaterial: THREE.ShaderMaterial | null = null;
@@ -2553,7 +2048,7 @@ class TetrisPanel {
     private consoleTiltX = 0;
     private consoleTiltY = 0;
     private consoleTiltZ = 0;
-    // ≡ƒÄ¡ Retro Viewport Transition Curtain References
+    // 🎭 Retro Viewport Transition Curtain References
     private curtainOverlayEl: HTMLElement | null = null;
     private curtainBladeEl: HTMLElement | null = null;
     private curtainLogoWrapperEl: HTMLElement | null = null;
@@ -2614,7 +2109,7 @@ class TetrisPanel {
         if (this.psxEngine && typeof (this.psxEngine as any).setMuted === 'function') {
             (this.psxEngine as any).setMuted(this.isMuted);
         }
-        new Notice(this.isMuted ? "≡ƒöç Audio Muted" : "≡ƒöè Audio Unmuted");
+        new Notice(this.isMuted ? "🔇 Audio Muted" : "🔊 Audio Unmuted");
         return this.isMuted;
     }
 
@@ -2638,10 +2133,10 @@ class TetrisPanel {
         this.containerEl.className = 'tetris-canvas-panel';
 
         if (this.plugin.settings && this.plugin.settings.hudPosition) {
-            setCssStyles(this.containerEl as any, { bottom: 'auto' });
-            setCssStyles(this.containerEl as any, { right: 'auto' });
-            setCssStyles(this.containerEl as any, { left: this.plugin.settings.hudPosition.left + 'px' });
-            setCssStyles(this.containerEl as any, { top: this.plugin.settings.hudPosition.top + 'px' });
+            setCssStyles(this.containerEl, { bottom: 'auto' });
+            setCssStyles(this.containerEl, { right: 'auto' });
+            setCssStyles(this.containerEl, { left: this.plugin.settings.hudPosition.left + 'px' });
+            setCssStyles(this.containerEl, { top: this.plugin.settings.hudPosition.top + 'px' });
         }
 
         if (this.plugin.settings && this.plugin.settings.selectedRoomEnvironment) {
@@ -2666,7 +2161,7 @@ class TetrisPanel {
 
         const miniIcon = createEl('div');
         miniIcon.className = 'tetris-mini-icon';
-        miniIcon.innerText = '≡ƒæ╛';
+        miniIcon.innerText = '👾';
         miniIcon.onclick = () => this.toggleMinimize();
         this.containerEl.appendChild(miniIcon);
 
@@ -2707,10 +2202,10 @@ class TetrisPanel {
             });
             const svg = logoContainer.querySelector('svg');
             if (svg) {
-                setCssStyles(svg as any, { backgroundColor: 'transparent' });
-                setCssStyles(svg as any, { display: 'block' });
-                setCssStyles(svg as any, { width: '100%' });
-                setCssStyles(svg as any, { height: '100%' });
+                setCssStyles(svg, { backgroundColor: 'transparent' });
+                setCssStyles(svg, { display: 'block' });
+                setCssStyles(svg, { width: '100%' });
+                setCssStyles(svg, { height: '100%' });
             }
         } catch (e) {
             console.error("Failed to load title pill lottie animation:", e);
@@ -2769,10 +2264,10 @@ class TetrisPanel {
             const relLeft = rect.left - parentRect.left;
             const relTop = rect.top - parentRect.top;
 
-            setCssStyles(this.containerEl as any, { bottom: 'auto' });
-            setCssStyles(this.containerEl as any, { right: 'auto' });
-            setCssStyles(this.containerEl as any, { left: relLeft + 'px' });
-            setCssStyles(this.containerEl as any, { top: relTop + 'px' });
+            setCssStyles(this.containerEl, { bottom: 'auto' });
+            setCssStyles(this.containerEl, { right: 'auto' });
+            setCssStyles(this.containerEl, { left: relLeft + 'px' });
+            setCssStyles(this.containerEl, { top: relTop + 'px' });
 
             panelStartX = relLeft;
             panelStartY = relTop;
@@ -2784,8 +2279,8 @@ class TetrisPanel {
             if (!dragging) return;
             const dx = e.clientX - dragStartX;
             const dy = e.clientY - dragStartY;
-            setCssStyles(this.containerEl as any, { left: (panelStartX + dx) + 'px' });
-            setCssStyles(this.containerEl as any, { top: (panelStartY + dy) + 'px' });
+            setCssStyles(this.containerEl, { left: (panelStartX + dx) + 'px' });
+            setCssStyles(this.containerEl, { top: (panelStartY + dy) + 'px' });
         });
         document.addEventListener('mouseup', () => {
             if (dragging) {
@@ -2804,10 +2299,10 @@ class TetrisPanel {
         this.previewCanvas = createEl('canvas');
         this.previewCanvas.width = this.SCREEN_WIDTH;
         this.previewCanvas.height = this.SCREEN_HEIGHT;
-        setCssStyles(this.previewCanvas as any, { width: '100%' });
-        setCssStyles(this.previewCanvas as any, { height: '100%' });
-        setCssStyles(this.previewCanvas as any, { display: 'none' });
-        setCssStyles(this.previewCanvas as any, { imageRendering: 'pixelated' });
+        setCssStyles(this.previewCanvas, { width: '100%' });
+        setCssStyles(this.previewCanvas, { height: '100%' });
+        setCssStyles(this.previewCanvas, { display: 'none' });
+        setCssStyles(this.previewCanvas, { imageRendering: 'pixelated' });
         this.previewCtx = this.previewCanvas.getContext('2d')!;
         this.previewCtx.imageSmoothingEnabled = false;
 
@@ -2826,33 +2321,33 @@ class TetrisPanel {
 
         // 1. Grid Resolution Slider (1x to 6x)
         const resSliderContainer = createEl('div');
-        setCssStyles(resSliderContainer as any, { display: 'flex' });
-        setCssStyles(resSliderContainer as any, { flexDirection: 'column' });
-        setCssStyles(resSliderContainer as any, { gap: '4px' });
+        setCssStyles(resSliderContainer, { display: 'flex' });
+        setCssStyles(resSliderContainer, { flexDirection: 'column' });
+        setCssStyles(resSliderContainer, { gap: '4px' });
 
         const resHeaderRow = createEl('div');
-        setCssStyles(resHeaderRow as any, { display: 'flex' });
-        setCssStyles(resHeaderRow as any, { justifyContent: 'space-between' });
-        setCssStyles(resHeaderRow as any, { alignItems: 'center' });
-        setCssStyles(resHeaderRow as any, { fontSize: '9px' });
-        setCssStyles(resHeaderRow as any, { color: '#a0a0a8' });
+        setCssStyles(resHeaderRow, { display: 'flex' });
+        setCssStyles(resHeaderRow, { justifyContent: 'space-between' });
+        setCssStyles(resHeaderRow, { alignItems: 'center' });
+        setCssStyles(resHeaderRow, { fontSize: '9px' });
+        setCssStyles(resHeaderRow, { color: '#a0a0a8' });
 
         const resLabel = createEl('span');
         resLabel.innerText = 'Canvas Matrix Grid Resolution';
 
         const resBadge = createEl('span');
-        setCssStyles(resBadge as any, {"color":"#00ff88","fontWeight":"bold","fontFamily":"monospace"});
+        setCssStyles(resBadge, { color: '#00ff88', fontWeight: 'bold', fontFamily: 'monospace' });
 
         resHeaderRow.appendChild(resLabel);
         resHeaderRow.appendChild(resBadge);
 
         const resMap: [number, number, string][] = [
-            [16, 15, '1x (16├ù15 ΓÇö 240 nodes)'],
-            [32, 30, '2x (32├ù30 ΓÇö 960 nodes)'],
-            [64, 60, '3x (64├ù60 ΓÇö 3.8K nodes)'],
-            [128, 120, '4x (128├ù120 ΓÇö 15.3K nodes)'],
-            [256, 240, '5x (256├ù240 ΓÇö Native 1:1)'],
-            [512, 480, '6x (512├ù480 ΓÇö Super-Res)']
+            [16, 15, '1x (16×15 — 240 nodes)'],
+            [32, 30, '2x (32×30 — 960 nodes)'],
+            [64, 60, '3x (64×60 — 3.8K nodes)'],
+            [128, 120, '4x (128×120 — 15.3K nodes)'],
+            [256, 240, '5x (256×240 — Native 1:1)'],
+            [512, 480, '6x (512×480 — Super-Res)']
         ];
 
         const resSlider = createEl('input');
@@ -2879,22 +2374,22 @@ class TetrisPanel {
 
         // 2. Pixel Scale Slider (1x to 6x)
         const pixelScaleSliderContainer = createEl('div');
-        setCssStyles(pixelScaleSliderContainer as any, { display: 'flex' });
-        setCssStyles(pixelScaleSliderContainer as any, { flexDirection: 'column' });
-        setCssStyles(pixelScaleSliderContainer as any, { gap: '4px' });
+        setCssStyles(pixelScaleSliderContainer, { display: 'flex' });
+        setCssStyles(pixelScaleSliderContainer, { flexDirection: 'column' });
+        setCssStyles(pixelScaleSliderContainer, { gap: '4px' });
 
         const scaleHeaderRow = createEl('div');
-        setCssStyles(scaleHeaderRow as any, { display: 'flex' });
-        setCssStyles(scaleHeaderRow as any, { justifyContent: 'space-between' });
-        setCssStyles(scaleHeaderRow as any, { alignItems: 'center' });
-        setCssStyles(scaleHeaderRow as any, { fontSize: '9px' });
-        setCssStyles(scaleHeaderRow as any, { color: '#a0a0a8' });
+        setCssStyles(scaleHeaderRow, { display: 'flex' });
+        setCssStyles(scaleHeaderRow, { justifyContent: 'space-between' });
+        setCssStyles(scaleHeaderRow, { alignItems: 'center' });
+        setCssStyles(scaleHeaderRow, { fontSize: '9px' });
+        setCssStyles(scaleHeaderRow, { color: '#a0a0a8' });
 
         const scaleLabel = createEl('span');
         scaleLabel.innerText = 'Node Pixel Footprint Scale';
 
         const scaleBadge = createEl('span');
-        setCssStyles(scaleBadge as any, {"color":"#00ff88","fontWeight":"bold","fontFamily":"monospace"});
+        setCssStyles(scaleBadge, { color: '#00ff88', fontWeight: 'bold', fontFamily: 'monospace' });
 
         scaleHeaderRow.appendChild(scaleLabel);
         scaleHeaderRow.appendChild(scaleBadge);
@@ -2952,9 +2447,9 @@ class TetrisPanel {
         this.containerEl.appendChild(systemLogoSwitcher);
 
         const romSelectContainer = createEl('div');
-        setCssStyles(romSelectContainer as any, { display: 'flex' });
-        setCssStyles(romSelectContainer as any, { flexDirection: 'column' });
-        setCssStyles(romSelectContainer as any, { gap: '6px' });
+        setCssStyles(romSelectContainer, { display: 'flex' });
+        setCssStyles(romSelectContainer, { flexDirection: 'column' });
+        setCssStyles(romSelectContainer, { gap: '6px' });
 
         this.romSelectEl = createEl('select');
         this.romSelectEl.className = 'tetris-select';
@@ -2963,7 +2458,7 @@ class TetrisPanel {
         const fileInput = createEl('input');
         fileInput.type = 'file';
         fileInput.accept = '.nes';
-        setCssStyles(fileInput as any, { display: 'none' });
+        setCssStyles(fileInput, { display: 'none' });
 
         fileInput.onchange = (e: any) => {
             const file = e.target.files?.[0];
@@ -3015,9 +2510,9 @@ class TetrisPanel {
 
         // Controller Scale Slider
         const scaleSliderContainer = createEl('div');
-        setCssStyles(scaleSliderContainer as any, { display: 'flex' });
-        setCssStyles(scaleSliderContainer as any, { flexDirection: 'column' });
-        setCssStyles(scaleSliderContainer as any, { gap: '4px' });
+        setCssStyles(scaleSliderContainer, { display: 'flex' });
+        setCssStyles(scaleSliderContainer, { flexDirection: 'column' });
+        setCssStyles(scaleSliderContainer, { gap: '4px' });
 
         const scaleSlider = createEl('input');
         scaleSlider.type = 'range';
@@ -3034,23 +2529,23 @@ class TetrisPanel {
         scaleSliderContainer.appendChild(scaleSlider);
 
         const displayControlsRow = createEl('div');
-        setCssStyles(displayControlsRow as any, { display: 'flex' });
-        setCssStyles(displayControlsRow as any, { gap: '6px' });
-        setCssStyles(displayControlsRow as any, { marginTop: '4px' });
+        setCssStyles(displayControlsRow, { display: 'flex' });
+        setCssStyles(displayControlsRow, { gap: '6px' });
+        setCssStyles(displayControlsRow, { marginTop: '4px' });
 
         const ctrlToggleBtn = createEl('button');
         ctrlToggleBtn.className = 'tetris-btn secondary';
-        setCssStyles(ctrlToggleBtn as any, { flex: '1' });
-        ctrlToggleBtn.innerText = this.isControllerVisible ? '≡ƒÄ« GAMEPAD ON' : '≡ƒÄ« GAMEPAD OFF';
+        setCssStyles(ctrlToggleBtn, { flex: '1' });
+        ctrlToggleBtn.innerText = this.isControllerVisible ? '🎮 GAMEPAD ON' : '🎮 GAMEPAD OFF';
         ctrlToggleBtn.onclick = () => {
             this.toggleControllerVisibility();
-            ctrlToggleBtn.innerText = this.isControllerVisible ? '≡ƒÄ« GAMEPAD ON' : '≡ƒÄ« GAMEPAD OFF';
+            ctrlToggleBtn.innerText = this.isControllerVisible ? '🎮 GAMEPAD ON' : '🎮 GAMEPAD OFF';
         };
 
         const crtToggleBtn = createEl('button');
         crtToggleBtn.className = 'tetris-btn secondary';
-        setCssStyles(crtToggleBtn as any, { flex: '1' });
-        crtToggleBtn.innerText = this.isCrtActive ? '≡ƒô║ CRT ON' : '≡ƒô║ CRT OFF';
+        setCssStyles(crtToggleBtn, { flex: '1' });
+        crtToggleBtn.innerText = this.isCrtActive ? '📺 CRT ON' : '📺 CRT OFF';
         crtToggleBtn.onclick = () => {
             this.isCrtActive = !this.isCrtActive;
             if (this.crtOverlayEl) {
@@ -3059,16 +2554,16 @@ class TetrisPanel {
             if (this.overlayCanvas) {
                 this.overlayCanvas.classList.toggle('crt-curved', this.isCrtActive);
             }
-            crtToggleBtn.innerText = this.isCrtActive ? '≡ƒô║ CRT ON' : '≡ƒô║ CRT OFF';
-            new Notice(this.isCrtActive ? "3D CRT Filter Enabled ≡ƒô║" : "CRT Filter Disabled");
+            crtToggleBtn.innerText = this.isCrtActive ? '📺 CRT ON' : '📺 CRT OFF';
+            new Notice(this.isCrtActive ? "3D CRT Filter Enabled 📺" : "CRT Filter Disabled");
         };
 
         const shapeToggleBtn = createEl('button');
         shapeToggleBtn.className = 'tetris-btn secondary';
-        setCssStyles(shapeToggleBtn as any, { flex: '1' });
+        setCssStyles(shapeToggleBtn, { flex: '1' });
         const updateShapeToggleText = () => {
             const isBubble = (this.masterState as any).crtScreenShape === 'vintage_bubble';
-            shapeToggleBtn.innerText = isBubble ? '≡ƒò╣∩╕Å BUBBLE CRT' : '≡ƒô║ FLAT CRT';
+            shapeToggleBtn.innerText = isBubble ? '🕹️ BUBBLE CRT' : '📺 FLAT CRT';
         };
         updateShapeToggleText();
         shapeToggleBtn.onclick = () => {
@@ -3081,7 +2576,7 @@ class TetrisPanel {
                 this.plugin.saveSettings();
             }
             const isBubble = (this.masterState as any).crtScreenShape === 'vintage_bubble';
-            new Notice(isBubble ? '≡ƒò╣∩╕Å Vintage 1980s Bubble CRT Shape Enabled (SMB3 Style)' : '≡ƒô║ Modern Flat CRT Shape Enabled');
+            new Notice(isBubble ? '🕹️ Vintage 1980s Bubble CRT Shape Enabled (SMB3 Style)' : '📺 Modern Flat CRT Shape Enabled');
         };
 
         displayControlsRow.appendChild(ctrlToggleBtn);
@@ -3089,41 +2584,197 @@ class TetrisPanel {
         displayControlsRow.appendChild(shapeToggleBtn);
 
         const controllerSectionContent = createEl('div');
-        setCssStyles(controllerSectionContent as any, { display: 'flex' });
-        setCssStyles(controllerSectionContent as any, { flexDirection: 'column' });
-        setCssStyles(controllerSectionContent as any, { gap: '6px' });
+        setCssStyles(controllerSectionContent, { display: 'flex' });
+        setCssStyles(controllerSectionContent, { flexDirection: 'column' });
+        setCssStyles(controllerSectionContent, { gap: '6px' });
         controllerSectionContent.appendChild(scaleSliderContainer);
         controllerSectionContent.appendChild(displayControlsRow);
 
+        // ── Advanced Settings Drawer Container ─────────────────────────────
+
+        // 3D Room Environment Selector
+        const roomSelect = createEl('select');
+        roomSelect.className = 'tetris-select';
+        [
+            { v: 'midnight',  t: '🌌 Modern Midnight Studio' },
+            { v: 'synthwave', t: '🌆 Neon Synthwave Arcade' },
+            { v: 'warm80s',   t: '📻 Warm 80s Retro Room' },
+            { v: 'minimal',   t: '⬛ Minimal Dark Canvas' }
+        ].forEach(({ v, t }) => {
+            const el = createEl('option');
+            el.value = v; el.text = t;
+            if (v === this.selectedRoomEnvironment) el.selected = true;
+            roomSelect.appendChild(el);
+        });
+        roomSelect.onchange = (e) => {
+            const val = (e.target as HTMLSelectElement).value;
+            this.selectedRoomEnvironment = val;
+            this.renderUnifiedCartridgeSystem();
+        };
+
+        const makeStudioSlider = (label: string, min: number, max: number, step: number, getVal: () => number, setVal: (v: number) => void) => {
+            const container = createEl('div');
+            setCssStyles(container, { display: 'flex' });
+            setCssStyles(container, { flexDirection: 'column' });
+            setCssStyles(container, { gap: '2px' });
+
+            const headerRow = createEl('div');
+            setCssStyles(headerRow, { display: 'flex' });
+            setCssStyles(headerRow, { justifyContent: 'space-between' });
+            setCssStyles(headerRow, { alignItems: 'center' });
+            setCssStyles(headerRow, { fontSize: '9px' });
+            setCssStyles(headerRow, { color: '#a0a0a8' });
+
+            const nameEl = createEl('span');
+            nameEl.innerText = label;
+
+            const numInput = createEl('input');
+            numInput.type = 'number';
+            numInput.step = String(step);
+            numInput.value = Number(getVal().toFixed(4)).toString();
+            setCssStyles(numInput, { width: '68px' });
+            setCssStyles(numInput, { background: 'rgba(0, 0, 0, 0.5)' });
+            setCssStyles(numInput, { border: '1px solid rgba(0, 255, 136, 0.35)' });
+            setCssStyles(numInput, { borderRadius: '3px' });
+            setCssStyles(numInput, { color: '#00ff88' });
+            setCssStyles(numInput, { fontSize: '10px' });
+            setCssStyles(numInput, { fontFamily: 'monospace' });
+            setCssStyles(numInput, { textAlign: 'right' });
+            setCssStyles(numInput, { padding: '1px 4px' });
+            setCssStyles(numInput, { outline: 'none' });
+
+            headerRow.appendChild(nameEl);
+            headerRow.appendChild(numInput);
+
+            const input = createEl('input');
+            input.type = 'range';
+            input.className = 'tetris-slider';
+            input.min = String(min);
+            input.max = String(max);
+            input.step = String(step);
+            input.value = String(getVal());
+
+            input.oninput = (e) => {
+                const v = parseFloat((e.target as HTMLInputElement).value);
+                setVal(v);
+                numInput.value = Number(v.toFixed(4)).toString();
+                if (this.plugin && this.plugin.settings) {
+                    this.plugin.settings.masterState = Object.assign({}, this.masterState);
+                    this.plugin.saveSettings();
+                }
+            };
+
+            numInput.oninput = (e) => {
+                const valStr = (e.target as HTMLInputElement).value;
+                const v = parseFloat(valStr);
+                if (!isNaN(v)) {
+                    setVal(v);
+                    input.value = String(v);
+                    if (this.plugin && this.plugin.settings) {
+                        this.plugin.settings.masterState = Object.assign({}, this.masterState);
+                        this.plugin.saveSettings();
+                    }
+                }
+            };
+
+            numInput.addEventListener('keydown', (e) => e.stopPropagation());
+            numInput.addEventListener('keyup', (e) => e.stopPropagation());
+            numInput.addEventListener('mousedown', (e) => e.stopPropagation());
+
+            container.addEventListener('mousedown', (e) => e.stopPropagation());
+            container.addEventListener('pointerdown', (e) => e.stopPropagation());
+            container.addEventListener('wheel', (e: WheelEvent) => {
+                e.stopPropagation();
+                e.preventDefault();
+                const scrollParent = container.closest('.tetris-studio-suite-scrollable, .tetris-advanced-content, .tetris-canvas-panel') as HTMLElement;
+                if (scrollParent) {
+                    scrollParent.scrollTop += e.deltaY;
+                }
+            }, { passive: false });
+
+            container.appendChild(headerRow);
+            container.appendChild(input);
+            return container;
+        };
+
+        const makeCollapsible = (title: string, contentEl: HTMLElement, startOpen = false) => {
+            const wrapper = createEl('div');
+            setCssStyles(wrapper, { border: '1px solid rgba(255, 255, 255, 0.08)' });
+            setCssStyles(wrapper, { borderRadius: '6px' });
+            setCssStyles(wrapper, { marginBottom: '6px' });
+            setCssStyles(wrapper, { overflow: 'visible' });
+            setCssStyles(wrapper, { background: 'rgba(0,0,0,0.18)' });
+
+            const headerBtn = createEl('button');
+        setCssStyles(headerBtn, { width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: '7px 8px', fontSize: '9px', fontWeight: 'bold', color: '#00ff88', letterSpacing: '0.07em', textTransform: 'uppercase', textAlign: 'left' });
+
+            const titleSpan = createEl('span');
+            titleSpan.innerText = title;
+
+            const chevron = createEl('span');
+        setCssStyles(chevron, { fontSize: '8px', transition: 'transform 0.18s', display: 'inline-block' });
+            chevron.innerText = '▼';
+
+            headerBtn.appendChild(titleSpan);
+            headerBtn.appendChild(chevron);
+
+            setCssStyles(contentEl, { padding: '0 8px 8px' });
+            setCssStyles(contentEl, { display: startOpen ? 'flex' : 'none' });
+            setCssStyles(contentEl, { flexDirection: 'column' });
+            setCssStyles(contentEl, { gap: '4px' });
+
+            if (!startOpen) setCssStyles(chevron, { transform: 'rotate(-90deg)' });
+
+            headerBtn.addEventListener('click', () => {
+                const open = contentEl.style.display !== 'none';
+                setCssStyles(contentEl, { display: open ? 'none' : 'flex' });
+                setCssStyles(chevron, { transform: open ? 'rotate(-90deg)' : 'rotate(0deg)' });
+            });
+            headerBtn.addEventListener('mousedown', e => e.stopPropagation());
+
+            wrapper.addEventListener('wheel', (e: WheelEvent) => {
+                e.stopPropagation();
+                e.preventDefault();
+                const scrollParent = wrapper.closest('.tetris-studio-suite-scrollable, .tetris-advanced-content, .tetris-canvas-panel') as HTMLElement;
+                if (scrollParent) {
+                    scrollParent.scrollTop += e.deltaY;
+                }
+            }, { passive: false });
+
+            wrapper.appendChild(headerBtn);
+            wrapper.appendChild(contentEl);
+            return wrapper;
+        };
+
         // Display & CRT Overlay Toggles inside Advanced Settings
         const overlayControlsGroup = createEl('div');
-        setCssStyles(overlayControlsGroup as any, { display: 'flex' });
-        setCssStyles(overlayControlsGroup as any, { flexDirection: 'column' });
-        setCssStyles(overlayControlsGroup as any, { gap: '6px' });
+        setCssStyles(overlayControlsGroup, { display: 'flex' });
+        setCssStyles(overlayControlsGroup, { flexDirection: 'column' });
+        setCssStyles(overlayControlsGroup, { gap: '6px' });
 
         const ctrlBtn = createEl('button');
         ctrlBtn.className = 'tetris-btn secondary';
-        ctrlBtn.innerText = this.isControllerVisible ? '≡ƒÄ« GAMEPAD CONTROLLER: ON' : '≡ƒÄ« GAMEPAD CONTROLLER: OFF';
+        ctrlBtn.innerText = this.isControllerVisible ? '🎮 GAMEPAD CONTROLLER: ON' : '🎮 GAMEPAD CONTROLLER: OFF';
         ctrlBtn.onclick = () => {
             this.toggleControllerVisibility();
-            ctrlBtn.innerText = this.isControllerVisible ? '≡ƒÄ« GAMEPAD CONTROLLER: ON' : '≡ƒÄ« GAMEPAD CONTROLLER: OFF';
+            ctrlBtn.innerText = this.isControllerVisible ? '🎮 GAMEPAD CONTROLLER: ON' : '🎮 GAMEPAD CONTROLLER: OFF';
         };
 
         const crtBtn = createEl('button');
         crtBtn.className = 'tetris-btn secondary';
-        crtBtn.innerText = this.isCrtActive ? '≡ƒô║ CRT SCANLINE SHADER: ON' : '≡ƒô║ CRT SCANLINE SHADER: OFF';
+        crtBtn.innerText = this.isCrtActive ? '📺 CRT SCANLINE SHADER: ON' : '📺 CRT SCANLINE SHADER: OFF';
         crtBtn.onclick = () => {
             this.isCrtActive = !this.isCrtActive;
             if (this.crtOverlayEl) this.crtOverlayEl.classList.toggle('active', this.isCrtActive);
             if (this.overlayCanvas) this.overlayCanvas.classList.toggle('crt-curved', this.isCrtActive);
-            crtBtn.innerText = this.isCrtActive ? '≡ƒô║ CRT SCANLINE SHADER: ON' : '≡ƒô║ CRT SCANLINE SHADER: OFF';
+            crtBtn.innerText = this.isCrtActive ? '📺 CRT SCANLINE SHADER: ON' : '📺 CRT SCANLINE SHADER: OFF';
         };
 
         const screenShapeBtn = createEl('button');
         screenShapeBtn.className = 'tetris-btn secondary';
         const updateShapeBtnText = () => {
             const isBubble = (this.masterState as any).crtScreenShape === 'vintage_bubble';
-            screenShapeBtn.innerText = isBubble ? '≡ƒò╣∩╕Å SCREEN SHAPE: VINTAGE 1980s BUBBLE' : '≡ƒô║ SCREEN SHAPE: MODERN FLAT CRT';
+            screenShapeBtn.innerText = isBubble ? '🕹️ SCREEN SHAPE: VINTAGE 1980s BUBBLE' : '📺 SCREEN SHAPE: MODERN FLAT CRT';
         };
         updateShapeBtnText();
         screenShapeBtn.onclick = () => {
@@ -3136,7 +2787,7 @@ class TetrisPanel {
                 this.plugin.saveSettings();
             }
             const isBubble = (this.masterState as any).crtScreenShape === 'vintage_bubble';
-            new Notice(isBubble ? '≡ƒò╣∩╕Å Vintage 1980s Bubble CRT Shape Enabled (SMB3 Style)' : '≡ƒô║ Modern Flat CRT Shape Enabled');
+            new Notice(isBubble ? '🕹️ Vintage 1980s Bubble CRT Shape Enabled (SMB3 Style)' : '📺 Modern Flat CRT Shape Enabled');
         };
 
         overlayControlsGroup.appendChild(ctrlBtn);
@@ -3145,9 +2796,9 @@ class TetrisPanel {
 
         const advContent = createEl('div');
         advContent.className = 'tetris-advanced-content';
-        setCssStyles(advContent as any, { maxHeight: '420px' });
-        setCssStyles(advContent as any, { overflowY: 'auto' });
-        setCssStyles(advContent as any, { display: 'none' }); // Closed by default as requested
+        setCssStyles(advContent, { maxHeight: '420px' });
+        setCssStyles(advContent, { overflowY: 'auto' });
+        setCssStyles(advContent, { display: 'none' }); // Closed by default as requested
 
         advContent.addEventListener('wheel', (e: WheelEvent) => {
             if ((e.target as HTMLElement).closest('.tetris-studio-suite-scrollable, .sfx-cards-scroll-list, .tetris-sfx-studio-container')) return;
@@ -3166,7 +2817,7 @@ class TetrisPanel {
 
         this.containerEl.appendChild(advContent);
 
-        // ΓöÇΓöÇ SLEEK ICON ACTION BAR ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+        // ── SLEEK ICON ACTION BAR ───────────────────────────────────────────
         const actionBar = createEl('div');
         actionBar.className = 'tetris-icon-action-bar';
 
@@ -3210,13 +2861,13 @@ class TetrisPanel {
                     if (buf) {
                         this.persistentSaveStates.set(romKey, buf);
                         const savedDisk = await this.saveRomStateToDisk(romKey, buf, true);
-                        if (savedDisk) new Notice("≡ƒÆ╛ PS1 Game State Saved to Disk!");
-                        else new Notice("ΓÜá∩╕Å Failed to Save PS1 State to Disk");
+                        if (savedDisk) new Notice("💾 PS1 Game State Saved to Disk!");
+                        else new Notice("⚠️ Failed to Save PS1 State to Disk");
                     } else {
-                        new Notice("ΓÜá∩╕Å Failed to Capture PS1 State");
+                        new Notice("⚠️ Failed to Capture PS1 State");
                     }
                 } else {
-                    new Notice("ΓÜá∩╕Å PS1 Engine not running");
+                    new Notice("⚠️ PS1 Engine not running");
                 }
             } else {
                 if (this.nes) {
@@ -3224,13 +2875,13 @@ class TetrisPanel {
                     if (nesState) {
                         this.persistentSaveStates.set(romKey, nesState);
                         const savedDisk = await this.saveRomStateToDisk(romKey, nesState, false);
-                        if (savedDisk) new Notice("≡ƒÆ╛ NES Game State Saved to Disk!");
-                        else new Notice("ΓÜá∩╕Å Failed to Save NES State to Disk");
+                        if (savedDisk) new Notice("💾 NES Game State Saved to Disk!");
+                        else new Notice("⚠️ Failed to Save NES State to Disk");
                     } else {
-                        new Notice("ΓÜá∩╕Å Failed to Capture NES State");
+                        new Notice("⚠️ Failed to Capture NES State");
                     }
                 } else {
-                    new Notice("ΓÜá∩╕Å NES Engine not running");
+                    new Notice("⚠️ NES Engine not running");
                 }
             }
         });
@@ -3246,10 +2897,10 @@ class TetrisPanel {
                 }
                 if (this.psxEngine && savedData) {
                     const ok = await this.psxEngine.loadState(savedData);
-                    if (ok) new Notice("≡ƒôé PS1 Game State Restored from Disk!");
-                    else new Notice("ΓÜá∩╕Å Failed to Restore PS1 State");
+                    if (ok) new Notice("📂 PS1 Game State Restored from Disk!");
+                    else new Notice("⚠️ Failed to Restore PS1 State");
                 } else {
-                    new Notice("ΓÜá∩╕Å No Save State Found on Disk for this ROM");
+                    new Notice("⚠️ No Save State Found on Disk for this ROM");
                 }
             } else {
                 let savedData = this.persistentSaveStates.get(romKey);
@@ -3259,9 +2910,9 @@ class TetrisPanel {
                 }
                 if (this.nes && savedData) {
                     this.nes.fromJSON(savedData);
-                    new Notice("≡ƒôé NES Game State Restored from Disk!");
+                    new Notice("📂 NES Game State Restored from Disk!");
                 } else {
-                    new Notice("ΓÜá∩╕Å No Save State Found on Disk for this ROM");
+                    new Notice("⚠️ No Save State Found on Disk for this ROM");
                 }
             }
         });
@@ -3286,9 +2937,9 @@ class TetrisPanel {
         // 6. Settings Toggle Drawer Button
         const settingsBtn = createIconButton('settings', 'Toggle Advanced Console & Emulator Settings', () => {
             const isOpen = advContent.style.display !== 'none';
-            setCssStyles(advContent as any, { display: isOpen ? 'none' : 'flex' });
-            setCssStyles(advContent as any, { flexDirection: 'column' });
-            setCssStyles(advContent as any, { gap: '6px' });
+            setCssStyles(advContent, { display: isOpen ? 'none' : 'flex' });
+            setCssStyles(advContent, { flexDirection: 'column' });
+            setCssStyles(advContent, { gap: '6px' });
             if (!isOpen) settingsBtn.classList.add('active');
             else settingsBtn.classList.remove('active');
         });
@@ -3305,7 +2956,7 @@ class TetrisPanel {
 
         // Start app 100% minimized on launch without flashing maximized HUD
         this.isMinimized = true;
-        setCssStyles(this.containerEl as any, { display: 'none' });
+        setCssStyles(this.containerEl, { display: 'none' });
         
         // Restore floating button position from settings if available
         if (this.plugin && this.plugin.settings && this.plugin.settings.floatingGamepadPos) {
@@ -3377,27 +3028,27 @@ class TetrisPanel {
     private buildSfxStudio(): HTMLElement {
         const studioContainer = createEl('div');
         studioContainer.className = 'tetris-sfx-studio-container';
-        setCssStyles(studioContainer as any, {"display":"flex","flexDirection":"column","gap":"8px","width":"100%"});
+        setCssStyles(studioContainer, { display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' });
 
         // 1. System Tab Switcher (NES vs PS1)
         const tabHeader = createEl('div');
-        setCssStyles(tabHeader as any, {"display":"flex","gap":"6px","marginBottom":"4px"});
+        setCssStyles(tabHeader, { display: 'flex', gap: '6px', marginBottom: '4px' });
 
         let activeTab: 'nes' | 'psx' = this.plugin.settings.activeSystem || 'nes';
 
         const nesTabBtn = createEl('button');
         nesTabBtn.className = 'tetris-btn ' + (activeTab === 'nes' ? 'primary' : 'secondary');
-        nesTabBtn.innerText = '≡ƒÄ« NES SAMPLES (17)';
-        setCssStyles(nesTabBtn as any, { flex: '1' });
-        setCssStyles(nesTabBtn as any, { fontSize: '10px' });
-        setCssStyles(nesTabBtn as any, { padding: '4px 6px' });
+        nesTabBtn.innerText = '🎮 NES SAMPLES (17)';
+        setCssStyles(nesTabBtn, { flex: '1' });
+        setCssStyles(nesTabBtn, { fontSize: '10px' });
+        setCssStyles(nesTabBtn, { padding: '4px 6px' });
 
         const psxTabBtn = createEl('button');
         psxTabBtn.className = 'tetris-btn ' + (activeTab === 'psx' ? 'primary' : 'secondary');
-        psxTabBtn.innerText = '≡ƒò╣∩╕Å PS1 SAMPLES (21)';
-        setCssStyles(psxTabBtn as any, { flex: '1' });
-        setCssStyles(psxTabBtn as any, { fontSize: '10px' });
-        setCssStyles(psxTabBtn as any, { padding: '4px 6px' });
+        psxTabBtn.innerText = '🕹️ PS1 SAMPLES (21)';
+        setCssStyles(psxTabBtn, { flex: '1' });
+        setCssStyles(psxTabBtn, { fontSize: '10px' });
+        setCssStyles(psxTabBtn, { padding: '4px 6px' });
 
         tabHeader.appendChild(nesTabBtn);
         tabHeader.appendChild(psxTabBtn);
@@ -3406,32 +3057,32 @@ class TetrisPanel {
         // 2. Cards Scroll List Container
         const cardsList = createEl('div');
         cardsList.className = 'sfx-cards-scroll-list';
-        setCssStyles(cardsList as any, {"display":"flex","flexDirection":"column","gap":"6px","maxHeight":"280px","overflowY":"auto","paddingRight":"4px"});
+        setCssStyles(cardsList, { display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '280px', overflowY: 'auto', paddingRight: '4px' });
 
         cardsList.addEventListener('wheel', (e) => {
             e.stopPropagation();
         }, { passive: true });
 
         const renderCards = () => {
-            cardsList.empty();
+            cardsList.innerHTML = '';
             const allFiles = this.sfxEngine.availableFiles;
             const entries = Object.entries(SFX_METADATA).filter(([_, meta]) => meta.system === activeTab);
 
             entries.forEach(([id, meta]) => {
                 const card = createEl('div');
                 card.className = 'sfx-card-item';
-                setCssStyles(card as any, {"display":"flex","flexDirection":"column","gap":"5px","padding":"7px 8px","background":"rgba(255, 255, 255, 0.03)","border":"1px solid rgba(255, 255, 255, 0.08)","borderRadius":"6px"});
+        setCssStyles(card, { display: 'flex', flexDirection: 'column', gap: '5px', padding: '7px 8px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '6px' });
 
                 // Header Row
                 const headerRow = createEl('div');
-                setCssStyles(headerRow as any, {"display":"flex","justifyContent":"space-between","alignItems":"center"});
+        setCssStyles(headerRow, { display: 'flex', justifyContent: 'space-between', alignItems: 'center' });
 
                 const titleEl = createEl('div');
-                setCssStyles(titleEl as any, {"fontSize":"11px","fontWeight":"bold","color":"#00ffaa","fontFamily":"monospace"});
+        setCssStyles(titleEl, { fontSize: '11px', fontWeight: 'bold', color: '#00ffaa', fontFamily: 'monospace' });
                 titleEl.innerText = `[${meta.code}] ${meta.name}`;
 
                 const catBadge = createEl('span');
-                setCssStyles(catBadge as any, {"fontSize":"9px","color":"#888","background":"rgba(255,255,255,0.06)","padding":"2px 5px","borderRadius":"3px"});
+        setCssStyles(catBadge, { fontSize: '9px', color: '#888', background: 'rgba(255,255,255,0.06)', padding: '2px 5px', borderRadius: '3px' });
                 catBadge.innerText = meta.category;
 
                 headerRow.appendChild(titleEl);
@@ -3440,16 +3091,16 @@ class TetrisPanel {
 
                 // Description
                 const descEl = createEl('div');
-                setCssStyles(descEl as any, {"fontSize":"9px","color":"#999","lineHeight":"1.2"});
+        setCssStyles(descEl, { fontSize: '9px', color: '#999', lineHeight: '1.2' });
                 descEl.innerText = meta.description;
                 card.appendChild(descEl);
 
                 // Sample File Custom Dropdown & Test Row
                 const assignRow = createEl('div');
-                setCssStyles(assignRow as any, {"display":"flex","gap":"6px","alignItems":"center","marginTop":"2px"});
+        setCssStyles(assignRow, { display: 'flex', gap: '6px', alignItems: 'center', marginTop: '2px' });
 
                 const selectWrap = createEl('div');
-                setCssStyles(selectWrap as any, {"position":"relative","flex":"1","minWidth":"0"});
+        setCssStyles(selectWrap, { position: 'relative', flex: '1', minWidth: '0' });
 
                 const currentConfig = this.sfxEngine.getConfig(id);
                 let currentAssigned = currentConfig.sampleFile || '';
@@ -3460,15 +3111,15 @@ class TetrisPanel {
 
                 const triggerBtn = createEl('button');
                 triggerBtn.className = 'tetris-btn';
-                setCssStyles(triggerBtn as any, {"width":"100%","display":"flex","justifyContent":"space-between","alignItems":"center","fontSize":"10px","padding":"3px 6px","fontFamily":"monospace","background":"rgba(0,0,0,0.5)","textAlign":"left","overflow":"hidden","textOverflow":"ellipsis","whiteSpace":"nowrap","border":"1px solid rgba(255,255,255,0.15)","borderRadius":"4px","color":"#eee","cursor":"pointer"});
+        setCssStyles(triggerBtn, { width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '10px', padding: '3px 6px', fontFamily: 'monospace', background: 'rgba(0,0,0,0.5)', textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '4px', color: '#eee', cursor: 'pointer' });
 
                 const triggerLabel = createEl('span');
-                setCssStyles(triggerLabel as any, {"overflow":"hidden","textOverflow":"ellipsis","whiteSpace":"nowrap","flex":"1"});
-                triggerLabel.innerText = currentAssigned || 'ΓÇö None / Muted ΓÇö';
+        setCssStyles(triggerLabel, { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: '1' });
+                triggerLabel.innerText = currentAssigned || '— None / Muted —';
 
                 const arrowIcon = createEl('span');
-                setCssStyles(arrowIcon as any, {"marginLeft":"4px","color":"#888","fontSize":"8px"});
-                arrowIcon.innerText = 'Γû╝';
+        setCssStyles(arrowIcon, { marginLeft: '4px', color: '#888', fontSize: '8px' });
+                arrowIcon.innerText = '▼';
 
                 triggerBtn.appendChild(triggerLabel);
                 triggerBtn.appendChild(arrowIcon);
@@ -3477,31 +3128,31 @@ class TetrisPanel {
                 // Floating Options Menu
                 const menuList = createEl('div');
                 menuList.className = 'sfx-custom-dropdown-menu';
-                setCssStyles(menuList as any, {"display":"none","position":"absolute","top":"100%","left":"0","width":"max-content","minWidth":"320px","maxWidth":"440px","maxHeight":"220px","overflowY":"auto","overflowX":"hidden","background":"#14151e","border":"1.5px solid #00ffaa","borderRadius":"6px","boxShadow":"0 12px 36px rgba(0,0,0,0.95)","zIndex":"999999","marginTop":"4px","padding":"4px","boxSizing":"border-box","flexDirection":"column","gap":"2px"});
+        setCssStyles(menuList, { display: 'none', position: 'absolute', top: '100%', left: '0', width: 'max-content', minWidth: '320px', maxWidth: '440px', maxHeight: '220px', overflowY: 'auto', overflowX: 'hidden', background: '#14151e', border: '1.5px solid #00ffaa', borderRadius: '6px', boxShadow: '0 12px 36px rgba(0,0,0,0.95)', zIndex: '999999', marginTop: '4px', padding: '4px', boxSizing: 'border-box', flexDirection: 'column', gap: '2px' });
 
                 menuList.addEventListener('wheel', (e) => e.stopPropagation(), { passive: true });
 
                 const closeMenu = () => {
-                    setCssStyles(menuList as any, { display: 'none' });
+                    setCssStyles(menuList, { display: 'none' });
                     this.sfxEngine.stopAudition();
                 };
 
                 // Option: None / Muted
                 const noneItem = createEl('div');
-                setCssStyles(noneItem as any, {"display":"flex","alignItems":"center","flexShrink":"0","height":"28px","minHeight":"28px","padding":"0 8px","fontSize":"11px","fontFamily":"monospace","color":"#888","borderRadius":"4px","cursor":"pointer","overflow":"hidden","textOverflow":"ellipsis","whiteSpace":"nowrap","boxSizing":"border-box","marginBottom":"2px"});
-                noneItem.innerText = 'ΓÇö None / Muted ΓÇö';
+        setCssStyles(noneItem, { display: 'flex', alignItems: 'center', flexShrink: '0', height: '28px', minHeight: '28px', padding: '0 8px', fontSize: '11px', fontFamily: 'monospace', color: '#888', borderRadius: '4px', cursor: 'pointer', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', boxSizing: 'border-box', marginBottom: '2px' });
+                noneItem.innerText = '— None / Muted —';
                 noneItem.onmouseenter = () => {
-                    setCssStyles(noneItem as any, { background: 'rgba(255,255,255,0.1)' });
+                    setCssStyles(noneItem, { background: 'rgba(255,255,255,0.1)' });
                     this.sfxEngine.stopAudition();
                 };
                 noneItem.onmouseleave = () => {
-                    setCssStyles(noneItem as any, { background: 'transparent' });
+                    setCssStyles(noneItem, { background: 'transparent' });
                 };
                 noneItem.onclick = (e) => {
                     e.stopPropagation();
                     this.sfxEngine.assignSample(id, '');
                     currentAssigned = '';
-                    triggerLabel.innerText = 'ΓÇö None / Muted ΓÇö';
+                    triggerLabel.innerText = '— None / Muted —';
                     closeMenu();
                 };
                 menuList.appendChild(noneItem);
@@ -3509,21 +3160,21 @@ class TetrisPanel {
                 // Options: All Audio Files
                 allFiles.forEach(f => {
                     const item = createEl('div');
-                    setCssStyles(item as any, {"display":"flex","alignItems":"center","flexShrink":"0","height":"28px","minHeight":"28px","padding":"0 8px","fontSize":"11px","fontFamily":"monospace","color":"#d0d4e0","borderRadius":"4px","cursor":"pointer","overflow":"hidden","textOverflow":"ellipsis","whiteSpace":"nowrap","boxSizing":"border-box","marginBottom":"2px"});
+        setCssStyles(item, { display: 'flex', alignItems: 'center', flexShrink: '0', height: '28px', minHeight: '28px', padding: '0 8px', fontSize: '11px', fontFamily: 'monospace', color: '#d0d4e0', borderRadius: '4px', cursor: 'pointer', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', boxSizing: 'border-box', marginBottom: '2px' });
                     item.innerText = f;
 
                     if (f === currentAssigned) {
-                        setCssStyles(item as any, { color: '#00ffaa' });
-                        setCssStyles(item as any, { fontWeight: 'bold' });
-                        setCssStyles(item as any, { background: 'rgba(0, 255, 170, 0.12)' });
+                        setCssStyles(item, { color: '#00ffaa' });
+                        setCssStyles(item, { fontWeight: 'bold' });
+                        setCssStyles(item, { background: 'rgba(0, 255, 170, 0.12)' });
                     }
 
                     item.onmouseenter = () => {
-                        setCssStyles(item as any, { background: 'rgba(0, 255, 170, 0.25)' });
+                        setCssStyles(item, { background: 'rgba(0, 255, 170, 0.25)' });
                         this.sfxEngine.startAudition(f, currentConfig.volume, currentConfig.pitchShift);
                     };
                     item.onmouseleave = () => {
-                        setCssStyles(item as any, { background: (f === currentAssigned ? 'rgba(0, 255, 170, 0.12)' : 'transparent') });
+                        setCssStyles(item, { background: (f === currentAssigned ? 'rgba(0, 255, 170, 0.12)' : 'transparent') });
                         this.sfxEngine.stopAudition();
                     };
                     item.onclick = (e) => {
@@ -3539,10 +3190,10 @@ class TetrisPanel {
 
                 triggerBtn.onclick = (e) => {
                     e.stopPropagation();
-                    const isVisible = ((menuList as HTMLElement).style.display == 'flex' );
-                    document.querySelectorAll('.sfx-custom-dropdown-menu').forEach((m: any) => { setCssStyles(m as any, { display: 'none' }); });
+                    const isVisible = menuList.style.display === 'flex';
+                    document.querySelectorAll('.sfx-custom-dropdown-menu').forEach((m: any) => { setCssStyles(m, { display: 'none' }); });
                     if (!isVisible) {
-                        setCssStyles(menuList as any, { display: 'flex' });
+                        setCssStyles(menuList, { display: 'flex' });
                     } else {
                         closeMenu();
                     }
@@ -3553,8 +3204,8 @@ class TetrisPanel {
                 // Play / Test Button
                 const playBtn = createEl('button');
                 playBtn.className = 'tetris-btn';
-                setCssStyles(playBtn as any, {"padding":"2px 8px","fontSize":"10px","whiteSpace":"nowrap","background":"#00ffaa","color":"#000","fontWeight":"bold","cursor":"pointer"});
-                playBtn.innerText = 'Γû╢ Test';
+        setCssStyles(playBtn, { padding: '2px 8px', fontSize: '10px', whiteSpace: 'nowrap', background: '#00ffaa', color: '#000', fontWeight: 'bold', cursor: 'pointer' });
+                playBtn.innerText = '▶ Test';
                 playBtn.onclick = () => {
                     const selectedFile = currentAssigned;
                     if (selectedFile) {
@@ -3562,8 +3213,8 @@ class TetrisPanel {
                     } else {
                         this.sfxEngine.preview(id);
                     }
-                    setCssStyles(playBtn as any, { background: '#ffffff' });
-                    window.setTimeout(() => { setCssStyles(playBtn as any, { background: '#00ffaa' }); }, 180);
+                    setCssStyles(playBtn, { background: '#ffffff' });
+                    window.setTimeout(() => { setCssStyles(playBtn, { background: '#00ffaa' }); }, 180);
                 };
 
                 assignRow.appendChild(selectWrap);
@@ -3572,13 +3223,13 @@ class TetrisPanel {
 
                 // Volume & Pitch Controls Row
                 const controlsRow = createEl('div');
-                setCssStyles(controlsRow as any, {"display":"flex","gap":"8px","alignItems":"center","marginTop":"2px"});
+        setCssStyles(controlsRow, { display: 'flex', gap: '8px', alignItems: 'center', marginTop: '2px' });
 
                 // Volume Slider
                 const volWrap = createEl('div');
-                setCssStyles(volWrap as any, {"flex":"1","display":"flex","flexDirection":"column","gap":"2px"});
+        setCssStyles(volWrap, { flex: '1', display: 'flex', flexDirection: 'column', gap: '2px' });
                 const volHeader = createEl('div');
-                setCssStyles(volHeader as any, {"display":"flex","justifyContent":"space-between","fontSize":"8px","color":"#777"});
+        setCssStyles(volHeader, { display: 'flex', justifyContent: 'space-between', fontSize: '8px', color: '#777' });
                 const volTitle = createEl('span'); volTitle.innerText = 'Volume';
                 const volBadge = createEl('span'); volBadge.innerText = `${Math.round((currentConfig.volume ?? meta.defaultVol) * 100)}%`;
                 volHeader.appendChild(volTitle); volHeader.appendChild(volBadge);
@@ -3600,9 +3251,9 @@ class TetrisPanel {
 
                 // Pitch Slider
                 const pitchWrap = createEl('div');
-                setCssStyles(pitchWrap as any, {"flex":"1","display":"flex","flexDirection":"column","gap":"2px"});
+        setCssStyles(pitchWrap, { flex: '1', display: 'flex', flexDirection: 'column', gap: '2px' });
                 const pitchHeader = createEl('div');
-                setCssStyles(pitchHeader as any, {"display":"flex","justifyContent":"space-between","fontSize":"8px","color":"#777"});
+        setCssStyles(pitchHeader, { display: 'flex', justifyContent: 'space-between', fontSize: '8px', color: '#777' });
                 const pitchTitle = createEl('span'); pitchTitle.innerText = 'Pitch';
                 const pitchBadge = createEl('span'); pitchBadge.innerText = `${(currentConfig.pitchShift ?? 1.0).toFixed(2)}x`;
                 pitchHeader.appendChild(pitchTitle); pitchHeader.appendChild(pitchBadge);
@@ -3653,7 +3304,7 @@ class TetrisPanel {
         return studioContainer;
     }
 
-    // ΓöÇΓöÇ POWER TOGGLE (single source of truth) ΓöÇΓöÇ
+    // ── POWER TOGGLE (single source of truth) ──
     public triggerPowerToggle() {
         const isOn = this.isConsolePowerOn || this.isControllerVisible ||
                      (!!this.overlayCanvas && this.overlayCanvas.style.display !== 'none') ||
@@ -3661,7 +3312,7 @@ class TetrisPanel {
         if (isOn) {
             this.triggerPowerOffSequence();
         } else {
-            if (this.retroStartBtnEl) setCssStyles(this.retroStartBtnEl as any, { display: 'none' });
+            if (this.retroStartBtnEl) setCssStyles(this.retroStartBtnEl, { display: 'none' });
             this.pendingStartGridCreation = true;
             if (this.masterState.introEnabled) {
                 this.triggerIntroAnimation(true);
@@ -3679,7 +3330,7 @@ class TetrisPanel {
         const isOff = !this.isConsolePowerOn && !this.isIntroPlaying && !this.hasIntroRun;
 
         if (this.retroStartBtnEl && this.retroStartBtnEl.parentElement === this.boxArtEl) {
-            setCssStyles(this.retroStartBtnEl as any, { display: isOff ? 'flex' : 'none' });
+            setCssStyles(this.retroStartBtnEl, { display: isOff ? 'flex' : 'none' });
             return;
         }
 
@@ -3689,7 +3340,7 @@ class TetrisPanel {
 
         const startBtn = createEl('button');
         startBtn.className = 'tetris-retro-start-btn';
-        startBtn.setText('START');
+        startBtn.innerHTML = 'START';
         startBtn.title = 'Power On Console & Launch Game';
 
         startBtn.onclick = (e) => {
@@ -3699,7 +3350,7 @@ class TetrisPanel {
 
         this.boxArtEl.appendChild(startBtn);
         this.retroStartBtnEl = startBtn;
-        setCssStyles(startBtn as any, { display: isOff ? 'flex' : 'none' });
+        setCssStyles(startBtn, { display: isOff ? 'flex' : 'none' });
     }
 
     private async saveRomStateToDisk(romKey: string, data: any, isBinary: boolean): Promise<boolean> {
@@ -3755,7 +3406,7 @@ class TetrisPanel {
     private floatingGamepadBtn: HTMLElement | null = null;
     private floatingGamepadPos: { x: number; y: number } | null = null;
 
-    // ΓöÇΓöÇ ≡ƒÅü TRUE 3D CTR WAVY SILK MESH TRANSITION ENGINE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    // ── 🏁 TRUE 3D CTR WAVY SILK MESH TRANSITION ENGINE ──────────────
     private flagCanvasEl: HTMLCanvasElement | null = null;
     private flagRenderer: THREE.WebGLRenderer | null = null;
     private flagScene: THREE.Scene | null = null;
@@ -3818,18 +3469,18 @@ class TetrisPanel {
 
             anim.onfinish = () => {
                 if (this.containerEl) {
-                    setCssStyles(this.containerEl as any, { display: 'none' });
-                    setCssStyles(this.containerEl as any, { transform: '' });
-                    setCssStyles(this.containerEl as any, { opacity: '' });
+                    setCssStyles(this.containerEl, { display: 'none' });
+                    setCssStyles(this.containerEl, { transform: '' });
+                    setCssStyles(this.containerEl, { opacity: '' });
                 }
                 this.showFloatingGamepadTrigger();
             };
         } catch (e) {
-            setCssStyles(this.containerEl as any, { display: 'none' });
+            setCssStyles(this.containerEl, { display: 'none' });
             this.showFloatingGamepadTrigger();
         }
 
-        // ≡ƒ¢æ PAUSE 3D RENDER LOOP: 100% compute freed for testing zero-overhead emulation
+        // 🛑 PAUSE 3D RENDER LOOP: 100% compute freed for testing zero-overhead emulation
         if (this.animationFrameId !== null) {
             window.cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;
@@ -3853,7 +3504,7 @@ class TetrisPanel {
             this.floatingGamepadBtn = null;
         }
 
-        setCssStyles(this.containerEl as any, { display: '' });
+        setCssStyles(this.containerEl, { display: '' });
         const hudRect = this.containerEl.getBoundingClientRect();
         const startLeft = hudRect.left - parentRect.left;
         const startTop = hudRect.top - parentRect.top;
@@ -3880,7 +3531,7 @@ class TetrisPanel {
             });
         } catch (e) {}
 
-        // Γû╢∩╕Å RESUME 3D RENDER LOOP & ENSURE START BUTTON
+        // ▶️ RESUME 3D RENDER LOOP & ENSURE START BUTTON
         if (this.animationFrameId === null) {
             this.build3DScene();
         }
@@ -3900,7 +3551,7 @@ class TetrisPanel {
         btn.title = 'Click to Restore HUD (Drag to Move)';
         setIcon(btn, 'gamepad-2');
 
-        // ≡ƒîƒ Sub-Buttons Mini Action Dock (Appears smoothly on hover underneath floating button)
+        // 🌟 Sub-Buttons Mini Action Dock (Appears smoothly on hover underneath floating button)
         const dock = createEl('div');
         dock.className = 'floating-hud-dock';
 
@@ -3939,14 +3590,14 @@ class TetrisPanel {
                 if (buf) {
                     this.persistentSaveStates.set(romKey, buf);
                     await this.saveRomStateToDisk(romKey, buf, true);
-                    new Notice("≡ƒÆ╛ PS1 Game State Saved!");
+                    new Notice("💾 PS1 Game State Saved!");
                 }
             } else if (this.nes) {
                 const nesState = this.nes.toJSON();
                 if (nesState) {
                     this.persistentSaveStates.set(romKey, nesState);
                     await this.saveRomStateToDisk(romKey, nesState, false);
-                    new Notice("≡ƒÆ╛ NES Game State Saved!");
+                    new Notice("💾 NES Game State Saved!");
                 }
             }
         });
@@ -3958,13 +3609,13 @@ class TetrisPanel {
                 let savedData = this.persistentSaveStates.get(romKey) || await this.loadRomStateFromDisk(romKey, true);
                 if (this.psxEngine && savedData) {
                     await this.psxEngine.loadState(savedData);
-                    new Notice("≡ƒôé PS1 Game State Restored!");
+                    new Notice("📂 PS1 Game State Restored!");
                 }
             } else {
                 let savedData = this.persistentSaveStates.get(romKey) || await this.loadRomStateFromDisk(romKey, false);
                 if (this.nes && savedData) {
                     this.nes.fromJSON(savedData);
-                    new Notice("≡ƒôé NES Game State Restored!");
+                    new Notice("📂 NES Game State Restored!");
                 }
             }
         });
@@ -3984,7 +3635,7 @@ class TetrisPanel {
         const dockSettingsBtn = createDockBtn('settings', 'Open HUD & Settings', () => {
             this.restoreHud();
             const adv = this.containerEl.querySelector('.tetris-advanced-content') as HTMLElement;
-            if (adv) setCssStyles(adv as any, { display: 'flex' });
+            if (adv) setCssStyles(adv, { display: 'flex' });
         });
 
         dock.appendChild(dockPowerBtn);
@@ -4003,8 +3654,8 @@ class TetrisPanel {
         let startX = this.floatingGamepadPos ? this.floatingGamepadPos.x : (hostRect.width > 200 ? 30 : 20);
         let startY = this.floatingGamepadPos ? this.floatingGamepadPos.y : (hostRect.height > 200 ? 30 : 20);
 
-        setCssStyles(wrapper as any, { left: `${startX}px` });
-        setCssStyles(wrapper as any, { top: `${startY}px` });
+        setCssStyles(wrapper, { left: `${startX}px` });
+        setCssStyles(wrapper, { top: `${startY}px` });
 
         let isDragging = false;
         let startPointerX = 0;
@@ -4041,8 +3692,8 @@ class TetrisPanel {
             newX = Math.max(8, Math.min(newX, maxW));
             newY = Math.max(8, Math.min(newY, maxH));
 
-            setCssStyles(wrapper as any, { left: `${newX}px` });
-            setCssStyles(wrapper as any, { top: `${newY}px` });
+            setCssStyles(wrapper, { left: `${newX}px` });
+            setCssStyles(wrapper, { top: `${newY}px` });
             this.floatingGamepadPos = { x: newX, y: newY };
         };
 
@@ -4072,7 +3723,7 @@ class TetrisPanel {
         this.floatingGamepadWrapper = wrapper;
     }
 
-    // ΓöÇΓöÇ Γ£¿ CELESTIAL ETHER WATERFALL & CONSOLE TRAILS ENGINE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    // ── ✨ CELESTIAL ETHER WATERFALL & CONSOLE TRAILS ENGINE ──────────────
     private initConsoleEtherSystem(scene: THREE.Scene) {
         if (this.etherParticles && this.etherParticles.parent) {
             this.etherParticles.parent.remove(this.etherParticles);
@@ -4215,7 +3866,7 @@ class TetrisPanel {
                     col = mix(vec3(lum), col, uHueSat);
                 }
                 
-                // Γ£¿ Multi-harmonic starburst scintillation & diamond sparkle glints
+                // ✨ Multi-harmonic starburst scintillation & diamond sparkle glints
                 float twTime = uTime * 4.2 + vPhase * 9.0;
                 float tw = sin(twTime) * cos(twTime * 1.618);
                 float sparkle = pow(max(0.0, tw), 4.5) * (uTwinkleIntensity * 2.2);
@@ -4259,7 +3910,7 @@ class TetrisPanel {
         scene.add(particles);
         this.etherParticles = particles;
 
-        // ≡ƒîî Ethereal Aurora Ribbons Mesh behind console (with amphitheater curve to prevent clipping)
+        // 🌌 Ethereal Aurora Ribbons Mesh behind console (with amphitheater curve to prevent clipping)
         const ribbonGeo = new THREE.PlaneGeometry(10.0, 6.0, 48, 32);
         const ribbonVertexShader = `
             uniform float uTime;
@@ -4365,7 +4016,7 @@ class TetrisPanel {
         scene.add(ribbonMesh);
         this.etherRibbonMesh = ribbonMesh;
 
-        // ≡ƒÆí Floor Caustics Light Pool Mesh
+        // 💡 Floor Caustics Light Pool Mesh
         const floorGeo = new THREE.PlaneGeometry(8.0, 6.0, 32, 32);
         const floorVertexShader = `
             varying vec2 vUv;
@@ -4638,15 +4289,329 @@ class TetrisPanel {
         this.etherGeometry.attributes.aLife.needsUpdate = true;
     }
 
+    private buildEtherStudio(): HTMLElement {
+        const container = createEl('div');
+        container.className = 'ether-studio-container';
+
+        let saveTimer: any = null;
+        const debouncedSave = () => {
+            if (saveTimer) window.clearTimeout(saveTimer);
+            saveTimer = window.setTimeout(() => {
+                if (this.plugin && this.plugin.settings) {
+                    this.plugin.settings.masterState = Object.assign({}, this.masterState);
+                    this.plugin.saveSettings();
+                }
+            }, 250);
+        };
+
+        const makeSectionTitle = (titleText: string) => {
+            const title = createEl('div');
+            title.className = 'card-title';
+        setCssStyles(title, { fontSize: '11px', fontWeight: '700', color: '#ffffff', marginTop: '8px', marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '0.4px' });
+            title.innerText = titleText;
+            return title;
+        };
+
+        const makeSlider = (label: string, min: number, max: number, step: number, getValue: () => number, setValue: (val: number) => void, description?: string) => {
+            const card = createEl('div');
+            card.className = 'tetris-slider-card';
+
+            const header = createEl('div');
+            header.className = 'card-header';
+
+            const title = createEl('span');
+            title.className = 'card-title';
+            title.innerText = label;
+
+            const numInput = createEl('input');
+            numInput.type = 'number';
+            numInput.step = String(step);
+            numInput.className = 'card-badge';
+            numInput.value = Number(getValue().toFixed(step < 0.01 ? 3 : (step < 0.1 ? 2 : 1))).toString();
+
+            header.appendChild(title);
+            header.appendChild(numInput);
+            card.appendChild(header);
+
+            if (description) {
+                const desc = createEl('div');
+                desc.className = 'card-desc';
+                desc.innerText = description;
+                card.appendChild(desc);
+            }
+
+            const range = createEl('input');
+            range.type = 'range';
+            range.min = min.toString();
+            range.max = max.toString();
+            range.step = step.toString();
+            range.value = getValue().toString();
+            range.className = 'tetris-slider';
+
+            range.oninput = (e) => {
+                const num = parseFloat((e.target as HTMLInputElement).value);
+                setValue(num);
+                numInput.value = Number(num.toFixed(step < 0.01 ? 3 : (step < 0.1 ? 2 : 1))).toString();
+                debouncedSave();
+            };
+
+            numInput.oninput = (e) => {
+                const valStr = (e.target as HTMLInputElement).value;
+                const v = parseFloat(valStr);
+                if (!isNaN(v)) {
+                    setValue(v);
+                    range.value = String(v);
+                    debouncedSave();
+                }
+            };
+
+            numInput.addEventListener('keydown', (e) => e.stopPropagation());
+            numInput.addEventListener('keyup', (e) => e.stopPropagation());
+            numInput.addEventListener('mousedown', (e) => e.stopPropagation());
+            card.addEventListener('mousedown', (e) => e.stopPropagation());
+            card.addEventListener('pointerdown', (e) => e.stopPropagation());
+
+            card.appendChild(range);
+            return card;
+        };
+
+        const makeToggle = (label: string, getVal: () => boolean, setVal: (val: boolean) => void) => {
+            const btn = createEl('button');
+            btn.className = 'tetris-suite-btn' + (getVal() ? ' pin-btn active' : ' pin-btn');
+            btn.innerText = label + ': ' + (getVal() ? 'ON' : 'OFF');
+            btn.onclick = () => {
+                const cur = getVal();
+                setVal(!cur);
+                btn.innerText = label + ': ' + (!cur ? 'ON' : 'OFF');
+                btn.className = 'tetris-suite-btn' + (!cur ? ' pin-btn active' : ' pin-btn');
+                debouncedSave();
+            };
+            return btn;
+        };
+
+        const makeColorRow = (label: string, getVal: () => string, setVal: (c: string) => void, desc?: string) => {
+            const card = createEl('div');
+            card.className = 'tetris-slider-card';
+
+            const header = createEl('div');
+            header.className = 'card-header';
+
+            const title = createEl('span');
+            title.className = 'card-title';
+            title.innerText = label;
+
+            const input = createEl('input');
+            input.type = 'color';
+            input.value = getVal();
+            setCssStyles(input, { width: '44px' });
+            setCssStyles(input, { height: '26px' });
+            setCssStyles(input, { border: '1.5px solid rgba(255, 255, 255, 0.3)' });
+            setCssStyles(input, { borderRadius: '4px' });
+            setCssStyles(input, { cursor: 'pointer' });
+            setCssStyles(input, { background: 'transparent' });
+            input.oninput = (e) => {
+                const col = (e.target as HTMLInputElement).value;
+                setVal(col);
+                debouncedSave();
+            };
+
+            header.appendChild(title);
+            header.appendChild(input);
+            card.appendChild(header);
+
+            if (desc) {
+                const descEl = createEl('div');
+                descEl.className = 'card-desc';
+                descEl.innerText = desc;
+                card.appendChild(descEl);
+            }
+            return card;
+        };
+
+        // 1. Master On/Off Toggle
+        container.appendChild(makeToggle('✨ MASTER CELESTIAL ETHER EFFECT', () => (this.masterState as any).etherEnabled !== false, v => (this.masterState as any).etherEnabled = v));
+
+        // 2. Flow Mode Selector Title & Grid
+        container.appendChild(makeSectionTitle('🌊 CELESTIAL ETHER FLOW MODE'));
+
+        const modeGrid = createEl('div');
+        modeGrid.className = 'ether-mode-grid';
+
+        const modes: { id: string; label: string; desc: string }[] = [
+            { id: 'waterfall', label: '🌊 WATERFALL', desc: 'Cascading downward pastel stream' },
+            { id: 'aurora', label: '🌌 AURORA', desc: 'Flowing wavy celestial ribbons' },
+            { id: 'nebula', label: '☁️ SPIRIT MIST', desc: 'Ascending ethereal incense & embers' },
+            { id: 'vortex', label: '🌀 VORTEX', desc: 'Orbital swirling spiral rings' }
+        ];
+
+        const modeButtons: HTMLButtonElement[] = [];
+
+        modes.forEach(m => {
+            const btn = createEl('button');
+            btn.className = 'ether-mode-btn' + (((this.masterState as any).etherMode || 'waterfall') === m.id ? ' active' : '');
+            btn.innerText = m.label;
+            btn.title = m.desc;
+            btn.onclick = () => {
+                (this.masterState as any).etherMode = m.id;
+                modeButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                debouncedSave();
+                new Notice(`✨ Ethereal Mode: ${m.label}`);
+            };
+            modeButtons.push(btn);
+            modeGrid.appendChild(btn);
+        });
+        container.appendChild(modeGrid);
+
+        // 3. 🧲 LIVING MOUSE INTERACTION & 3D GYRO PARALLAX
+        container.appendChild(makeSectionTitle('🧲 LIVING MOUSE INTERACTION & 3D GYRO PARALLAX'));
+
+        container.appendChild(makeToggle('🧲 CURSOR MAGNETIC FLUID WAKE', () => (this.masterState as any).etherMouseInteraction !== false, v => (this.masterState as any).etherMouseInteraction = v));
+
+        container.appendChild(makeSlider('CURSOR FLUID FORCE (SWIRL)', 0.20, 3.00, 0.10, () => (this.masterState as any).etherMouseForce ?? 1.20, v => (this.masterState as any).etherMouseForce = v, 'Magnetic swirl and wake displacement power when moving mouse across ether.'));
+
+        container.appendChild(makeToggle('🕹️ 3D MOUSE PARALLAX FLOAT TILT', () => (this.masterState as any).etherParallaxTilt !== false, v => (this.masterState as any).etherParallaxTilt = v));
+
+        container.appendChild(makeSlider('3D PARALLAX TILT AMPLITUDE', 0.01, 0.25, 0.005, () => (this.masterState as any).etherParallaxStrength ?? 0.08, v => (this.masterState as any).etherParallaxStrength = v, 'Subtle zero-gravity tilt banking angle of the floating console toward cursor.'));
+
+        // 4. ✨ MICRO-SCINTILLATION & TWINKLE
+        container.appendChild(makeSectionTitle('✨ MICRO-SCINTILLATION & STARBURST TWINKLE'));
+
+        container.appendChild(makeSlider('STARBURST TWINKLE & GLINT BRILLIANCE', 0.00, 3.00, 0.10, () => (this.masterState as any).etherTwinkleIntensity ?? 1.00, v => (this.masterState as any).etherTwinkleIntensity = v, 'Organic diamond sparkle glints and prismatic starburst scintillation.'));
+
+        // 5. 💡 FLOOR CAUSTICS & UNDERSIDE LIGHT POOL
+        container.appendChild(makeSectionTitle('💡 FLOOR CAUSTICS & UNDERSIDE LIGHT POOL'));
+
+        container.appendChild(makeToggle('💡 FLOOR CAUSTICS & RIM LIGHT', () => (this.masterState as any).etherFloorLightEnabled !== false, v => (this.masterState as any).etherFloorLightEnabled = v));
+
+        container.appendChild(makeSlider('FLOOR LIGHT ILLUMINATION INTENSITY', 0.00, 2.00, 0.05, () => (this.masterState as any).etherFloorLightIntensity ?? 0.85, v => (this.masterState as any).etherFloorLightIntensity = v, 'Brightness of the pulsating floor caustics pool and underside chassis glow.'));
+
+        // 6. ☁️ ASCENDING SPIRIT SPLASH EMBERS
+        container.appendChild(makeSectionTitle('☁️ ASCENDING SPIRIT SPLASH EMBERS'));
+
+        container.appendChild(makeToggle('☁️ ASCENDING SPLASH EMBERS', () => (this.masterState as any).etherSplashEmbers !== false, v => (this.masterState as any).etherSplashEmbers = v));
+
+        // 7. 🌈 ANIMATED COLOR HUE SHIFTING CONTROLS
+        container.appendChild(makeSectionTitle('🌈 ANIMATED COLOR HUE SHIFTING & SPECTRAL ROTATION'));
+
+        container.appendChild(makeSlider('HUE SHIFT ANIMATION SPEED', 0.00, 4.00, 0.05, () => (this.masterState as any).etherHueShiftSpeed ?? 0.80, v => (this.masterState as any).etherHueShiftSpeed = v, 'Continuous spectral rotation speed cycling dynamically through the pastel colors (0.0 = Static).'));
+
+        container.appendChild(makeSlider('HUE COLOR WAVE FREQUENCY', 0.20, 6.00, 0.10, () => (this.masterState as any).etherHueCycleFreq ?? 2.00, v => (this.masterState as any).etherHueCycleFreq = v, 'How rapidly rainbow color bands wrap vertically along the waterfall height.'));
+
+        container.appendChild(makeSlider('HUE COLOR SATURATION / VIBRANCE', 0.00, 2.00, 0.05, () => (this.masterState as any).etherHueSat ?? 1.00, v => (this.masterState as any).etherHueSat = v, 'Color saturation and chromatic vibrancy of the animated pastel glow.'));
+
+        // 8. Preset Palettes
+        container.appendChild(makeSectionTitle('⚡ PASTEL PALETTE PRESETS'));
+
+        const presetGrid = createEl('div');
+        presetGrid.className = 'ether-preset-grid';
+
+        const presets = [
+            { label: '🦪 Opal Nacre', c1: '#d8b4fe', c2: '#7dd3fc', c3: '#f472b6', c4: '#fef08a' },
+            { label: '🌌 Aurora', c1: '#34d399', c2: '#38bdf8', c3: '#818cf8', c4: '#fcd34d' },
+            { label: '🦄 Prism', c1: '#f472b6', c2: '#c084fc', c3: '#60a5fa', c4: '#4ade80' },
+            { label: '🍸 Champagne', c1: '#fbbf24', c2: '#f472b6', c3: '#fed7aa', c4: '#ffffff' },
+            { label: '🌙 Moonlight', c1: '#6366f1', c2: '#a855f7', c3: '#93c5fd', c4: '#e2e8f0' },
+            { label: '🍑 Sunset', c1: '#fb7185', c2: '#f59e0b', c3: '#f43f5e', c4: '#fda4af' }
+        ];
+
+        presets.forEach(p => {
+            const btn = createEl('button');
+            btn.className = 'ether-preset-btn';
+            btn.innerText = p.label;
+            btn.onclick = () => {
+                const s = this.masterState as any;
+                s.etherColor1 = p.c1;
+                s.etherColor2 = p.c2;
+                s.etherColor3 = p.c3;
+                s.etherColor4 = p.c4;
+                debouncedSave();
+                new Notice(`✨ Applied Preset: ${p.label}`);
+            };
+            presetGrid.appendChild(btn);
+        });
+        container.appendChild(presetGrid);
+
+        // 9. Color Pickers (4-way pastel gradient)
+        const colorGrid = createEl('div');
+        colorGrid.className = 'ether-color-grid';
+        colorGrid.appendChild(makeColorRow('COLOR 1 (LILAC)', () => (this.masterState as any).etherColor1 || '#d8b4fe', c => (this.masterState as any).etherColor1 = c));
+        colorGrid.appendChild(makeColorRow('COLOR 2 (CYAN)', () => (this.masterState as any).etherColor2 || '#7dd3fc', c => (this.masterState as any).etherColor2 = c));
+        colorGrid.appendChild(makeColorRow('COLOR 3 (ROSE)', () => (this.masterState as any).etherColor3 || '#f472b6', c => (this.masterState as any).etherColor3 = c));
+        colorGrid.appendChild(makeColorRow('COLOR 4 (GOLD)', () => (this.masterState as any).etherColor4 || '#fef08a', c => (this.masterState as any).etherColor4 = c));
+        container.appendChild(colorGrid);
+
+        // 10. 🌊 WATERFALL PHYSICAL DIMENSIONS & DROP HEIGHT
+        container.appendChild(makeSectionTitle('🌊 WATERFALL PHYSICAL DIMENSIONS & DROP HEIGHT'));
+
+        container.appendChild(makeSlider('WATERFALL WIDTH (SPREAD X)', 0.50, 8.00, 0.10, () => (this.masterState as any).etherSpreadX ?? (this.masterState as any).etherTrailSpread ?? 2.6, v => {
+            (this.masterState as any).etherSpreadX = v;
+            (this.masterState as any).etherTrailSpread = v;
+        }, 'Horizontal width span of the cascading waterfall stream (real-time responsive).'));
+
+        container.appendChild(makeSlider('WATERFALL DEPTH (SPREAD Z)', 0.50, 6.00, 0.10, () => (this.masterState as any).etherSpreadZ ?? 1.8, v => {
+            (this.masterState as any).etherSpreadZ = v;
+        }, 'Front-to-back thickness and depth perimeter around the console (real-time responsive).'));
+
+        container.appendChild(makeSlider('WATERFALL VERTICAL DROP (MAX HEIGHT)', 1.00, 10.00, 0.20, () => (this.masterState as any).etherDropHeight ?? 4.5, v => (this.masterState as any).etherDropHeight = v, 'How deep the waterfall cascades down before recycling into the mist.'));
+
+        container.appendChild(makeSlider('VERTICAL GRAVITY ACCELERATION', 0.20, 4.00, 0.10, () => (this.masterState as any).etherGravity ?? 1.0, v => (this.masterState as any).etherGravity = v, 'Downward waterfall fall acceleration speed.'));
+
+        // 11. 🌀 CURL & DRIFT DIMENSIONAL CONTROLS
+        container.appendChild(makeSectionTitle('🌀 CURL & DRIFT DIMENSIONAL CONTROLS'));
+
+        container.appendChild(makeSlider('CURL HORIZONTAL DRIFT (SWAY X)', 0.00, 3.00, 0.05, () => (this.masterState as any).etherCurlSwayX ?? (this.masterState as any).etherTurbulence ?? 0.65, v => {
+            (this.masterState as any).etherCurlSwayX = v;
+            (this.masterState as any).etherTurbulence = v;
+        }, 'Horizontal left/right curling sway amplitude.'));
+
+        container.appendChild(makeSlider('CURL DEPTH DRIFT (SWAY Z)', 0.00, 3.00, 0.05, () => (this.masterState as any).etherCurlSwayZ ?? 0.55, v => (this.masterState as any).etherCurlSwayZ = v, 'Front-to-back swirling depth displacement amplitude.'));
+
+        container.appendChild(makeSlider('CURL WAVE FREQUENCY (RIPPLE TIGHTNESS)', 0.20, 5.00, 0.10, () => (this.masterState as any).etherCurlFreq ?? 1.6, v => (this.masterState as any).etherCurlFreq = v, 'Density and tightness of the 3D spiral curl loops along the stream.'));
+
+        container.appendChild(makeSlider('CURL SWIRL SPEED (DRIFT TEMPO)', 0.10, 4.00, 0.05, () => (this.masterState as any).etherCurlSpeed ?? 1.3, v => (this.masterState as any).etherCurlSpeed = v, 'Velocity of the undulating air currents and curl motion.'));
+
+        // 12. 🌌 AURORA BACKDROP PLACEMENT & OCCLUSION
+        container.appendChild(makeSectionTitle('🌌 AURORA BACKDROP PLACEMENT (NO-CLIPPING)'));
+
+        container.appendChild(makeSlider('AURORA BACKDROP DISTANCE (DEPTH Z)', -5.00, -1.20, 0.10, () => (this.masterState as any).etherAuroraPosZ ?? -2.50, v => (this.masterState as any).etherAuroraPosZ = v, 'Depth distance behind console model so the aurora never intersects or clips console plastic.'));
+
+        container.appendChild(makeSlider('AURORA ELEVATION (HEIGHT Y)', -2.00, 3.00, 0.10, () => (this.masterState as any).etherAuroraPosY ?? 0.40, v => (this.masterState as any).etherAuroraPosY = v, 'Vertical height elevation of the aurora backdrop ribbons.'));
+
+        container.appendChild(makeSlider('AURORA CURTAIN BREADTH (WIDTH)', 2.00, 16.00, 0.20, () => (this.masterState as any).etherAuroraScaleX ?? 7.50, v => (this.masterState as any).etherAuroraScaleX = v, 'Horizontal breadth and span of the aurora curtain.'));
+
+        // 13. 🎛️ PARTICLE SPRITES & IDLE DYNAMICS
+        container.appendChild(makeSectionTitle('🎛️ PARTICLE SPRITES & IDLE DYNAMICS'));
+
+        container.appendChild(makeSlider('PARTICLE DENSITY (COUNT)', 100, 3000, 50, () => (this.masterState as any).etherParticleCount ?? 1200, v => {
+            (this.masterState as any).etherParticleCount = v;
+            if (this.activeSceneRef) this.initConsoleEtherSystem(this.activeSceneRef);
+        }, 'Total number of shimmering ethereal particle motes in the 3D scene.'));
+
+        container.appendChild(makeSlider('PARTICLE GLOW RADIUS (SIZE)', 0.05, 0.80, 0.01, () => (this.masterState as any).etherParticleSize ?? 0.22, v => (this.masterState as any).etherParticleSize = v, 'Visual particle sprite scale and soft glow radius.'));
+
+        container.appendChild(makeSlider('FLOW VELOCITY (BASE SPEED)', 0.10, 4.00, 0.05, () => (this.masterState as any).etherFlowSpeed ?? 1.20, v => (this.masterState as any).etherFlowSpeed = v, 'Base movement speed of cascading waterfall motes and undulating aurora ribbons.'));
+
+        container.appendChild(makeSlider('ETHER OPACITY (INTENSITY)', 0.00, 1.50, 0.05, () => (this.masterState as any).etherOpacity ?? 0.75, v => (this.masterState as any).etherOpacity = v, 'Soft additive glow brilliance of the particles and ribbons.'));
+
+        container.appendChild(makeSlider('CONSOLE HOVER FLOAT (HEIGHT)', 0.00, 0.25, 0.005, () => (this.masterState as any).etherHoverAmplitude ?? 0.06, v => (this.masterState as any).etherHoverAmplitude = v, 'Gentle vertical floating bobbing of the console while resting in place.'));
+
+        container.appendChild(makeSlider('CONSOLE HOVER FLOAT (TEMPO)', 0.20, 4.00, 0.05, () => (this.masterState as any).etherHoverSpeed ?? 1.5, v => (this.masterState as any).etherHoverSpeed = v, 'Oscillation tempo and rhythm of the idle console hover breathing.'));
+
+        container.appendChild(makeSlider('SPIN VORTEX FLARE MULTIPLIER', 1.00, 5.00, 0.10, () => (this.masterState as any).etherSpinVortexMult ?? 2.2, v => (this.masterState as any).etherSpinVortexMult = v, 'Particle acceleration flare boost when switching between NES and PS1.'));
+
+        return container;
+    }
+
     private ensureCrtClipPathDefs() {
         if (document.getElementById('nes-bubble-crt-clip-svg')) return;
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.id = 'nes-bubble-crt-clip-svg';
-        setCssStyles(svg as any, { position: 'absolute' });
-        setCssStyles(svg as any, { width: '0' });
-        setCssStyles(svg as any, { height: '0' });
-        setCssStyles(svg as any, { pointerEvents: 'none' });
-        setCssStyles(svg as any, { overflow: 'hidden' });
+        setCssStyles(svg, { position: 'absolute' });
+        setCssStyles(svg, { width: '0' });
+        setCssStyles(svg, { height: '0' });
+        setCssStyles(svg, { pointerEvents: 'none' });
+        setCssStyles(svg, { overflow: 'hidden' });
         const svgDefs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
         const clip = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
         clip.setAttribute('id', 'nes-bubble-crt-clip');
@@ -4661,7 +4626,7 @@ class TetrisPanel {
 
     public applyCrtScreenShape() {
         this.ensureCrtClipPathDefs();
-        const shape = (this.masterState as any).crtScreenShape || 'modern';
+        const shape = (this.masterState as any).crtScreenShape || 'vintage_bubble';
         const isBubble = (shape === 'vintage_bubble');
         if (this.overlayCanvas) {
             this.overlayCanvas.classList.toggle('crt-shape-bubble', isBubble);
@@ -4678,15 +4643,15 @@ class TetrisPanel {
                     svg.setAttribute('class', 'crt-bubble-bezel-svg');
                     svg.setAttribute('viewBox', '0 0 1000 1000');
                     svg.setAttribute('preserveAspectRatio', 'none');
-                    setCssStyles(svg as any, { position: 'absolute' });
-                    setCssStyles(svg as any, { top: '0' });
-                    setCssStyles(svg as any, { left: '0' });
-                    setCssStyles(svg as any, { width: '100%' });
-                    setCssStyles(svg as any, { height: '100%' });
-                    setCssStyles(svg as any, { pointerEvents: 'none' });
-                    setCssStyles(svg as any, { overflow: 'visible' });
-                    setCssStyles(svg as any, { zIndex: '2' });
-                    setCssStyles(svg as any, { filter: 'drop-shadow(0 0 2px #0a0a0d) drop-shadow(0 25px 60px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 35px rgba(147, 197, 253, 0.22))' });
+                    setCssStyles(svg, { position: 'absolute' });
+                    setCssStyles(svg, { top: '0' });
+                    setCssStyles(svg, { left: '0' });
+                    setCssStyles(svg, { width: '100%' });
+                    setCssStyles(svg, { height: '100%' });
+                    setCssStyles(svg, { pointerEvents: 'none' });
+                    setCssStyles(svg, { overflow: 'visible' });
+                    setCssStyles(svg, { zIndex: '2' });
+                    setCssStyles(svg, { filter: 'drop-shadow(0 0 2px #0a0a0d) drop-shadow(0 25px 60px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 35px rgba(147, 197, 253, 0.22))' });
                     const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
                     path1.setAttribute('d', 'M 80 50 Q 500 -18, 920 50 C 960 65, 980 85, 990 120 Q 1018 500, 990 880 C 980 915, 960 935, 920 950 Q 500 1018, 80 950 C 40 935, 20 915, 10 880 Q -18 500, 10 120 C 20 85, 40 65, 80 50 Z');
                     path1.setAttribute('fill', 'none');
@@ -4707,10 +4672,10 @@ class TetrisPanel {
                     svg.appendChild(path2);
                     this.crtOverlayEl.appendChild(svg);
                 } else {
-                    setCssStyles(bezelSvg as any, { display: 'block' });
+                    setCssStyles(bezelSvg, { display: 'block' });
                 }
             } else {
-                if (bezelSvg) setCssStyles(bezelSvg as any, { display: 'none' });
+                if (bezelSvg) setCssStyles(bezelSvg, { display: 'none' });
             }
         }
     }
@@ -4733,7 +4698,7 @@ class TetrisPanel {
         } else if (warmth < 0) {
             filterStr += ` hue-rotate(${-warmth * 25}deg)`;
         }
-        setCssStyles(canvas as any, { filter: filterStr });
+        setCssStyles(canvas, { filter: filterStr });
 
         if (this.activeRenderer) {
             this.activeRenderer.toneMappingExposure = (s.exposure ?? 1.0) * gamma;
@@ -4742,9 +4707,9 @@ class TetrisPanel {
 
     private buildViewportColorCorrectionContainer(): HTMLElement {
         const container = createEl('div');
-        setCssStyles(container as any, { display: 'flex' });
-        setCssStyles(container as any, { flexDirection: 'column' });
-        setCssStyles(container as any, { gap: '8px' });
+        setCssStyles(container, { display: 'flex' });
+        setCssStyles(container, { flexDirection: 'column' });
+        setCssStyles(container, { gap: '8px' });
 
         let saveTimer: any = null;
         const debouncedSave = () => {
@@ -4831,7 +4796,7 @@ class TetrisPanel {
 
         const resetBtn = createEl('button');
         resetBtn.className = 'tetris-suite-btn';
-        resetBtn.innerText = 'Γå║ RESET COLOR CORRECTION TO DEFAULT';
+        resetBtn.innerText = '↺ RESET COLOR CORRECTION TO DEFAULT';
         resetBtn.onclick = () => {
             (this.masterState as any).viewportBrightness = 1.0;
             (this.masterState as any).viewportContrast = 1.0;
@@ -4841,7 +4806,7 @@ class TetrisPanel {
             (this.masterState as any).viewportGamma = 1.0;
             this.updateViewportColorCorrection();
             debouncedSave();
-            new Notice("≡ƒÄ¿ Viewport Color Correction Reset to Defaults!");
+            new Notice("🎨 Viewport Color Correction Reset to Defaults!");
             if (container.parentElement) {
                 container.replaceWith(this.buildViewportColorCorrectionContainer());
             }
@@ -4853,9 +4818,9 @@ class TetrisPanel {
 
     private buildNesCartridgeTunerContainer(): HTMLElement {
         const container = createEl('div');
-        setCssStyles(container as any, { display: 'flex' });
-        setCssStyles(container as any, { flexDirection: 'column' });
-        setCssStyles(container as any, { gap: '8px' });
+        setCssStyles(container, { display: 'flex' });
+        setCssStyles(container, { flexDirection: 'column' });
+        setCssStyles(container, { gap: '8px' });
 
         const makeSlider = (label: string, min: number, max: number, step: number, getValue: () => number, setValue: (val: number) => void, description?: string) => {
             const card = createEl('div');
@@ -4927,9 +4892,9 @@ class TetrisPanel {
         };
 
         container.appendChild(makeSlider('NES CARTRIDGE SCALE (3D SIZE)', 0.40, 1.80, 0.01, () => (typeof (this.masterState as any).nesCartScale === 'number' ? (this.masterState as any).nesCartScale : 0.85), v => (this.masterState as any).nesCartScale = v, 'Adjusts the physical 3D size of NES cartridges (0.85 = Default). Only affects NES.'));
-        container.appendChild(makeSlider('SLOT POS X (LEFT Γùä Γû║ RIGHT)', -3.0, 3.0, 0.01, () => (typeof (this.masterState as any).nesSlotX === 'number' ? (this.masterState as any).nesSlotX : (typeof (this.masterState as any).slotX === 'number' ? (this.masterState as any).slotX : -0.575)), v => { (this.masterState as any).nesSlotX = v; (this.masterState as any).slotX = v; }, 'Horizontal center position inside the NES front-loading chamber.'));
-        container.appendChild(makeSlider('SLOT POS Y (UP Γû▓ Γû╝ DOWN)', 0.5, 3.5, 0.01, () => (typeof (this.masterState as any).nesSlotY === 'number' ? (this.masterState as any).nesSlotY : (typeof (this.masterState as any).slotY === 'number' ? (this.masterState as any).slotY : 1.95)), v => { (this.masterState as any).nesSlotY = v; (this.masterState as any).slotY = v; }, 'Height elevation of the cartridge when seated inside the NES slot.'));
-        container.appendChild(makeSlider('SLOT POS Z (DEPTH IN Γùä Γû║ OUT)', -1.0, 2.0, 0.01, () => (typeof (this.masterState as any).nesSlotZ === 'number' ? (this.masterState as any).nesSlotZ : (typeof (this.masterState as any).slotZ === 'number' ? (this.masterState as any).slotZ : 0.20)), v => { (this.masterState as any).nesSlotZ = v; (this.masterState as any).slotZ = v; }, 'How deep the cartridge sits inside the console connector when seated.'));
+        container.appendChild(makeSlider('SLOT POS X (LEFT ◄ ► RIGHT)', -3.0, 3.0, 0.01, () => (typeof (this.masterState as any).nesSlotX === 'number' ? (this.masterState as any).nesSlotX : (typeof (this.masterState as any).slotX === 'number' ? (this.masterState as any).slotX : -0.575)), v => { (this.masterState as any).nesSlotX = v; (this.masterState as any).slotX = v; }, 'Horizontal center position inside the NES front-loading chamber.'));
+        container.appendChild(makeSlider('SLOT POS Y (UP ▲ ▼ DOWN)', 0.5, 3.5, 0.01, () => (typeof (this.masterState as any).nesSlotY === 'number' ? (this.masterState as any).nesSlotY : (typeof (this.masterState as any).slotY === 'number' ? (this.masterState as any).slotY : 1.95)), v => { (this.masterState as any).nesSlotY = v; (this.masterState as any).slotY = v; }, 'Height elevation of the cartridge when seated inside the NES slot.'));
+        container.appendChild(makeSlider('SLOT POS Z (DEPTH IN ◄ ► OUT)', -1.0, 2.0, 0.01, () => (typeof (this.masterState as any).nesSlotZ === 'number' ? (this.masterState as any).nesSlotZ : (typeof (this.masterState as any).slotZ === 'number' ? (this.masterState as any).slotZ : 0.20)), v => { (this.masterState as any).nesSlotZ = v; (this.masterState as any).slotZ = v; }, 'How deep the cartridge sits inside the console connector when seated.'));
         container.appendChild(makeSlider('SLOT ROT X (PITCH TILT)', -3.14, 3.14, 0.02, () => (typeof (this.masterState as any).nesSlotRotX === 'number' ? (this.masterState as any).nesSlotRotX : (typeof (this.masterState as any).slotRotX === 'number' ? (this.masterState as any).slotRotX : 1.45)), v => { (this.masterState as any).nesSlotRotX = v; (this.masterState as any).slotRotX = v; }, 'Tilts the cartridge forward or backward inside the chamber.'));
         container.appendChild(makeSlider('SLOT ROT Y (YAW TURN)', -3.14, 3.14, 0.02, () => (typeof (this.masterState as any).nesSlotRotY === 'number' ? (this.masterState as any).nesSlotRotY : (typeof (this.masterState as any).slotRotY === 'number' ? (this.masterState as any).slotRotY : 0.00)), v => { (this.masterState as any).nesSlotRotY = v; (this.masterState as any).slotRotY = v; }, 'Swivels the cartridge left or right inside the chamber.'));
         container.appendChild(makeSlider('SLOT ROT Z (ROLL LEAN)', -1.50, 1.50, 0.02, () => (typeof (this.masterState as any).nesSlotRotZ === 'number' ? (this.masterState as any).nesSlotRotZ : (typeof (this.masterState as any).slotRotZ === 'number' ? (this.masterState as any).slotRotZ : 0.00)), v => { (this.masterState as any).nesSlotRotZ = v; (this.masterState as any).slotRotZ = v; }, 'Levels the cartridge sideways inside the chamber.'));
@@ -4937,8 +4902,8 @@ class TetrisPanel {
 
         const resetBtn = createEl('button');
         resetBtn.className = 'tetris-suite-btn pin-btn';
-        resetBtn.innerText = 'Γå║ RESET NES CARTRIDGE ALIGNMENT TO DEFAULT';
-        setCssStyles(resetBtn as any, { marginTop: '4px' });
+        resetBtn.innerText = '↺ RESET NES CARTRIDGE ALIGNMENT TO DEFAULT';
+        setCssStyles(resetBtn, { marginTop: '4px' });
         resetBtn.onclick = () => {
             (this.masterState as any).nesCartScale = 0.85;
             (this.masterState as any).nesSlotX = -0.575;
@@ -4973,16 +4938,10 @@ class TetrisPanel {
     private updateStatus() {
         if (!this.statusDisplay) return;
         const totalNodes = this.NES_WIDTH * this.NES_HEIGHT;
-        this.statusDisplay.empty();
-    const stLine1 = this.statusDisplay.createDiv();
-    stLine1.appendText('Nodes: ');
-    stLine1.createSpan({ cls: 'stat-val', text: totalNodes.toLocaleString() });
-    const stLine2 = this.statusDisplay.createDiv();
-    stLine2.appendText('Resolution: ');
-    stLine2.createSpan({ cls: 'stat-val', text: this.NES_WIDTH + 'x' + this.NES_HEIGHT });
-    const stLine3 = this.statusDisplay.createDiv();
-    stLine3.appendText('Status: ');
-    stLine3.createSpan({ cls: this.nodesCreated ? 'stat-good' : 'stat-warn', text: this.nodesCreated ? 'Ready to play' : 'Nodes not created yet' });
+        this.statusDisplay.innerHTML = 
+            "Nodes: <span class='stat-val'>" + totalNodes.toLocaleString() + "</span><br>" +
+            "Resolution: <span class='stat-val'>" + this.NES_WIDTH + "x" + this.NES_HEIGHT + "</span><br>" +
+            "Status: <span class='" + (this.nodesCreated ? "stat-good" : "stat-warn") + "'>" + (this.nodesCreated ? "Ready to play" : "Nodes not created yet") + "</span>";
     }
 
     private async createGrid() {
@@ -5039,12 +4998,12 @@ class TetrisPanel {
         if (!this.overlayCanvas) {
             this.overlayCanvas = createEl('canvas');
             this.overlayCanvas.className = 'doom-viewport-overlay';
-            setCssStyles(this.overlayCanvas as any, { position: 'absolute' });
-            setCssStyles(this.overlayCanvas as any, { top: '0' });
-            setCssStyles(this.overlayCanvas as any, { left: '0' });
-            setCssStyles(this.overlayCanvas as any, { zIndex: '999' });
-            setCssStyles(this.overlayCanvas as any, { pointerEvents: 'none' });
-            setCssStyles(this.overlayCanvas as any, { imageRendering: 'pixelated' });
+            setCssStyles(this.overlayCanvas, { position: 'absolute' });
+            setCssStyles(this.overlayCanvas, { top: '0' });
+            setCssStyles(this.overlayCanvas, { left: '0' });
+            setCssStyles(this.overlayCanvas, { zIndex: '999' });
+            setCssStyles(this.overlayCanvas, { pointerEvents: 'none' });
+            setCssStyles(this.overlayCanvas, { imageRendering: 'pixelated' });
             
             canvasContainer.appendChild(this.overlayCanvas);
             this.overlayCtx = this.overlayCanvas.getContext('2d', { alpha: true })!;
@@ -5071,14 +5030,14 @@ class TetrisPanel {
         if (!this.cordSvgEl) {
             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             svg.setAttribute('class', 'nes-dynamic-cord-svg');
-            setCssStyles(svg as any, { position: 'absolute' });
-            setCssStyles(svg as any, { top: '0' });
-            setCssStyles(svg as any, { left: '0' });
-            setCssStyles(svg as any, { width: '100%' });
-            setCssStyles(svg as any, { height: '100%' });
-            setCssStyles(svg as any, { pointerEvents: 'none' });
-            setCssStyles(svg as any, { zIndex: '1' });
-            setCssStyles(svg as any, { overflow: 'visible' });
+            setCssStyles(svg, { position: 'absolute' });
+            setCssStyles(svg, { top: '0' });
+            setCssStyles(svg, { left: '0' });
+            setCssStyles(svg, { width: '100%' });
+            setCssStyles(svg, { height: '100%' });
+            setCssStyles(svg, { pointerEvents: 'none' });
+            setCssStyles(svg, { zIndex: '1' });
+            setCssStyles(svg, { overflow: 'visible' });
 
             const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
             const f1 = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
@@ -5202,18 +5161,18 @@ class TetrisPanel {
                     return s;
                 };
 
-                const upBtn = cross.createDiv({ cls: 'dpad-btn dpad-up', attr: { title: 'Up (W / Γåæ)' } });
+                const upBtn = cross.createDiv({ cls: 'dpad-btn dpad-up', attr: { title: 'Up (W / ↑)' } });
                 upBtn.appendChild(makeArrowSvg('M12 4L5 13h4v7h6v-7h4z'));
 
-                const leftBtn = cross.createDiv({ cls: 'dpad-btn dpad-left', attr: { title: 'Left (A / ΓåÉ)' } });
+                const leftBtn = cross.createDiv({ cls: 'dpad-btn dpad-left', attr: { title: 'Left (A / ←)' } });
                 leftBtn.appendChild(makeArrowSvg('M4 12l9-7v4h7v6h-7v4z'));
 
                 cross.createDiv({ cls: 'dpad-center-hole' });
 
-                const rightBtn = cross.createDiv({ cls: 'dpad-btn dpad-right', attr: { title: 'Right (D / ΓåÆ)' } });
+                const rightBtn = cross.createDiv({ cls: 'dpad-btn dpad-right', attr: { title: 'Right (D / →)' } });
                 rightBtn.appendChild(makeArrowSvg('M20 12l-9 7v-4H4v-6h7V5z'));
 
-                const downBtn = cross.createDiv({ cls: 'dpad-btn dpad-down', attr: { title: 'Down (S / Γåô)' } });
+                const downBtn = cross.createDiv({ cls: 'dpad-btn dpad-down', attr: { title: 'Down (S / ↓)' } });
                 downBtn.appendChild(makeArrowSvg('M12 20l7-9h-4V4H9v7H5z'));
 
                 // CENTER SECTION
@@ -5232,7 +5191,7 @@ class TetrisPanel {
                 const rightSec = decal.createDiv({ cls: 'nes-right-section' });
                 const brand = rightSec.createDiv({ cls: 'nes-brand' });
                 brand.appendText('Nintendo');
-                brand.createEl('sup', { text: '┬«' });
+                brand.createEl('sup', { text: '®' });
 
                 const btnGroup = rightSec.createDiv({ cls: 'nes-buttons-group' });
                 const wrapB = btnGroup.createDiv({ cls: 'nes-sharp-square-wrapper' });
@@ -5412,7 +5371,7 @@ class TetrisPanel {
         this.updateStatus();
     }
 
-    // ΓöÇΓöÇ DOOM-STYLE DUMMY NODE & SELECTION LOGIC ΓöÇΓöÇ
+    // ── DOOM-STYLE DUMMY NODE & SELECTION LOGIC ──
 
     private getWorkspaceCoords(e: MouseEvent) {
         if (!this.canvasView.canvas) return { x: 0, y: 0 };
@@ -5858,16 +5817,16 @@ class TetrisPanel {
         
         this.overlayCanvas.width = w;
         this.overlayCanvas.height = h;
-        setCssStyles(this.overlayCanvas as any, { width: w + 'px' });
-        setCssStyles(this.overlayCanvas as any, { height: h + 'px' });
-        setCssStyles(this.overlayCanvas as any, { left: minX + 'px' });
-        setCssStyles(this.overlayCanvas as any, { top: minY + 'px' });
+        setCssStyles(this.overlayCanvas, { width: w + 'px' });
+        setCssStyles(this.overlayCanvas, { height: h + 'px' });
+        setCssStyles(this.overlayCanvas, { left: minX + 'px' });
+        setCssStyles(this.overlayCanvas, { top: minY + 'px' });
 
         if (this.crtOverlayEl) {
-            setCssStyles(this.crtOverlayEl as any, { width: w + 'px' });
-            setCssStyles(this.crtOverlayEl as any, { height: h + 'px' });
-            setCssStyles(this.crtOverlayEl as any, { left: minX + 'px' });
-            setCssStyles(this.crtOverlayEl as any, { top: minY + 'px' });
+            setCssStyles(this.crtOverlayEl, { width: w + 'px' });
+            setCssStyles(this.crtOverlayEl, { height: h + 'px' });
+            setCssStyles(this.crtOverlayEl, { left: minX + 'px' });
+            setCssStyles(this.crtOverlayEl, { top: minY + 'px' });
         }
 
         if (this.controllerPadEl) {
@@ -5878,8 +5837,8 @@ class TetrisPanel {
     private drawOverlay() {
         if (!this.overlayCtx || !this.overlayCanvas || !this.canvasView.canvas) return;
         if (!this.isConsolePowerOn) {
-            setCssStyles(this.overlayCanvas as any, { display: 'none' });
-            if (this.crtOverlayEl) setCssStyles(this.crtOverlayEl as any, { display: 'none' });
+            setCssStyles(this.overlayCanvas, { display: 'none' });
+            if (this.crtOverlayEl) setCssStyles(this.crtOverlayEl, { display: 'none' });
             return;
         }
 
@@ -5891,7 +5850,7 @@ class TetrisPanel {
 
         this.overlayCtx.clearRect(0, 0, w, h);
 
-        // ΓöÇΓöÇ GPU ACCELERATED FAST PATH: ALWAYS 1-SHOT BLIT ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+        // ── GPU ACCELERATED FAST PATH: ALWAYS 1-SHOT BLIT ───────
         if (this.isRunning && (this.selectedVaultRomPath || this.customRomString)) {
             if (this.plugin.settings.activeSystem === 'psx' && this.psxEngine) {
                 const psxCanvas = this.psxEngine.getCanvas();
@@ -5932,7 +5891,7 @@ class TetrisPanel {
             }
         }
 
-        // ΓöÇΓöÇ RETRO STANDBY DISPLAY: Console Powered ON with Empty Bay ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+        // ── RETRO STANDBY DISPLAY: Console Powered ON with Empty Bay ─────────
         if (!this.selectedVaultRomPath && !this.customRomString) {
             const isPSX = (this.plugin.settings.activeSystem === 'psx');
             this.overlayCtx.fillStyle = isPSX ? '#0a0d14' : '#05070a';
@@ -5946,7 +5905,7 @@ class TetrisPanel {
             return;
         }
 
-        // ΓöÇΓöÇ SLOW PATH: selection/drag active or emulator stopped ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+        // ── SLOW PATH: selection/drag active or emulator stopped ─────────────────
         const colorMap = new Map<string, number[]>();
         const total = this.fakePixels.length;
         for (let i = 0; i < total; i++) {
@@ -6530,7 +6489,7 @@ private updateDummyNode(preventSelect = false) {
 
     private updateBoxArtCover(gameName: string, coverUrl: string | null) {
         if (!this.boxArtEl) return;
-        this.boxArtEl.empty();
+        this.boxArtEl.innerHTML = '';
 
         if (coverUrl) {
             const img = createEl('img');
@@ -6540,12 +6499,12 @@ private updateDummyNode(preventSelect = false) {
         } else {
             const card = createEl('div');
             card.className = 'tetris-box-art-placeholder';
-            card.createDiv({ cls: 'cart-top-grooves' });
-    const cLabel = card.createDiv({ cls: 'cart-label' });
-    cLabel.createDiv({ cls: 'cart-title', text: gameName.toUpperCase() });
-    const cSub = cLabel.createDiv({ cls: 'cart-sub' });
-    cSub.createDiv({ text: 'OFFICIAL NINTENDO' });
-    cSub.createDiv({ text: 'PAK COMPATIBLE' });
+            card.innerHTML = 
+                '<div class="cart-top-grooves"></div>' +
+                '<div class="cart-label">' +
+                    '<div class="cart-title">' + gameName.toUpperCase() + '</div>' +
+                    '<div class="cart-sub">OFFICIAL NINTENDO<br>PAK COMPATIBLE</div>' +
+                '</div>';
             this.boxArtEl.appendChild(card);
         }
     }
@@ -6583,7 +6542,7 @@ private updateDummyNode(preventSelect = false) {
         return '';
     }
 
-    // ΓöÇΓöÇ ≡ƒº╣ DEEP RECURSIVE THREE.JS RESOURCE DISPOSAL (ZERO MEMORY LEAKS) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    // ── 🧹 DEEP RECURSIVE THREE.JS RESOURCE DISPOSAL (ZERO MEMORY LEAKS) ──────────
     private disposeThreeObject(obj: any) {
         if (!obj) return;
         try {
@@ -6628,7 +6587,7 @@ private updateDummyNode(preventSelect = false) {
         }
     }
 
-    // ΓöÇΓöÇ ≡ƒÅü TRUE 3D CTR WAVY SILK MESH TRANSITION ENGINE (VIEWPORT ANCHORED) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    // ── 🏁 TRUE 3D CTR WAVY SILK MESH TRANSITION ENGINE (VIEWPORT ANCHORED) ────────────────
     private ensureCurtainOverlay() {
         if (!this.boxArtEl) return;
         if (this.curtainOverlayEl && this.curtainOverlayEl.parentElement === this.boxArtEl) return;
@@ -6649,12 +6608,12 @@ private updateDummyNode(preventSelect = false) {
         blade.appendChild(flagCanvas);
         this.flagCanvasEl = flagCanvas;
 
-        // ≡ƒîƒ Center Animated Author Logo (Title Pill Lottie Animation)
+        // 🌟 Center Animated Author Logo (Title Pill Lottie Animation)
         const logoWrapper = createEl('div');
         logoWrapper.className = 'curtain-author-logo-wrapper';
         const logoSize = (this.masterState as any).curtainLogoSize ?? 95;
-        setCssStyles(logoWrapper as any, { width: `${logoSize}px` });
-        setCssStyles(logoWrapper as any, { height: `${logoSize}px` });
+        setCssStyles(logoWrapper, { width: `${logoSize}px` });
+        setCssStyles(logoWrapper, { height: `${logoSize}px` });
         this.curtainLogoWrapperEl = logoWrapper;
 
         try {
@@ -6668,10 +6627,10 @@ private updateDummyNode(preventSelect = false) {
             });
             const svg = logoWrapper.querySelector('svg');
             if (svg) {
-                setCssStyles(svg as any, { backgroundColor: 'transparent' });
-                setCssStyles(svg as any, { display: 'block' });
-                setCssStyles(svg as any, { width: '100%' });
-                setCssStyles(svg as any, { height: '100%' });
+                setCssStyles(svg, { backgroundColor: 'transparent' });
+                setCssStyles(svg, { display: 'block' });
+                setCssStyles(svg, { width: '100%' });
+                setCssStyles(svg, { height: '100%' });
             }
         } catch (e) {
             console.error("Failed to load curtain lottie animation:", e);
@@ -6764,7 +6723,7 @@ private updateDummyNode(preventSelect = false) {
                 float normX = clamp((position.x / 16.0) + 0.5, 0.0, 1.0);
                 
                 if (uSweepMode < 0.5) {
-                    // ≡ƒîè TRUE BILLOWING WAVE-IN UNFURL (Left to Right)
+                    // 🌊 TRUE BILLOWING WAVE-IN UNFURL (Left to Right)
                     float front = uSweepProgress * 1.32 - 0.16;
                     float d = normX - front;
                     
@@ -6781,7 +6740,7 @@ private updateDummyNode(preventSelect = false) {
                     pos.x -= foldCompression;
                     pos.z -= (1.0 - unfold) * 3.2;
                 } else {
-                    // ≡ƒîè TRUE BILLOWING WAVE-OUT FLUTTER (Left to Right Dissolve)
+                    // 🌊 TRUE BILLOWING WAVE-OUT FLUTTER (Left to Right Dissolve)
                     float front = uSweepProgress * 1.32 - 0.16;
                     float d = normX - front;
                     
@@ -6867,7 +6826,7 @@ private updateDummyNode(preventSelect = false) {
                 
                 vec3 shadedColor = baseColor * mix(1.0, totalDiff, uContrast);
                 
-                // ≡ƒª¬ Pearlescent & Iridescent Optical Sheen Model
+                // 🦪 Pearlescent & Iridescent Optical Sheen Model
                 float NdotV = max(dot(normal, viewDir), 0.0);
                 float NdotL1 = max(dot(normal, lightDir1), 0.0);
                 
@@ -6998,8 +6957,8 @@ private updateDummyNode(preventSelect = false) {
             if (this.curtainLogoWrapperEl) {
                 const desiredSize = ((s.curtainLogoSize ?? 95)) + 'px';
                 if (this.curtainLogoWrapperEl.style.width !== desiredSize) {
-                    setCssStyles(this.curtainLogoWrapperEl as any, { width: desiredSize });
-                    setCssStyles(this.curtainLogoWrapperEl as any, { height: desiredSize });
+                    setCssStyles(this.curtainLogoWrapperEl, { width: desiredSize });
+                    setCssStyles(this.curtainLogoWrapperEl, { height: desiredSize });
                 }
             }
 
@@ -7094,9 +7053,9 @@ private updateDummyNode(preventSelect = false) {
 
         const logo = this.curtainLogoWrapperEl;
         if (logo) {
-            setCssStyles(logo as any, { opacity: '0' });
-            setCssStyles(logo as any, { transform: 'scale(0.80)' });
-            setCssStyles(logo as any, { transition: 'none' });
+            setCssStyles(logo, { opacity: '0' });
+            setCssStyles(logo, { transform: 'scale(0.80)' });
+            setCssStyles(logo, { transition: 'none' });
         }
 
         this.flagSweepProgress = 0.0;
@@ -7126,11 +7085,11 @@ private updateDummyNode(preventSelect = false) {
             if (logo) {
                 if (progress >= 0.40) {
                     const logoT = Math.min(1.0, (progress - 0.40) / 0.35);
-                    setCssStyles(logo as any, { opacity: String(logoT) });
-                    setCssStyles(logo as any, { transform: `scale(${0.80 + 0.20 * logoT})` });
+                    setCssStyles(logo, { opacity: String(logoT) });
+                    setCssStyles(logo, { transform: `scale(${0.80 + 0.20 * logoT})` });
                 } else {
-                    setCssStyles(logo as any, { opacity: '0' });
-                    setCssStyles(logo as any, { transform: 'scale(0.80)' });
+                    setCssStyles(logo, { opacity: '0' });
+                    setCssStyles(logo, { transform: 'scale(0.80)' });
                 }
             }
 
@@ -7142,8 +7101,8 @@ private updateDummyNode(preventSelect = false) {
                 this.flagCurrentSpeed = baseSpeed;
                 this.flagIsAnimating = false;
                 if (logo) {
-                    setCssStyles(logo as any, { opacity: '1' });
-                    setCssStyles(logo as any, { transform: 'scale(1)' });
+                    setCssStyles(logo, { opacity: '1' });
+                    setCssStyles(logo, { transform: 'scale(1)' });
                 }
                 curtain.classList.add('in-transit');
                 onCovered();
@@ -7171,9 +7130,9 @@ private updateDummyNode(preventSelect = false) {
 
         const logo = this.curtainLogoWrapperEl;
         if (logo) {
-            setCssStyles(logo as any, { opacity: '1' });
-            setCssStyles(logo as any, { transform: 'scale(1)' });
-            setCssStyles(logo as any, { transition: 'none' });
+            setCssStyles(logo, { opacity: '1' });
+            setCssStyles(logo, { transform: 'scale(1)' });
+            setCssStyles(logo, { transition: 'none' });
         }
 
         this.flagSweepProgress = 0.0;
@@ -7205,11 +7164,11 @@ private updateDummyNode(preventSelect = false) {
             if (logo) {
                 if (progress >= 0.25) {
                     const logoOutT = Math.min(1.0, (progress - 0.25) / 0.35);
-                    setCssStyles(logo as any, { opacity: String(1.0 - logoOutT) });
-                    setCssStyles(logo as any, { transform: `scale(${1.0 - 0.20 * logoOutT})` });
+                    setCssStyles(logo, { opacity: String(1.0 - logoOutT) });
+                    setCssStyles(logo, { transform: `scale(${1.0 - 0.20 * logoOutT})` });
                 } else {
-                    setCssStyles(logo as any, { opacity: '1' });
-                    setCssStyles(logo as any, { transform: 'scale(1)' });
+                    setCssStyles(logo, { opacity: '1' });
+                    setCssStyles(logo, { transform: 'scale(1)' });
                 }
             }
 
@@ -7223,8 +7182,8 @@ private updateDummyNode(preventSelect = false) {
                 curtain.classList.remove('active');
                 curtain.classList.remove('in-transit');
                 if (logo) {
-                    setCssStyles(logo as any, { opacity: '0' });
-                    setCssStyles(logo as any, { transform: 'scale(0.80)' });
+                    setCssStyles(logo, { opacity: '0' });
+                    setCssStyles(logo, { transform: 'scale(0.80)' });
                 }
                 onComplete();
             }
@@ -7295,14 +7254,14 @@ private updateDummyNode(preventSelect = false) {
         if (allRoms.length === 0) {
             const p = createEl('div');
             p.className = 'nes-slot-prompt';
-            p.innerText = 'ΓÇö NO ROMS FOUND ΓÇö';
+            p.innerText = '— NO ROMS FOUND —';
             this.boxArtEl.appendChild(p);
             return;
         }
 
         const width = this.boxArtEl.clientWidth || 320;
         const canvasHeight = 380;
-        setCssStyles(this.boxArtEl as any, { height: '380px' });
+        setCssStyles(this.boxArtEl, { height: '380px' });
 
         const masterState = this.masterState;
 
@@ -7322,11 +7281,11 @@ private updateDummyNode(preventSelect = false) {
         renderer.toneMappingExposure = masterState.exposure;
         renderer.shadowMap.enabled = masterState.shadowsEnabled;
         renderer.shadowMap.type = THREE.PCFShadowMap;
-        setCssStyles(renderer.domElement as any, { background: 'transparent' });
-        setCssStyles(renderer.domElement as any, { cursor: 'pointer' });
-        setCssStyles(renderer.domElement as any, { borderRadius: '12px' });
-        setCssStyles(renderer.domElement as any, { overflow: 'hidden' });
-        setCssStyles(renderer.domElement as any, { display: 'block' });
+        setCssStyles(renderer.domElement, { background: 'transparent' });
+        setCssStyles(renderer.domElement, { cursor: 'pointer' });
+        setCssStyles(renderer.domElement, { borderRadius: '12px' });
+        setCssStyles(renderer.domElement, { overflow: 'hidden' });
+        setCssStyles(renderer.domElement, { display: 'block' });
         this.boxArtEl.insertBefore(renderer.domElement, this.boxArtEl.firstChild);
         this.ensureCurtainOverlay();
         this.ensureRetroStartButton();
@@ -7334,7 +7293,7 @@ private updateDummyNode(preventSelect = false) {
         const scene = new THREE.Scene();
         this.activeScene = scene;
 
-        // ΓöÇΓöÇ DYNAMIC 3D ROOM ENVIRONMENT & LIGHTING ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+        // ── DYNAMIC 3D ROOM ENVIRONMENT & LIGHTING ────────────────────────────
         let roomTex: THREE.CanvasTexture;
         let deskColor: number, deskRough: number, deskMetal: number, trimColor: number;
         let keyCol: number, keyPwr: number, fillCol: number, fillPwr: number;
@@ -7368,7 +7327,7 @@ private updateDummyNode(preventSelect = false) {
         roomMesh.position.set(0, 4, 0);
         scene.add(roomMesh);
 
-        // ≡ƒî½∩╕Å Atmospheric Carousel Fog Engine
+        // 🌫️ Atmospheric Carousel Fog Engine
         if (masterState.fogEnabled !== false) {
             const fogColor = masterState.fogColor || '#0b0e17';
             if (masterState.fogMode === 'exp2') {
@@ -7471,7 +7430,7 @@ private updateDummyNode(preventSelect = false) {
         scene.add(rimHelper);
         scene.add(key2Helper);
 
-        // ΓöÇΓöÇ Custom Dynamic Lights Array & Spawner ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+        // ── Custom Dynamic Lights Array & Spawner ─────────────────────────────
         interface LiveCustomLight {
             config: any;
             light: THREE.Light;
@@ -7535,7 +7494,7 @@ private updateDummyNode(preventSelect = false) {
             masterState.customLights.forEach(cfg => spawnCustomLightInScene(cfg));
         }
 
-        // ΓöÇΓöÇ POST-PROCESSING RETRO BLOOM & HALATION SHADER PIPELINE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+        // ── POST-PROCESSING RETRO BLOOM & HALATION SHADER PIPELINE ─────────────
         const pixelRatio = Math.max(window.devicePixelRatio || 1, 2);
         const composer = new EffectComposer(renderer);
         this.activeComposer = composer;
@@ -7587,7 +7546,7 @@ private updateDummyNode(preventSelect = false) {
                 '}\n'
         };
 
-        // ≡ƒô╖ Camera Depth of Field (DOF) Bokeh Pass
+        // 📷 Camera Depth of Field (DOF) Bokeh Pass
         let bokehPass: BokehPass | null = null;
         try {
             bokehPass = new BokehPass(scene, camera, {
@@ -7612,7 +7571,7 @@ private updateDummyNode(preventSelect = false) {
         const outputPass = new OutputPass();
         composer.addPass(outputPass);
 
-        // ΓöÇΓöÇ 3D CONSOLE ASSEMBLY (NES PROCEDURAL OR PS1 GLB) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+        // ── 3D CONSOLE ASSEMBLY (NES PROCEDURAL OR PS1 GLB) ───────────────
         const isLocked = !!this.selectedVaultRomPath;
         const consoleGroup = new THREE.Group();
         this.activeConsoleGroupRef = consoleGroup;
@@ -7737,7 +7696,7 @@ private updateDummyNode(preventSelect = false) {
 
         scene.add(consoleGroup);
 
-        // ΓöÇΓöÇ RACK STACK GEOMETRY CONFIGURATION & WHEEL SCROLL STATE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+        // ── RACK STACK GEOMETRY CONFIGURATION & WHEEL SCROLL STATE ──────────
         const STACK_BASE_Y = -1.4;
         const STACK_BASE_Z = 1.0;
         const REST_ROT_X = 0.38;  
@@ -7837,7 +7796,7 @@ private updateDummyNode(preventSelect = false) {
             });
         });
 
-        // ΓöÇΓöÇ Eject Helper Callback for Power Off & Hot-Swap ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+        // ── Eject Helper Callback for Power Off & Hot-Swap ──────────────────
         (this as any).ejectBayCartridge = () => {
             const currentBayEntry = entries.find(e => e.state === 'BAY' || e.state === 'ANIM_TO_BAY');
             if (currentBayEntry) {
@@ -7858,7 +7817,7 @@ private updateDummyNode(preventSelect = false) {
             }
         };
 
-        // ΓöÇΓöÇ Bulletproof Raycaster Mouse Hover & Click ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+        // ── Bulletproof Raycaster Mouse Hover & Click ───────────────────────
         let pendingInsertEntry: CartEntry | null = null;
 
         const getEntryUnderMouse = (): CartEntry | null => {
@@ -7982,7 +7941,7 @@ private updateDummyNode(preventSelect = false) {
             mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
             mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
-            // ΓöÇΓöÇ ≡ƒÄ» INTERACTIVE VIEWPORT LIGHT PICKING HANDLER ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+            // ── 🎯 INTERACTIVE VIEWPORT LIGHT PICKING HANDLER ─────────────────
             if (this.lightPickingMode !== 'none') {
                 raycaster.setFromCamera(mouse, camera);
                 const pickTargets = [consoleGroup, deskMesh, roomMesh, ...entries.map(e => e.mesh)];
@@ -8007,7 +7966,7 @@ private updateDummyNode(preventSelect = false) {
                             this.masterState[selKey + 'TargetY'] = ty;
                             this.masterState[selKey + 'TargetZ'] = tz;
                         }
-                        new Notice(`≡ƒÄ» Light aimed at (${tx}, ${ty}, ${tz})`);
+                        new Notice(`🎯 Light aimed at (${tx}, ${ty}, ${tz})`);
                     } else if (this.lightPickingMode === 'place_light') {
                         const px = parseFloat(pt.x.toFixed(2));
                         const py = parseFloat((pt.y + 1.2).toFixed(2));
@@ -8021,7 +7980,7 @@ private updateDummyNode(preventSelect = false) {
                             this.masterState[selKey + 'Y'] = py;
                             this.masterState[selKey + 'Z'] = pz;
                         }
-                        new Notice(`≡ƒôì Light placed at (${px}, ${py}, ${pz})`);
+                        new Notice(`📍 Light placed at (${px}, ${py}, ${pz})`);
                     }
 
                     if (this.plugin && this.plugin.settings) {
@@ -8030,7 +7989,7 @@ private updateDummyNode(preventSelect = false) {
                     }
 
                     this.lightPickingMode = 'none';
-                    setCssStyles(renderer.domElement as any, { cursor: 'pointer' });
+                    setCssStyles(renderer.domElement, { cursor: 'pointer' });
                     if (typeof (this as any).refreshActiveLightInspector === 'function') {
                         (this as any).refreshActiveLightInspector();
                     }
@@ -8150,7 +8109,7 @@ private updateDummyNode(preventSelect = false) {
         renderer.domElement.addEventListener('wheel', onWheel, { passive: false });
         renderer.domElement.addEventListener('click', onClick);
 
-        // ΓöÇΓöÇ 60FPS Render & Bezier Trajectory Animation Loop ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+        // ── 60FPS Render & Bezier Trajectory Animation Loop ─────────────────
         const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
         const easeInOutQuad = (t: number) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
         let lastEtherFrameTime = performance.now();
@@ -8159,7 +8118,7 @@ private updateDummyNode(preventSelect = false) {
             try {
             this.animationFrameId = window.requestAnimationFrame(animate);
 
-            // ≡ƒ¢æ FREE 100% GPU & CPU POWER FOR THE 3D FLAG DURING SYSTEM TRANSITIONS
+            // 🛑 FREE 100% GPU & CPU POWER FOR THE 3D FLAG DURING SYSTEM TRANSITIONS
             if (this.isCurtainTransitioning || this.isMinimized) {
                 return;
             }
@@ -8168,10 +8127,10 @@ private updateDummyNode(preventSelect = false) {
             const deltaSec = Math.min((nowMs - lastEtherFrameTime) * 0.001, 0.05);
             lastEtherFrameTime = nowMs;
 
-            // Γ£¿ Live 60 FPS Celestial Console Ether Waterfall & Trails Simulation
+            // ✨ Live 60 FPS Celestial Console Ether Waterfall & Trails Simulation
             this.updateConsoleEtherSystem(deltaSec, nowMs * 0.001);
 
-            // ≡ƒî½∩╕Å Live 60 FPS Atmospheric Fog Updates
+            // 🌫️ Live 60 FPS Atmospheric Fog Updates
             if (masterState.fogEnabled !== false) {
                 const fogColor = masterState.fogColor || '#0b0e17';
                 if (masterState.fogMode === 'exp2') {
@@ -8192,11 +8151,11 @@ private updateDummyNode(preventSelect = false) {
                 scene.fog = null;
             }
 
-            // ≡ƒô╖ Live 60 FPS Depth of Field (DOF) Bokeh & Cinematic Autofocus Rack-Tracking
+            // 📷 Live 60 FPS Depth of Field (DOF) Bokeh & Cinematic Autofocus Rack-Tracking
             if (bokehPass) {
                 bokehPass.enabled = (masterState.dofEnabled !== false);
 
-                // ≡ƒÄÑ Camera FOV calculation: baseline 50mm maps 1:1 to masterState.camFov (43┬░)
+                // 🎥 Camera FOV calculation: baseline 50mm maps 1:1 to masterState.camFov (43°)
                 if (camera) {
                     const baseFov = typeof masterState.camFov === 'number' ? masterState.camFov : 43;
                     const focalLength = typeof masterState.dofLensFocalLength === 'number' ? masterState.dofLensFocalLength : 50;
@@ -8210,7 +8169,7 @@ private updateDummyNode(preventSelect = false) {
                 let rawTargetFocus = typeof masterState.dofFocusDistance === 'number' ? masterState.dofFocusDistance : 6.2;
                 const isPSXSystem = (this.plugin.settings.activeSystem === 'psx');
 
-                // ≡ƒîƒ Smart Mid-Air Flight Focus Shift: Cinematically track flying cartridge / CD in 3D space!
+                // 🌟 Smart Mid-Air Flight Focus Shift: Cinematically track flying cartridge / CD in 3D space!
                 const flyingEntry = entries.find(e => e.state === 'ANIM_TO_BAY' || e.state === 'ANIM_TO_DECK');
                 if (flyingEntry && camera) {
                     const flightWorldPos = new THREE.Vector3();
@@ -8415,7 +8374,7 @@ private updateDummyNode(preventSelect = false) {
             const rY = Number.isFinite(masterState.nesRotY) ? masterState.nesRotY : 0;
             const rZ = Number.isFinite(masterState.nesRotZ) ? masterState.nesRotZ : 0;
 
-            // ΓöÇΓöÇ ≡ƒìâ PERFECT HARMONIC LOOPING ZERO-G LEVITATION ENGINE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+            // ── 🍃 PERFECT HARMONIC LOOPING ZERO-G LEVITATION ENGINE ─────────
             const floatTime = performance.now() * 0.001;
             // Harmonic figure-8 Lissajous trajectory with exact 2:1 harmonic ratio:
             const consoleFloatY = Math.sin(floatTime * 1.2) * 0.022;
@@ -8428,7 +8387,7 @@ private updateDummyNode(preventSelect = false) {
             consoleGroup.position.set(nX + consoleFloatX, nY + consoleFloatY, nZ + consoleFloatZ);
             consoleGroup.rotation.set(rX + consoleFloatRotX, rY + this.consoleSpinY + consoleFloatRotY, rZ + consoleFloatRotZ);
 
-            // ΓöÇΓöÇ Live 60 FPS Desk Surface Position & Dimension Transforms ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+            // ── Live 60 FPS Desk Surface Position & Dimension Transforms ──────
             const dX = Number.isFinite(masterState.deskX) ? masterState.deskX : 0.0;
             const dY = Number.isFinite(masterState.deskY) ? masterState.deskY : -1.9;
             const dZ = Number.isFinite(masterState.deskZ) ? masterState.deskZ : -0.4;
@@ -8442,7 +8401,7 @@ private updateDummyNode(preventSelect = false) {
             trimMesh.position.set(dX, dY + (dH / 2) + 0.02, dZ);
             trimMesh.scale.set(dW / 10.0, 1.0, dD / 7.5);
 
-            // ΓöÇΓöÇ Live 60 FPS Dynamic Light Rig Transforms & System Scoping ΓöÇΓöÇΓöÇΓöÇΓöÇ
+            // ── Live 60 FPS Dynamic Light Rig Transforms & System Scoping ─────
             const currentSys = this.plugin.settings.activeSystem;
             const checkLightScope = (scope?: string) => {
                 if (!scope || scope === 'all') return true;
@@ -8479,7 +8438,7 @@ private updateDummyNode(preventSelect = false) {
             );
             fillLight.target.updateMatrixWorld();
 
-            // ΓöÇΓöÇ Live 60 FPS Dynamic Rim Light Edge Silhouette ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+            // ── Live 60 FPS Dynamic Rim Light Edge Silhouette ─────────────────
             rimLight.visible = (masterState.rimLightEnabled !== false) && checkLightScope(masterState.rimSystemScope);
             let rColHex = 0xffb060;
             if (masterState.rimColor === 'cyan') rColHex = 0x00f0ff;
@@ -8504,7 +8463,7 @@ private updateDummyNode(preventSelect = false) {
             hemi.intensity = masterState.hemiPower;
             renderer.toneMappingExposure = masterState.exposure;
 
-            // ΓöÇΓöÇ Live 60 FPS Key Light 2 ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+            // ── Live 60 FPS Key Light 2 ────────────────────────────────────────
             key2Light.visible = (masterState.key2LightEnabled !== false) && checkLightScope(masterState.key2SystemScope);
             let k2ColHex = 0xfff8e8;
             if (masterState.key2Color === 'coolBlue')  k2ColHex = 0x80a0ff;
@@ -8525,7 +8484,7 @@ private updateDummyNode(preventSelect = false) {
             );
             key2Light.target.updateMatrixWorld();
 
-            // ΓöÇΓöÇ Live 60 FPS 3D Light Gizmos Visibility & Position Updates ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+            // ── Live 60 FPS 3D Light Gizmos Visibility & Position Updates ──────
             const showGizmos = (masterState.showLightGizmos === true);
             keyHelper.visible = showGizmos && keyLight.visible;
             fillHelper.visible = showGizmos && fillLight.visible;
@@ -8539,7 +8498,7 @@ private updateDummyNode(preventSelect = false) {
                 key2Helper.update();
             }
 
-            // ΓöÇΓöÇ Live 60 FPS Custom Dynamic Lights Updates ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+            // ── Live 60 FPS Custom Dynamic Lights Updates ──────────────────────
             liveCustomLights.forEach(item => {
                 const cfg = item.config;
                 const l = item.light;
@@ -8567,7 +8526,7 @@ private updateDummyNode(preventSelect = false) {
                 }
             });
 
-            // ΓöÇΓöÇ ≡ƒîÇ TRUE 3D SPIN TRANSITION ENGINE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+            // ── 🌀 TRUE 3D SPIN TRANSITION ENGINE ────────────────────────────
             if (this.isSpinSwitching) {
                 if (this.spinSwitchPhase === 'spinup') {
                     this.spinSwitchProgress += 0.035;
@@ -8577,7 +8536,7 @@ private updateDummyNode(preventSelect = false) {
                     this.targetScrollOffset += eased * 2.2;
 
                     if (this.spinSwitchProgress >= 1.0) {
-                        // MID-SPIN SWAP AT PEAK VELOCITY (360┬░ rotation point):
+                        // MID-SPIN SWAP AT PEAK VELOCITY (360° rotation point):
                         this.spinSwitchPhase = 'spindown';
                         this.spinSwitchProgress = 0.0;
                         if (this.targetSpinSystem) {
@@ -8684,14 +8643,14 @@ private updateDummyNode(preventSelect = false) {
                 const baseRotY = baseRotYParam + wRotY;
                 const baseRotZ = baseRotZParam + wRotZ;
 
-                // ΓöÇΓöÇ Scale fix: always reset to correct per-system base scale before any state touches it
+                // ── Scale fix: always reset to correct per-system base scale before any state touches it
                 const isNes = (this.plugin.settings.activeSystem === 'nes');
                 const baseScale = isNes ? (typeof masterState.nesCartScale === 'number' ? masterState.nesCartScale : 0.85) : 1.0;
 
                 if (e.state === 'DECK') {
                     const isHovered = (e.idx === hoveredStackIdx);
 
-                    // ≡ƒìâ Harmonically synchronized carousel breathing (figure-8 Lissajous matching console)
+                    // 🍃 Harmonically synchronized carousel breathing (figure-8 Lissajous matching console)
                     const deckPhase = (virtualIdx * 0.38) + floatTime * 0.6;
                     const itemBobY = Math.sin(deckPhase * 2.0) * 0.012;
                     const itemBobZ = Math.cos(deckPhase * 2.0) * 0.006;
@@ -8729,7 +8688,7 @@ private updateDummyNode(preventSelect = false) {
                     // Render depth sorting: items closest to front (smallest virtualIdx absolute distance) render on top
                     e.mesh.renderOrder = isHovered ? 500 : (100 - Math.round(Math.abs(virtualIdx)));
 
-                    // ≡ƒö« INFINITE CAROUSEL CULLING & FADE ARC MAGIC HACK:
+                    // 🔮 INFINITE CAROUSEL CULLING & FADE ARC MAGIC HACK:
                     const maxSpan = 6.8;
                     const absV = Math.abs(virtualIdx);
 
@@ -8815,7 +8774,7 @@ private updateDummyNode(preventSelect = false) {
                     const s = bio.seed;
                     const t = floatTime * bio.swayFreq;
 
-                    // ΓöÇΓöÇ ≡ƒûÉ∩╕Å BIOMECHANICAL GHOST-HAND KINEMATICS LAYER ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+                    // ── 🖐️ BIOMECHANICAL GHOST-HAND KINEMATICS LAYER ───────────────
                     // Continuous C2 smooth envelope across the entire handling sequence:
                     const env = Math.sin(Math.min(1.0, Math.max(0.0, progress)) * Math.PI);
                     const envSmooth = env * env;
@@ -8845,7 +8804,7 @@ private updateDummyNode(preventSelect = false) {
                         const peakX = baseX - 0.55;
                         const peakTiltZ = 0.14;
 
-                        // ΓöÇΓöÇ ≡ƒÆ┐ PS1 JEWEL CASE HANDLING BY GHOST HANDS ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+                        // ── 💿 PS1 JEWEL CASE HANDLING BY GHOST HANDS ────────────────
                         // 0.00 -> 0.18: Grip & Lift forward from shelf with human wrist presentation
                         // 0.18 -> 0.58: Hold at showcase height while two-handed lid open & disc takeout occur
                         // 0.58 -> 0.74: Descend & curve back into carousel shelf slot
@@ -8891,7 +8850,7 @@ private updateDummyNode(preventSelect = false) {
                             caseRotZ + wristRotZ * caseEnv
                         );
 
-                        // ΓöÇΓöÇ ≡ƒôû TWO-HANDED JEWEL LID HINGE OPENING DYNAMICS ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+                        // ── 📖 TWO-HANDED JEWEL LID HINGE OPENING DYNAMICS ────────────
                         if (jewelHinge) {
                             if (progress < 0.24) {
                                 jewelHinge.rotation.y = 0;
@@ -8909,7 +8868,7 @@ private updateDummyNode(preventSelect = false) {
                             }
                         }
 
-                        // ΓöÇΓöÇ ≡ƒÆ┐ CD DISC POP-OUT & FLIGHT TRAJECTORY ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+                        // ── 💿 CD DISC POP-OUT & FLIGHT TRAJECTORY ────────────────────
                         if (cdDisc) {
                             if (progress < 0.38) {
                                 if (cdDisc.userData.detached) {
@@ -9007,7 +8966,7 @@ private updateDummyNode(preventSelect = false) {
                             }
                         }
                     } else {
-                        // ΓöÇΓöÇ ≡ƒÄ« NES CARTRIDGE HANDLING BY GHOST HANDS ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+                        // ── 🎮 NES CARTRIDGE HANDLING BY GHOST HANDS ─────────────────
                         const targetSlotX = typeof masterState.nesSlotX === 'number' ? masterState.nesSlotX : (typeof masterState.slotX === 'number' ? masterState.slotX : -0.575);
                         const targetSlotY = typeof masterState.nesSlotY === 'number' ? masterState.nesSlotY : (typeof masterState.slotY === 'number' ? masterState.slotY : 1.95);
                         const targetSlotZ = typeof masterState.nesSlotZ === 'number' ? masterState.nesSlotZ : (typeof masterState.slotZ === 'number' ? masterState.slotZ : 0.20);
@@ -9030,7 +8989,7 @@ private updateDummyNode(preventSelect = false) {
                             currRotY = 0.0;
                         }
                         else if (progress < 0.42) {
-                            // Phase 1b: Showcase Linger ΓÇö Holds presentation tilt directly facing player before flight
+                            // Phase 1b: Showcase Linger — Holds presentation tilt directly facing player before flight
                             const lingerT = (progress - 0.20) / 0.22;
                             const lingerBreath = Math.sin(lingerT * Math.PI) * 0.018;
                             currY = masterState.peakY * bio.liftArcHeight + lingerBreath;
@@ -9061,7 +9020,7 @@ private updateDummyNode(preventSelect = false) {
                             currRotY = targetSlotRotY + consoleFloatRotY;
                         }
                         else {
-                            // Phase 4: THE CHUNK ΓÇö Hand firmly presses spring tray DOWN into mechanical lock with damped bounce!
+                            // Phase 4: THE CHUNK — Hand firmly presses spring tray DOWN into mechanical lock with damped bounce!
                             const lockT = (progress - 0.88) / 0.12;
                             const tProg = easeInOutQuad(lockT);
                             const baseDownY = THREE.MathUtils.lerp(targetSlotY + 0.18 + consoleFloatY, targetSlotY + consoleFloatY, tProg);
@@ -9149,7 +9108,7 @@ private updateDummyNode(preventSelect = false) {
                     const s = bio.seed;
                     const t = floatTime * bio.swayFreq;
 
-                    // ΓöÇΓöÇ ≡ƒûÉ∩╕Å BIOMECHANICAL GHOST-HAND KINEMATICS LAYER ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+                    // ── 🖐️ BIOMECHANICAL GHOST-HAND KINEMATICS LAYER ───────────────
                     const env = Math.sin(Math.min(1.0, Math.max(0.0, progress)) * Math.PI);
                     const envSmooth = env * env;
 
@@ -9175,7 +9134,7 @@ private updateDummyNode(preventSelect = false) {
                         const peakX = baseX - 0.55;
                         const peakTiltZ = 0.14;
 
-                        // ΓöÇΓöÇ ≡ƒÆ┐ PS1 JEWEL CASE RETURN SEQUENCE (GHOST HANDS) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+                        // ── 💿 PS1 JEWEL CASE RETURN SEQUENCE (GHOST HANDS) ──────────
                         // 0.00 -> 0.28: Rest at Shelf
                         // 0.28 -> 0.44: Rise to meet returning disc & open lid
                         // 0.44 -> 0.82: Hold while disc seats into rosette hub
@@ -9325,7 +9284,7 @@ private updateDummyNode(preventSelect = false) {
                             }
                         }
                     } else {
-                        // ΓöÇΓöÇ ≡ƒÄ« NES CARTRIDGE EJECTION (GHOST HANDS) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+                        // ── 🎮 NES CARTRIDGE EJECTION (GHOST HANDS) ──────────────────
                         const targetSlotX = typeof masterState.nesSlotX === 'number' ? masterState.nesSlotX : (typeof masterState.slotX === 'number' ? masterState.slotX : -0.575);
                         const targetSlotY = typeof masterState.nesSlotY === 'number' ? masterState.nesSlotY : (typeof masterState.slotY === 'number' ? masterState.slotY : 1.95);
                         const targetSlotZ = typeof masterState.nesSlotZ === 'number' ? masterState.nesSlotZ : (typeof masterState.slotZ === 'number' ? masterState.slotZ : 0.20);
@@ -9452,19 +9411,19 @@ private updateDummyNode(preventSelect = false) {
 
     private refreshRomSelectOptions() {
         if (!this.romSelectEl) return;
-        this.romSelectEl.empty();
+        this.romSelectEl.innerHTML = '';
 
         const allRoms = this.getAllAvailableRoms(this.plugin.settings.activeSystem);
         allRoms.forEach((rom) => {
             const opt = createEl('option');
             opt.value = rom.path;
-            opt.text = rom.isAsset ? ('≡ƒÄ« ' + rom.name + ' (Plugin Assets)') : ('≡ƒôü ' + rom.name + ' (Vault)');
+            opt.text = rom.isAsset ? ('🎮 ' + rom.name + ' (Plugin Assets)') : ('📁 ' + rom.name + ' (Vault)');
             this.romSelectEl.appendChild(opt);
         });
 
         const uploadOption = createEl('option');
         uploadOption.value = 'upload';
-        uploadOption.text = '≡ƒôñ Load External .NES File...';
+        uploadOption.text = '📤 Load External .NES File...';
         this.romSelectEl.appendChild(uploadOption);
 
         if (this.selectedVaultRomPath) {
@@ -9504,21 +9463,21 @@ private updateDummyNode(preventSelect = false) {
         // 1. Keep controller pad hidden (isControllerVisible = false) during screen power-on animation
         this.isControllerVisible = false;
         if (this.controllerPadEl) {
-            setCssStyles(this.controllerPadEl as any, { display: 'none' });
+            setCssStyles(this.controllerPadEl, { display: 'none' });
         }
         if (this.cordSvgEl) {
-            setCssStyles(this.cordSvgEl as any, { display: 'none' });
+            setCssStyles(this.cordSvgEl, { display: 'none' });
         }
 
         // 2. Trigger GPU Hardware-Accelerated CRT TV Screen Power-On Animation (Dot -> Horizontal Line -> Full Height Screen)
         if (this.overlayCanvas) {
-            setCssStyles(this.overlayCanvas as any, { display: 'block' });
+            setCssStyles(this.overlayCanvas, { display: 'block' });
             this.overlayCanvas.classList.remove('tetris-crt-power-on');
             void this.overlayCanvas.offsetWidth; // Force reflow
             this.overlayCanvas.classList.add('tetris-crt-power-on');
         }
         if (this.crtOverlayEl && this.isCrtActive) {
-            setCssStyles(this.crtOverlayEl as any, { display: 'block' });
+            setCssStyles(this.crtOverlayEl, { display: 'block' });
             this.crtOverlayEl.classList.remove('tetris-crt-power-on');
             void this.crtOverlayEl.offsetWidth; // Force reflow
             this.crtOverlayEl.classList.add('tetris-crt-power-on');
@@ -9545,8 +9504,8 @@ private updateDummyNode(preventSelect = false) {
                 const defaultRightShift = 55;
                 const baseLeft = (minX + (w - padW) / 2) + defaultRightShift;
                 const baseTop = (minY + h + 140);
-                setCssStyles(this.controllerPadEl as any, { left: (baseLeft + ox) + 'px' });
-                setCssStyles(this.controllerPadEl as any, { top: (baseTop + oy) + 'px' });
+                setCssStyles(this.controllerPadEl, { left: (baseLeft + ox) + 'px' });
+                setCssStyles(this.controllerPadEl, { top: (baseTop + oy) + 'px' });
 
                 // EMOJI / RETRO EMERGENCE: Tucked behind TV screen (-160px up) sliding DOWNWARDS into position with spring bounce!
                 const startTransform = 'perspective(800px) translateY(-160px) scale(' + targetScale + ') rotateX(-4deg)';
@@ -9555,9 +9514,9 @@ private updateDummyNode(preventSelect = false) {
                 const endTransform = 'perspective(800px) translateY(0px) scale(' + targetScale + ') rotateX(1.5deg)';
 
                 // Set initial hidden start transform & opacity BEFORE making element visible
-                setCssStyles(this.controllerPadEl as any, { transform: startTransform });
-                setCssStyles(this.controllerPadEl as any, { opacity: '0' });
-                setCssStyles(this.controllerPadEl as any, { display: 'block' });
+                setCssStyles(this.controllerPadEl, { transform: startTransform });
+                setCssStyles(this.controllerPadEl, { opacity: '0' });
+                setCssStyles(this.controllerPadEl, { display: 'block' });
 
                 const anim = this.controllerPadEl.animate([
                     { transform: startTransform, opacity: 0 },
@@ -9574,13 +9533,13 @@ private updateDummyNode(preventSelect = false) {
                 anim.onfinish = () => {
                     this.isControllerAnimatingIn = false;
                     if (this.controllerPadEl) {
-                        setCssStyles(this.controllerPadEl as any, { opacity: '1' });
+                        setCssStyles(this.controllerPadEl, { opacity: '1' });
                     }
                     this.updateControllerTransform();
                 };
             }
             if (this.cordSvgEl && this.isControllerVisible) {
-                setCssStyles(this.cordSvgEl as any, { display: 'block' });
+                setCssStyles(this.cordSvgEl, { display: 'block' });
             }
             this.updateCordPhysics();
         }, 1300);
@@ -9648,15 +9607,15 @@ private updateDummyNode(preventSelect = false) {
 
             anim.onfinish = () => {
                 if (this.controllerPadEl) {
-                    setCssStyles(this.controllerPadEl as any, { display: 'none' });
-                    setCssStyles(this.controllerPadEl as any, { opacity: '0' });
+                    setCssStyles(this.controllerPadEl, { display: 'none' });
+                    setCssStyles(this.controllerPadEl, { opacity: '0' });
                 }
             };
         }
 
         if (this.cordSvgEl) {
             window.setTimeout(() => {
-                if (this.cordSvgEl) setCssStyles(this.cordSvgEl as any, { display: 'none' });
+                if (this.cordSvgEl) setCssStyles(this.cordSvgEl, { display: 'none' });
             }, 300);
         }
 
@@ -9677,24 +9636,24 @@ private updateDummyNode(preventSelect = false) {
         // 3. After screen collapse animation finishes (900ms), hide screen elements & stop emulator!
         window.setTimeout(() => {
             if (this.overlayCanvas) {
-                setCssStyles(this.overlayCanvas as any, { display: 'none' });
+                setCssStyles(this.overlayCanvas, { display: 'none' });
                 this.overlayCanvas.classList.remove('tetris-crt-power-off');
             }
             if (this.crtOverlayEl) {
-                setCssStyles(this.crtOverlayEl as any, { display: 'none' });
+                setCssStyles(this.crtOverlayEl, { display: 'none' });
                 this.crtOverlayEl.classList.remove('active');
                 this.crtOverlayEl.classList.remove('tetris-crt-power-off');
             }
             if (this.controllerPadEl) {
-                setCssStyles(this.controllerPadEl as any, { display: 'none' });
+                setCssStyles(this.controllerPadEl, { display: 'none' });
             }
             if (this.cordSvgEl) {
-                setCssStyles(this.cordSvgEl as any, { display: 'none' });
+                setCssStyles(this.cordSvgEl, { display: 'none' });
             }
             this.isControllerVisible = false;
             this.isControllerAnimatingIn = false;
             this.stopEmulator();
-            // System is now OFF ΓÇö show START button
+            // System is now OFF — show START button
             this.ensureRetroStartButton();
         }, 900);
     }
@@ -9719,29 +9678,29 @@ private updateDummyNode(preventSelect = false) {
         const baseLeft = (minX + (w - padW) / 2) + defaultRightShift;
         const baseTop = (minY + h + 140);
 
-        setCssStyles(this.controllerPadEl as any, { left: (baseLeft + ox) + 'px' });
-        setCssStyles(this.controllerPadEl as any, { top: (baseTop + oy) + 'px' });
+        setCssStyles(this.controllerPadEl, { left: (baseLeft + ox) + 'px' });
+        setCssStyles(this.controllerPadEl, { top: (baseTop + oy) + 'px' });
 
         if (!this.isControllerAnimatingIn) {
-            setCssStyles(this.controllerPadEl as any, { transform: 'perspective(800px) scale(' + targetScale + ') rotateX(1.5deg)' });
-            setCssStyles(this.controllerPadEl as any, { opacity: '1' });
+            setCssStyles(this.controllerPadEl, { transform: 'perspective(800px) scale(' + targetScale + ') rotateX(1.5deg)' });
+            setCssStyles(this.controllerPadEl, { opacity: '1' });
         }
 
-        setCssStyles(this.controllerPadEl as any, { display: this.isControllerVisible ? 'block' : 'none' });
+        setCssStyles(this.controllerPadEl, { display: this.isControllerVisible ? 'block' : 'none' });
 
         this.updateCordPhysics();
     }
 
     private updateCordPhysics() {
         if (!this.cordSvgEl || !this.controllerPadEl) {
-            if (this.cordSvgEl) setCssStyles(this.cordSvgEl as any, { display: 'none' });
+            if (this.cordSvgEl) setCssStyles(this.cordSvgEl, { display: 'none' });
             return;
         }
         if (!this.isControllerVisible && !this.isControllerAnimatingIn) {
-            if (this.cordSvgEl) setCssStyles(this.cordSvgEl as any, { display: 'none' });
+            if (this.cordSvgEl) setCssStyles(this.cordSvgEl, { display: 'none' });
             return;
         }
-        setCssStyles(this.cordSvgEl as any, { display: 'block' });
+        setCssStyles(this.cordSvgEl, { display: 'block' });
 
         const minX = this.dummyNode ? this.dummyNode.x : this.cachedMinX;
         const minY = this.dummyNode ? this.dummyNode.y : this.cachedMinY;
@@ -9846,9 +9805,9 @@ private updateDummyNode(preventSelect = false) {
         const baseLeft = (minX + (w - padW) / 2) + defaultRightShift;
         const baseTop = (minY + h + 140);
 
-        setCssStyles(this.controllerPadEl as any, { left: (baseLeft + ox) + 'px' });
-        setCssStyles(this.controllerPadEl as any, { top: (baseTop + oy) + 'px' });
-        setCssStyles(this.controllerPadEl as any, { display: 'block' });
+        setCssStyles(this.controllerPadEl, { left: (baseLeft + ox) + 'px' });
+        setCssStyles(this.controllerPadEl, { top: (baseTop + oy) + 'px' });
+        setCssStyles(this.controllerPadEl, { display: 'block' });
 
         const p = `perspective(800px) translateY(-160px) scale(${targetScale}) rotateX(-4deg)`;
         const x = `perspective(800px) translateY(18px) scale(${targetScale * 1.03}) rotateX(4deg)`;
@@ -9870,16 +9829,16 @@ private updateDummyNode(preventSelect = false) {
             anim.onfinish = () => {
                 this.isControllerAnimatingIn = false;
                 if (this.controllerPadEl) {
-                    setCssStyles(this.controllerPadEl as any, { opacity: '1' });
-                    setCssStyles(this.controllerPadEl as any, { transform: g });
+                    setCssStyles(this.controllerPadEl, { opacity: '1' });
+                    setCssStyles(this.controllerPadEl, { transform: g });
                 }
                 this.updateControllerTransform();
             };
         } catch (e) {
             this.isControllerAnimatingIn = false;
             if (this.controllerPadEl) {
-                setCssStyles(this.controllerPadEl as any, { opacity: '1' });
-                setCssStyles(this.controllerPadEl as any, { transform: g });
+                setCssStyles(this.controllerPadEl, { opacity: '1' });
+                setCssStyles(this.controllerPadEl, { transform: g });
             }
             this.updateControllerTransform();
         }
@@ -9902,10 +9861,10 @@ private updateDummyNode(preventSelect = false) {
 
         if (target) {
             if (this.controllerPadEl) {
-                setCssStyles(this.controllerPadEl as any, { display: 'block' });
+                setCssStyles(this.controllerPadEl, { display: 'block' });
             }
             if (this.cordSvgEl) {
-                setCssStyles(this.cordSvgEl as any, { display: 'block' });
+                setCssStyles(this.cordSvgEl, { display: 'block' });
             }
             if (!wasVisible) {
                 this.animateControllerIn();
@@ -9915,16 +9874,16 @@ private updateDummyNode(preventSelect = false) {
             this.updateCordPhysics();
         } else {
             if (this.controllerPadEl) {
-                setCssStyles(this.controllerPadEl as any, { display: 'none' });
+                setCssStyles(this.controllerPadEl, { display: 'none' });
             }
             if (this.cordSvgEl) {
-                setCssStyles(this.cordSvgEl as any, { display: 'none' });
+                setCssStyles(this.cordSvgEl, { display: 'none' });
             }
             this.isControllerAnimatingIn = false;
         }
     }
 
-    // ΓöÇΓöÇ EMULATOR LOGIC ΓöÇΓöÇ
+    // ── EMULATOR LOGIC ──
 
     private async startEmulator() {
         const isScreenAlreadyMounted = !!(this.overlayCanvas && this.overlayCanvas.style.display !== 'none');
@@ -9935,7 +9894,7 @@ private updateDummyNode(preventSelect = false) {
             this.nodesCreated = true;
         }
         if (this.overlayCanvas) {
-            setCssStyles(this.overlayCanvas as any, { display: 'block' });
+            setCssStyles(this.overlayCanvas, { display: 'block' });
             if (!isScreenAlreadyMounted) {
                 this.overlayCanvas.classList.remove('tetris-crt-power-on');
                 void this.overlayCanvas.offsetWidth;
@@ -9943,7 +9902,7 @@ private updateDummyNode(preventSelect = false) {
             }
         }
         if (this.crtOverlayEl && this.isCrtActive) {
-            setCssStyles(this.crtOverlayEl as any, { display: 'block' });
+            setCssStyles(this.crtOverlayEl, { display: 'block' });
             if (!isScreenAlreadyMounted) {
                 this.crtOverlayEl.classList.remove('tetris-crt-power-on');
                 void this.crtOverlayEl.offsetWidth;
@@ -9957,7 +9916,7 @@ private updateDummyNode(preventSelect = false) {
         }
         this.updateControllerTransform();
         if (this.powerBtnEl) this.powerBtnEl.classList.add('active');
-        if (this.retroStartBtnEl) setCssStyles(this.retroStartBtnEl as any, { display: 'none' });
+        if (this.retroStartBtnEl) setCssStyles(this.retroStartBtnEl, { display: 'none' });
 
         const isPSX = (this.plugin.settings.activeSystem === 'psx');
 
@@ -10017,7 +9976,7 @@ private updateDummyNode(preventSelect = false) {
         this.persistentBg = new Uint32Array(this.SCREEN_WIDTH * this.SCREEN_HEIGHT).fill(0);
         this.isRunning = true;
         if (this.startBtn) {
-            this.startBtn.innerText = 'Γûá  STOP';
+            this.startBtn.innerText = '■  STOP';
             this.startBtn.classList.add('running');
         }
         this.updateStatus();
@@ -10235,7 +10194,7 @@ private updateDummyNode(preventSelect = false) {
                     if (currentTransform !== this.lastTransform) {
                         this.lastTransform = currentTransform;
                         this.updateOverlayCanvasSize();
-                        // During active PS1 play the RAF loop already blits every frame ΓÇö skip the double call
+                        // During active PS1 play the RAF loop already blits every frame — skip the double call
                         if (!(this.isRunning && this.plugin.settings.activeSystem === 'psx')) {
                             this.drawOverlay();
                         }
@@ -10250,7 +10209,7 @@ private updateDummyNode(preventSelect = false) {
         this.isRunning = false;
         
         if (this.startBtn) {
-            this.startBtn.innerText = 'Γû╢  START';
+            this.startBtn.innerText = '▶  START';
             this.startBtn.classList.remove('running');
         }
         this.updateStatus();
@@ -10521,10 +10480,10 @@ private updateDummyNode(preventSelect = false) {
         }
 
         // Forcefully hide screen and controller instantly (flag covers them during transition)
-        if (this.overlayCanvas) setCssStyles(this.overlayCanvas as any, { display: 'none' });
-        if (this.crtOverlayEl) setCssStyles(this.crtOverlayEl as any, { display: 'none' });
-        if (this.controllerPadEl) setCssStyles(this.controllerPadEl as any, { display: 'none' });
-        if (this.cordSvgEl) setCssStyles(this.cordSvgEl as any, { display: 'none' });
+        if (this.overlayCanvas) setCssStyles(this.overlayCanvas, { display: 'none' });
+        if (this.crtOverlayEl) setCssStyles(this.crtOverlayEl, { display: 'none' });
+        if (this.controllerPadEl) setCssStyles(this.controllerPadEl, { display: 'none' });
+        if (this.cordSvgEl) setCssStyles(this.cordSvgEl, { display: 'none' });
         this.isControllerVisible = false;
         this.isConsolePowerOn = false;
         this.hasIntroRun = false;
@@ -10543,7 +10502,7 @@ private updateDummyNode(preventSelect = false) {
         // Play high-end transition audio cue consistently on every system switch
         this.sfxEngine.play('psx_disc_flight_whoosh', 0.85);
 
-        // ≡ƒÄ¡ Play CTR-style wavy checkered flag sweep across the 3D viewport
+        // 🎭 Play CTR-style wavy checkered flag sweep across the 3D viewport
         this.playCurtainSweepIn(target, async () => {
             try {
                 // Viewport is now 100% occluded by the wavy checkered flag curtain.
@@ -10577,7 +10536,7 @@ private updateDummyNode(preventSelect = false) {
                 // Sweep the checkered flag away to the right, revealing the pristine 60 FPS scene with 0 pop-in
                 this.playCurtainSweepOut(() => {
                     this.isCurtainTransitioning = false;
-                    // Arrive in OFF state on new system ΓÇö show START button
+                    // Arrive in OFF state on new system — show START button
                     this.ensureRetroStartButton();
                 });
             }
@@ -10603,7 +10562,7 @@ private updateDummyNode(preventSelect = false) {
         if (this.nesBtnRef) this.nesBtnRef.className = 'system-logo-btn nes-logo-btn' + (targetSys === 'nes' ? ' active' : '');
         if (this.psxBtnRef) this.psxBtnRef.className = 'system-logo-btn psx-logo-btn' + (targetSys === 'psx' ? ' active' : '');
 
-        // ≡ƒº╣ Cleanly dispose and rebuild Console 3D Model in-place (ZERO LEAKS)
+        // 🧹 Cleanly dispose and rebuild Console 3D Model in-place (ZERO LEAKS)
         if (this.activeConsoleGroupRef) {
             const cg = this.activeConsoleGroupRef;
             while (cg.children.length > 0) {
@@ -10705,7 +10664,7 @@ private updateDummyNode(preventSelect = false) {
 
         await new Promise(r => window.setTimeout(r, 0));
 
-        // ≡ƒº╣ Cleanly dispose and rebuild Cartridges / Jewel Cases in-place (ZERO LEAKS)
+        // 🧹 Cleanly dispose and rebuild Cartridges / Jewel Cases in-place (ZERO LEAKS)
         if (this.activeSceneRef && this.activeEntriesRef) {
             const scene = this.activeSceneRef;
             const entries = this.activeEntriesRef;

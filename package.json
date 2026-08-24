@@ -31,7 +31,7 @@
   "dependencies": {
     "jsnes": "^1.2.1",
     "lottie-web": "^5.12.2",
-    "nostalgist": "^0.9.0",
+    "nostalgist": "^0.21.1",
     "three": "^0.160.0"
   }
 }

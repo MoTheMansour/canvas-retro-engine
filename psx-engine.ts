@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Nostalgist } from 'nostalgist';
-import {  } from 'obsidian';
 
 function createEl<K extends keyof HTMLElementTagNameMap>(
     tag: K,
@@ -16,37 +15,25 @@ function createEl<K extends keyof HTMLElementTagNameMap>(
     } else if (o) {
         if (o.cls) el.className = Array.isArray(o.cls) ? o.cls.join(' ') : o.cls;
         if (o.text) el.textContent = o.text;
-        if (o.attr) {
-            for (const [k, v] of Object.entries(o.attr)) {
-                if (v !== undefined && v !== null) el.setAttribute(k, String(v));
-            }
-        }
-        if (o.title) el.title = o.title;
-        if (o.value) (el as any).value = o.value;
-        if (o.type) (el as any).type = o.type;
-        if (o.placeholder) (el as any).placeholder = o.placeholder;
-        if (o.href) (el as any).href = o.href;
     }
     if (callback) callback(el);
     return el;
 }
 
-
-
-export function setCssStyles(el: HTMLElement | SVGElement | any, styles: Record<string, string | number | undefined | null>): void {
+function setCssStyles(el: HTMLElement | any, styles: Record<string, string | number | undefined | null>): void {
     if (!el || !styles) return;
-    if (typeof (el as any).setCssStyles === 'function') {
+    if (typeof el.setCssStyles === 'function') {
         try {
-            (el as any).setCssStyles(styles);
+            el.setCssStyles(styles);
             return;
-        } catch {}
+        } catch (e) {}
     }
     if (el.style) {
         for (const [key, value] of Object.entries(styles)) {
             if (value !== undefined && value !== null) {
                 try {
-                    (el.style as any)[key] = String(value);
-                } catch {}
+                    el.style[key] = String(value);
+                } catch (err) {}
             }
         }
     }
@@ -338,7 +325,7 @@ export class PsxEngine {
         if (this.nostalgistInstance) {
             try {
                 this.nostalgistInstance.exit();
-            } catch {}
+            } catch (e) {}
             this.nostalgistInstance = null;
         }
         if (this.canvasTexture) {
