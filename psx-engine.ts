@@ -234,7 +234,7 @@ export class PsxEngine {
             this.nostalgistInstance = await Nostalgist.launch(options);
             fs.appendFileSync(logFile, "[PsxEngine] Nostalgist successfully launched!\n");
 
-        } catch (_e) {
+        } catch (e) {
             const logFile = path.join(this.container.ownerDocument.defaultView?.process.cwd() || '', 'psx_error.log');
             fs.appendFileSync(logFile, `[PsxEngine] Nostalgist failed to launch: ${e}\n${(e as any).stack || ''}\n`);
             console.error("[PsxEngine] Nostalgist failed to launch:", e);
@@ -258,7 +258,7 @@ export class PsxEngine {
                 return buffer;
             }
             return null;
-        } catch (_e) {
+        } catch (e) {
             console.error("PSX saveState failed:", e);
             return null;
         }
@@ -272,7 +272,7 @@ export class PsxEngine {
             const blob = new Blob([targetBuffer]);
             await this.nostalgistInstance.loadState(blob);
             return true;
-        } catch (_e) {
+        } catch (e) {
             console.error("PSX loadState failed:", e);
             return false;
         }
@@ -331,7 +331,7 @@ export class PsxEngine {
                 const loseContextExt = gl.getExtension('WEBGL_lose_context');
                 if (loseContextExt) loseContextExt.loseContext();
             }
-        } catch (_e) {
+        } catch (e) {
             console.warn("[PsxEngine] WebGL loseContext warning:", e);
         }
 

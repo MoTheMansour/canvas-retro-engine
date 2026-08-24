@@ -63,7 +63,7 @@ export function getPluginDir(plugin: { app: any; manifest: any }): string {
         const configDir = plugin.app?.vault?.configDir || ((this.app?.vault as any)?.configDir || '.obsidian');
         const pluginId = plugin.manifest?.id || 'canvas-retro-engine';
         return basePath ? path.join(basePath, configDir, 'plugins', pluginId) : path.join(configDir, 'plugins', pluginId);
-    } catch (_e) {
+    } catch {
         return '';
     }
 }
@@ -280,7 +280,7 @@ function loadNesCartridgeGeometriesSync(): NesCartridgeGeometries | null {
             };
             return cachedNesCartridgeGeometries;
         }
-    } catch (_e) {
+    } catch (e) {
         console.warn("Could not synchronously parse nes_cartridge.glb:", e);
     }
     return cachedNesCartridgeGeometries;
@@ -1278,7 +1278,7 @@ export default class CanvasNESEmulatorPlugin extends Plugin {
                     if (res.status === 200) {
                         fs.writeFileSync(fullPath, Buffer.from(res.arrayBuffer));
                     }
-                    } catch (_e) {
+                    } catch (e) {
                         console.error("Asset download error:", rel, e);
                     }
                 }
@@ -1292,8 +1292,8 @@ export default class CanvasNESEmulatorPlugin extends Plugin {
             if (this.panel) {
                 this.panel.renderUnifiedCartridgeSystem();
             }
-        } catch (_err) {
-            console.error("ensureAssetsDownloaded error:", err);
+        } catch (e) {
+            console.error("Operation error:", e);
         }
     }
 
@@ -1435,7 +1435,7 @@ class RetroAudioEngine {
                 this.audioCtx = new AudioContextClass();
             }
             await this.preloadAllSfx();
-        } catch (_e) {
+        } catch (e) {
             console.error("Failed to init RetroAudioEngine:", e);
         }
     }
@@ -1473,13 +1473,13 @@ class RetroAudioEngine {
                                 ts = st?.ctime || st?.mtime || Date.now();
                             }
                             fileTimestamps.set(filename, ts);
-                        } catch (_err) {
-                            console.warn(`Could not decode audio file: ${filename}`, err);
+                        } catch (e) {
+                            console.error("Operation error:", e);
                         }
                     }
                 }
-            } catch (_err) {
-                console.warn("Could not list SFX directory:", sfxDir, err);
+            } catch (e) {
+                console.error("Operation error:", e);
             }
         }
 
@@ -1596,7 +1596,7 @@ class RetroAudioEngine {
             const playDuration = Math.max(0.01, rawEnd - startOffset);
 
             src.start(0, startOffset, playDuration);
-        } catch (_e) {
+        } catch (e) {
             console.error(`Error playing SFX ${id}:`, e);
         }
     }
@@ -1647,7 +1647,7 @@ class RetroAudioEngine {
             gain.connect(this.audioCtx.destination);
 
             src.start(0);
-        } catch (_e) {
+        } catch (e) {
             console.error(`Error playing reverse SFX ${id}:`, e);
         }
     }
@@ -1681,7 +1681,7 @@ class RetroAudioEngine {
 
             src.start(0, startOffset, playDuration);
             return playDuration;
-        } catch (_e) {
+        } catch (e) {
             console.error(`Error previewing SFX ${id}:`, e);
             return 0;
         }
@@ -1711,7 +1711,7 @@ class RetroAudioEngine {
 
             src.start(0);
             return buf.duration;
-        } catch (_e) {
+        } catch (e) {
             console.error(`Error previewing file ${filename}:`, e);
             return 0;
         }
@@ -1750,7 +1750,7 @@ class RetroAudioEngine {
                     this.currentAuditionSource = null;
                 }
             };
-        } catch (_e) {
+        } catch (e) {
             console.error(`Error auditioning ${filenameOrId}:`, e);
         }
     }
@@ -2406,7 +2406,7 @@ class TetrisPanel {
                 setCssStyles(svg as any, { width: '100%' });
                 setCssStyles(svg as any, { height: '100%' });
             }
-        } catch (_e) {
+        } catch (e) {
             console.error("Failed to load title pill lottie animation:", e);
         }
 
@@ -3414,7 +3414,7 @@ class TetrisPanel {
                 await adapter.write(filePath, jsonStr);
             }
             return true;
-        } catch (_e) {
+        } catch (e) {
             console.error("Failed to save state to disk:", e);
             return false;
         }
@@ -3438,7 +3438,7 @@ class TetrisPanel {
                 const str = await adapter.read(filePath);
                 return JSON.parse(str);
             }
-        } catch (_e) {
+        } catch (e) {
             console.error("Failed to load state from disk:", e);
             return null;
         }
@@ -3518,7 +3518,7 @@ class TetrisPanel {
                 }
                 this.showFloatingGamepadTrigger();
             };
-        } catch (_e) {
+        } catch {
             setCssStyles(this.containerEl as any, { display: 'none' });
             this.showFloatingGamepadTrigger();
         }
@@ -4949,7 +4949,7 @@ class TetrisPanel {
                         const data = fs.readFileSync(fullImgPath);
                         controllerImgSrc = `data:image/png;base64,${data.toString('base64')}`;
                     }
-                } catch (_e) {
+                } catch (e) {
                     console.error("Failed to load PS1 controller PNG:", e);
                 }
 
@@ -5693,7 +5693,7 @@ private updateDummyNode(preventSelect = false) {
                 this.isUpdatingDummy = true;
                 try {
                     canvas.removeNode(this.dummyNode);
-                } catch (_e) {
+                } catch (e) {
                     console.error("Error removing dummy node:", e);
                 }
                 this.dummyNode = null;
@@ -5769,7 +5769,7 @@ private updateDummyNode(preventSelect = false) {
                         canvas.selectOnly(this.dummyNode);
                     }
                 }
-            } catch (_e) {
+            } catch (e) {
                 console.error("Error creating dummy node:", e);
             }
             this.isUpdatingDummy = false;
@@ -6088,7 +6088,7 @@ private updateDummyNode(preventSelect = false) {
                     }
                 }
             }
-        } catch (_e) {
+        } catch (e) {
             console.error("Error scanning plugin assets directory:", e);
         }
 
@@ -6101,7 +6101,7 @@ private updateDummyNode(preventSelect = false) {
                 const buf = fs.readFileSync(romPath);
                 return new Uint8Array(buf);
             }
-        } catch (_e) {
+        } catch (e) {
             console.error("Error reading file via fs:", e);
         }
         return null;
@@ -6113,7 +6113,7 @@ private updateDummyNode(preventSelect = false) {
                 const buf = await fs.promises.readFile(romPath);
                 return new Uint8Array(buf);
             }
-        } catch (_e) {
+        } catch (e) {
             console.error("Error reading file via fs async:", e);
         }
         return null;
@@ -6218,7 +6218,7 @@ private updateDummyNode(preventSelect = false) {
                     }
                 }
             }
-        } catch (_e) {
+        } catch (e) {
             console.error("Error finding cover image:", e);
         }
         this.coverCache.set(romPath, null);
@@ -6274,7 +6274,7 @@ private updateDummyNode(preventSelect = false) {
                     return `data:image/png;base64,${buf.toString('base64')}`;
                 }
             }
-        } catch (_e) {
+        } catch (e) {
             console.error("Failed to load asset logo data URL:", e);
         }
         return '';
@@ -6309,7 +6309,7 @@ private updateDummyNode(preventSelect = false) {
             if (obj.dispose && typeof obj.dispose === 'function' && !obj.isMesh && !obj.isScene && !obj.isGroup) {
                 obj.dispose();
             }
-        } catch (_e) {
+        } catch (e) {
             console.error("Error disposing Three.js object:", e);
         }
     }
@@ -6320,7 +6320,7 @@ private updateDummyNode(preventSelect = false) {
             root.traverse((node: any) => {
                 this.disposeThreeObject(node);
             });
-        } catch (_e) {
+        } catch (e) {
             console.error("Error disposing Three.js hierarchy:", e);
         }
     }
@@ -6370,7 +6370,7 @@ private updateDummyNode(preventSelect = false) {
                 setCssStyles(svg as any, { width: '100%' });
                 setCssStyles(svg as any, { height: '100%' });
             }
-        } catch (_e) {
+        } catch (e) {
             console.error("Failed to load curtain lottie animation:", e);
         }
 
@@ -6955,7 +6955,7 @@ private updateDummyNode(preventSelect = false) {
                         if (pass.dispose && typeof pass.dispose === 'function') pass.dispose();
                     });
                 }
-            } catch (_e) {
+            } catch (e) {
                 console.error("Error disposing active composer:", e);
             }
             this.activeComposer = null;
@@ -6965,7 +6965,7 @@ private updateDummyNode(preventSelect = false) {
             try {
                 this.disposeThreeHierarchy(this.activeScene);
                 this.activeScene.clear();
-            } catch (_e) {
+            } catch (e) {
                 console.error("Error disposing active Three.js scene:", e);
             }
             this.activeScene = null;
@@ -6975,7 +6975,7 @@ private updateDummyNode(preventSelect = false) {
             try {
                 this.activeRenderer.dispose();
                 this.activeRenderer.forceContextLoss();
-            } catch (_e) {
+            } catch (e) {
                 console.error("Error disposing active WebGL renderer:", e);
             }
             this.activeRenderer = null;
@@ -7296,7 +7296,7 @@ private updateDummyNode(preventSelect = false) {
             });
             bokehPass.enabled = (masterState.dofEnabled !== false);
             composer.addPass(bokehPass);
-        } catch (_e) {
+        } catch (e) {
             console.warn("BokehPass warning:", e);
         }
 
@@ -7355,7 +7355,7 @@ private updateDummyNode(preventSelect = false) {
                     }, (error) => {
                         console.error("Error parsing NES GLB Model:", error);
                     });
-                } catch (_e) {
+                } catch (e) {
                     console.error("Failed to read NES GLB file:", e);
                 }
             }
@@ -7406,7 +7406,7 @@ private updateDummyNode(preventSelect = false) {
                         placeholder.position.set(0, 1.4, -0.5);
                         consoleGroup.add(placeholder);
                     });
-                } catch (_e) {
+                } catch (e) {
                     console.error("Error reading PS1 GLB File:", e);
                     const boxGeo = new THREE.BoxGeometry(3.6, 0.65, 3.0);
                     const boxMat = new THREE.MeshStandardMaterial({ color: 0xcccccc });
@@ -9130,16 +9130,16 @@ private updateDummyNode(preventSelect = false) {
             } else {
                 renderer.render(scene, camera);
             }
-            } catch (_err) {
-                console.error("Error in animate loop:", err);
+            } catch (e) {
+                console.error("Error in animate loop:", e);
                 if (this.animationFrameId !== null) window.cancelAnimationFrame(this.animationFrameId);
-                new Notice("3D Render Error: " + err.message);
+                new Notice("3D Render Error: " + ((e as any)?.message || e));
             }
         };
         animate();
 
-        } catch (_e) {
-            new Notice("Error in build3DScene: " + e.message);
+        } catch (e) {
+            new Notice("Error in build3DScene: " + ((e as any)?.message || e));
             console.error("build3DScene error:", e);
         }
     }
@@ -9569,7 +9569,7 @@ private updateDummyNode(preventSelect = false) {
                 }
                 this.updateControllerTransform();
             };
-        } catch (_e) {
+        } catch {
             this.isControllerAnimatingIn = false;
             if (this.controllerPadEl) {
                 setCssStyles(this.controllerPadEl as any, { opacity: '1' });
@@ -9691,7 +9691,7 @@ private updateDummyNode(preventSelect = false) {
                         for (let i = 0; i < b.length; i++) {
                             romString += String.fromCharCode(b[i]);
                         }
-                    } catch (_e) {
+                    } catch (e) {
                         console.error("Failed to load vault ROM:", e);
                     }
                 }
@@ -10005,8 +10005,8 @@ private updateDummyNode(preventSelect = false) {
             if (typeof nes.ppu.updatePalettes === 'function') {
                 nes.ppu.updatePalettes();
             }
-        } catch (_err) {
-            console.warn("Could not apply custom NES palette:", err);
+        } catch (e) {
+            console.error("Operation error:", e);
         }
     }
 
@@ -10165,7 +10165,7 @@ private updateDummyNode(preventSelect = false) {
                         if (pass.dispose && typeof pass.dispose === 'function') pass.dispose();
                     });
                 }
-            } catch (_e) {
+            } catch (e) {
                 console.error("Error disposing active composer:", e);
             }
             this.activeComposer = null;
@@ -10175,7 +10175,7 @@ private updateDummyNode(preventSelect = false) {
             try {
                 this.disposeThreeHierarchy(this.activeScene);
                 this.activeScene.clear();
-            } catch (_e) {
+            } catch (e) {
                 console.error("Error disposing 3D scene", e);
             }
             this.activeScene = null;
@@ -10185,7 +10185,7 @@ private updateDummyNode(preventSelect = false) {
             try {
                 this.activeRenderer.dispose();
                 this.activeRenderer.forceContextLoss();
-            } catch (_e) {
+            } catch (e) {
                 console.error("Error disposing active renderer:", e);
             }
             this.activeRenderer = null;
@@ -10265,7 +10265,7 @@ private updateDummyNode(preventSelect = false) {
                 // User-controlled flag linger / occlusion delay to ensure target scene has fully settled
                 const lingerDelay = Math.max(150, (this.masterState as any).curtainLingerMs ?? 200);
                 await new Promise(r => window.setTimeout(r, lingerDelay));
-            } catch (_e) {
+            } catch (e) {
                 console.error("Error during system transition:", e);
             } finally {
                 // Sweep the checkered flag away to the right, revealing the pristine 60 FPS scene with 0 pop-in
@@ -10375,7 +10375,7 @@ private updateDummyNode(preventSelect = false) {
                             const glbBuffer = await fs.promises.readFile(gltfPath);
                             arrayBuffer = glbBuffer.buffer.slice(glbBuffer.byteOffset, glbBuffer.byteOffset + glbBuffer.byteLength);
                             this.glbBufferCache.set(gltfPath, arrayBuffer);
-                        } catch (_e) {
+                        } catch (e) {
                             console.error("Failed to read GLTF file:", e);
                         }
                     }
@@ -10388,7 +10388,7 @@ private updateDummyNode(preventSelect = false) {
                                 applyConsoleModel(gltf.scene);
                                 resolve();
                             }, (err) => {
-                                console.error("Failed to parse GLTF:", err);
+                                console.error("Operation error:", e);
                                 resolve();
                             });
                         });
