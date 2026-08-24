@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Nostalgist } from 'nostalgist';
-import { setCssStyles } from 'obsidian';
+import {  } from 'obsidian';
 
 function createEl<K extends keyof HTMLElementTagNameMap>(
     tag: K,
@@ -31,6 +31,26 @@ function createEl<K extends keyof HTMLElementTagNameMap>(
     return el;
 }
 
+
+
+export function setCssStyles(el: HTMLElement | SVGElement | any, styles: Record<string, string | number | undefined | null>): void {
+    if (!el || !styles) return;
+    if (typeof (el as any).setCssStyles === 'function') {
+        try {
+            (el as any).setCssStyles(styles);
+            return;
+        } catch (e) {}
+    }
+    if (el.style) {
+        for (const [key, value] of Object.entries(styles)) {
+            if (value !== undefined && value !== null) {
+                try {
+                    (el.style as any)[key] = String(value);
+                } catch (err) {}
+            }
+        }
+    }
+}
 
 export class PsxEngine {
     private container: HTMLElement;
