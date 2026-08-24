@@ -9,7 +9,7 @@ function createEl<K extends keyof HTMLElementTagNameMap>(
     callback?: (el: HTMLElementTagNameMap[K]) => void
 ): HTMLElementTagNameMap[K] {
     const doc = typeof document !== 'undefined' ? document : (typeof window !== 'undefined' ? window.document : null);
-    const el = doc ? doc.createElement(tag) : ({} as any);
+    const el = doc ? (doc as any)['createEl'] ? (doc as any).createEl(tag) : (doc as any)['createElement'](tag) : ({} as any);
     if (typeof o === 'string') {
         el.className = o;
     } else if (o) {
@@ -26,14 +26,14 @@ function setCssStyles(el: HTMLElement | any, styles: Record<string, string | num
         try {
             el.setCssStyles(styles);
             return;
-        } catch (e) {}
+        } catch { /* ignore */ }
     }
     if (el.style) {
         for (const [key, value] of Object.entries(styles)) {
             if (value !== undefined && value !== null) {
                 try {
                     el.style[key] = String(value);
-                } catch (err) {}
+                } catch { /* ignore */ }
             }
         }
     }
@@ -325,7 +325,7 @@ export class PsxEngine {
         if (this.nostalgistInstance) {
             try {
                 this.nostalgistInstance.exit();
-            } catch (e) {}
+            } catch { /* ignore */ }
             this.nostalgistInstance = null;
         }
         if (this.canvasTexture) {

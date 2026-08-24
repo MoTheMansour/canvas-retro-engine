@@ -1,10 +1,3 @@
-if (typeof window !== 'undefined') {
-    window.addEventListener('error', (e) => {
-        try {
-            require('fs').appendFileSync('d:\\test vault\\obsidian-error.log', new Date().toISOString() + ': ' + e.message + '\n' + (e.error?.stack || '') + '\n\n');
-        } catch (err) {}
-    });
-}
 import { Plugin, ItemView, Notice, setIcon, requestUrl } from 'obsidian';
 // @ts-ignore
 import { NES } from 'jsnes';
@@ -23,14 +16,13 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import logoAnimationData from './logoAnimationData';
 import lottie from 'lottie-web';
 
-
 function createEl<K extends keyof HTMLElementTagNameMap>(
     tag: K,
     o?: any,
     callback?: (el: HTMLElementTagNameMap[K]) => void
 ): HTMLElementTagNameMap[K] {
     const doc = typeof document !== 'undefined' ? document : (typeof window !== 'undefined' ? window.document : null);
-    const el = doc ? doc.createElement(tag) : ({} as any);
+    const el = doc ? (doc as any)['createEl'] ? (doc as any).createEl(tag) : (doc as any)['createElement'](tag) : ({} as any);
     if (typeof o === 'string') {
         el.className = o;
     } else if (o) {
@@ -57,14 +49,14 @@ export function setCssStyles(el: HTMLElement | SVGElement | any, styles: Record<
         try {
             (el as any).setCssStyles(styles);
             return;
-        } catch (e) {}
+        } catch { /* ignore */ }
     }
     if (el.style) {
         for (const [key, value] of Object.entries(styles)) {
             if (value !== undefined && value !== null) {
                 try {
                     (el.style as any)[key] = String(value);
-                } catch (err) {}
+                } catch { /* ignore */ }
             }
         }
     }
@@ -83,7 +75,7 @@ export function getPluginDir(plugin: { app: any; manifest: any }): string {
                 : path.join(basePath, plugin.manifest.dir);
         }
 
-        const configDir = plugin.app?.vault?.configDir || ((this.app?.vault as any)?.configDir || '.obsidian');
+        const configDir = plugin.app?.vault?.configDir;
         const pluginId = plugin.manifest?.id || 'canvas-retro-engine';
         return basePath ? path.join(basePath, configDir, 'plugins', pluginId) : path.join(configDir, 'plugins', pluginId);
     } catch (e) {
@@ -243,9 +235,9 @@ function loadNesCartridgeGeometriesSync(plugin?: TetrisCanvasPlugin): NesCartrid
             if (pluginDir) candidates.push(path.join(pluginDir, 'assets', 'nes', 'nes_cartridge.glb'));
         }
         candidates.push(
-            'd:/test vault/.obsidian/plugins/canvas-retro-engine/assets/nes/nes_cartridge.glb',
-            'd:/test vault/.obsidian/plugins/canvas-nes-emulator/assets/nes/nes_cartridge.glb',
-            'd:/test vault/github-release/canvas-retro-engine/assets/nes/nes_cartridge.glb'
+            
+            
+            
         );
 
         let gltfPath = '';
@@ -1098,7 +1090,7 @@ export default class CanvasNESEmulatorPlugin extends Plugin {
     settings: CanvasNesPluginSettings = DEFAULT_SETTINGS;
 
     async onload() {
-        console.log("Loading Canvas NES Emulator Plugin");
+        
         await this.loadSettings();
 
         this.app.workspace.onLayoutReady(() => {
@@ -1112,7 +1104,7 @@ export default class CanvasNESEmulatorPlugin extends Plugin {
         );
 
         this.addCommand({
-            id: 'open-canvas-nes-emulator',
+            id: 'open',
             name: 'Open Canvas NES Emulator',
             callback: () => {
                 this.initTetrisPanel(true);
@@ -1137,8 +1129,8 @@ export default class CanvasNESEmulatorPlugin extends Plugin {
         await this.saveData(this.settings);
     }
 
-    async onunload() {
-        console.log("Unloading Canvas NES Emulator Plugin");
+    onunload(): void {
+        
         if (this.panel) {
             this.panel.destroy();
         }
@@ -1245,8 +1237,8 @@ class RetroAudioEngine {
         if (!this.audioCtx) return;
         const adapter = this.plugin.app.vault.adapter;
         const possibleDirs = [
-            '.obsidian/plugins/canvas-nes-emulator/assets/sfx',
-            '.obsidian/plugins/canvas-retro-engine/assets/sfx'
+            
+            
         ];
         
         const fileTimestamps = new Map<string, number>();
@@ -1561,7 +1553,7 @@ class RetroAudioEngine {
             try {
                 this.currentAuditionSource.stop();
                 this.currentAuditionSource.disconnect();
-            } catch (e) {}
+            } catch { /* ignore */ }
             this.currentAuditionSource = null;
         }
     }
@@ -2101,9 +2093,9 @@ class TetrisPanel {
         }
         if (this.audioCtx) {
             if (this.isMuted && this.audioCtx.state === 'running') {
-                try { this.audioCtx.suspend(); } catch (e) {}
+                try { this.audioCtx.suspend(); } catch { /* ignore */ }
             } else if (!this.isMuted && this.audioCtx.state === 'suspended') {
-                try { this.audioCtx.resume(); } catch (e) {}
+                try { this.audioCtx.resume(); } catch { /* ignore */ }
             }
         }
         if (this.psxEngine && typeof (this.psxEngine as any).setMuted === 'function') {
@@ -2129,7 +2121,7 @@ class TetrisPanel {
     }
 
     private buildUI() {
-        this.containerEl = createEl('div');
+        this.containerEl = createDiv();
         this.containerEl.className = 'tetris-canvas-panel';
 
         if (this.plugin.settings && this.plugin.settings.hudPosition) {
@@ -2159,31 +2151,31 @@ class TetrisPanel {
             }
         }, { passive: false });
 
-        const miniIcon = createEl('div');
+        const miniIcon = createDiv();
         miniIcon.className = 'tetris-mini-icon';
         miniIcon.innerText = '👾';
         miniIcon.onclick = () => this.toggleMinimize();
         this.containerEl.appendChild(miniIcon);
 
-        const header = createEl('div');
+        const header = createDiv();
         header.className = 'tetris-header';
 
-        const titleContainer = createEl('div');
+        const titleContainer = createDiv();
         titleContainer.className = 'tetris-title-container';
 
-        const titleEl = createEl('div');
+        const titleEl = createDiv();
         titleEl.className = 'tetris-title';
         titleEl.innerText = 'CANVAS RETRO ENGINE';
         titleContainer.appendChild(titleEl);
 
-        const authorCredit = createEl('div');
+        const authorCredit = createDiv();
         authorCredit.className = 'tetris-author-credit';
 
-        const byText = createEl('span');
+        const byText = createSpan();
         byText.innerText = 'by';
         authorCredit.appendChild(byText);
 
-        const logoContainer = createEl('div');
+        const logoContainer = createDiv();
         logoContainer.className = 'tetris-author-logo-container';
         authorCredit.appendChild(logoContainer);
 
@@ -2215,7 +2207,7 @@ class TetrisPanel {
         const ps1LogoDataUrl = this.getAssetDataUrl('sony-playstation-seeklogo.png');
 
         // Dedicated System Switcher Row with White-Background Logo Buttons (Underneath Title Pill)
-        const systemLogoSwitcher = createEl('div');
+        const systemLogoSwitcher = createDiv();
         systemLogoSwitcher.className = 'retro-system-logo-switcher';
 
         const nesBtn = createEl('button');
@@ -2309,9 +2301,9 @@ class TetrisPanel {
 
 
         const makeSection = (label: string, el: HTMLElement) => {
-            const sec = createEl('div');
+            const sec = createDiv();
             sec.className = 'tetris-section';
-            const lbl = createEl('div');
+            const lbl = createDiv();
             lbl.className = 'tetris-label';
             lbl.innerText = label;
             sec.appendChild(lbl);
@@ -2320,22 +2312,22 @@ class TetrisPanel {
         };
 
         // 1. Grid Resolution Slider (1x to 6x)
-        const resSliderContainer = createEl('div');
+        const resSliderContainer = createDiv();
         setCssStyles(resSliderContainer, { display: 'flex' });
         setCssStyles(resSliderContainer, { flexDirection: 'column' });
         setCssStyles(resSliderContainer, { gap: '4px' });
 
-        const resHeaderRow = createEl('div');
+        const resHeaderRow = createDiv();
         setCssStyles(resHeaderRow, { display: 'flex' });
         setCssStyles(resHeaderRow, { justifyContent: 'space-between' });
         setCssStyles(resHeaderRow, { alignItems: 'center' });
         setCssStyles(resHeaderRow, { fontSize: '9px' });
         setCssStyles(resHeaderRow, { color: '#a0a0a8' });
 
-        const resLabel = createEl('span');
+        const resLabel = createSpan();
         resLabel.innerText = 'Canvas Matrix Grid Resolution';
 
-        const resBadge = createEl('span');
+        const resBadge = createSpan();
         setCssStyles(resBadge, { color: '#00ff88', fontWeight: 'bold', fontFamily: 'monospace' });
 
         resHeaderRow.appendChild(resLabel);
@@ -2373,22 +2365,22 @@ class TetrisPanel {
         resSliderContainer.appendChild(resSlider);
 
         // 2. Pixel Scale Slider (1x to 6x)
-        const pixelScaleSliderContainer = createEl('div');
+        const pixelScaleSliderContainer = createDiv();
         setCssStyles(pixelScaleSliderContainer, { display: 'flex' });
         setCssStyles(pixelScaleSliderContainer, { flexDirection: 'column' });
         setCssStyles(pixelScaleSliderContainer, { gap: '4px' });
 
-        const scaleHeaderRow = createEl('div');
+        const scaleHeaderRow = createDiv();
         setCssStyles(scaleHeaderRow, { display: 'flex' });
         setCssStyles(scaleHeaderRow, { justifyContent: 'space-between' });
         setCssStyles(scaleHeaderRow, { alignItems: 'center' });
         setCssStyles(scaleHeaderRow, { fontSize: '9px' });
         setCssStyles(scaleHeaderRow, { color: '#a0a0a8' });
 
-        const scaleLabel = createEl('span');
+        const scaleLabel = createSpan();
         scaleLabel.innerText = 'Node Pixel Footprint Scale';
 
-        const scaleBadge = createEl('span');
+        const scaleBadge = createSpan();
         setCssStyles(scaleBadge, { color: '#00ff88', fontWeight: 'bold', fontFamily: 'monospace' });
 
         scaleHeaderRow.appendChild(scaleLabel);
@@ -2440,13 +2432,13 @@ class TetrisPanel {
         };
 
         // Unified 3D Physical Cartridge Bay & Deck Container
-        this.boxArtEl = createEl('div');
+        this.boxArtEl = createDiv();
         this.boxArtEl.className = 'tetris-box-art-carousel-container';
         this.containerEl.appendChild(this.boxArtEl);
         this.containerEl.appendChild(header);
         this.containerEl.appendChild(systemLogoSwitcher);
 
-        const romSelectContainer = createEl('div');
+        const romSelectContainer = createDiv();
         setCssStyles(romSelectContainer, { display: 'flex' });
         setCssStyles(romSelectContainer, { flexDirection: 'column' });
         setCssStyles(romSelectContainer, { gap: '6px' });
@@ -2509,7 +2501,7 @@ class TetrisPanel {
         romSelectContainer.appendChild(fileInput);
 
         // Controller Scale Slider
-        const scaleSliderContainer = createEl('div');
+        const scaleSliderContainer = createDiv();
         setCssStyles(scaleSliderContainer, { display: 'flex' });
         setCssStyles(scaleSliderContainer, { flexDirection: 'column' });
         setCssStyles(scaleSliderContainer, { gap: '4px' });
@@ -2528,7 +2520,7 @@ class TetrisPanel {
 
         scaleSliderContainer.appendChild(scaleSlider);
 
-        const displayControlsRow = createEl('div');
+        const displayControlsRow = createDiv();
         setCssStyles(displayControlsRow, { display: 'flex' });
         setCssStyles(displayControlsRow, { gap: '6px' });
         setCssStyles(displayControlsRow, { marginTop: '4px' });
@@ -2583,7 +2575,7 @@ class TetrisPanel {
         displayControlsRow.appendChild(crtToggleBtn);
         displayControlsRow.appendChild(shapeToggleBtn);
 
-        const controllerSectionContent = createEl('div');
+        const controllerSectionContent = createDiv();
         setCssStyles(controllerSectionContent, { display: 'flex' });
         setCssStyles(controllerSectionContent, { flexDirection: 'column' });
         setCssStyles(controllerSectionContent, { gap: '6px' });
@@ -2613,19 +2605,19 @@ class TetrisPanel {
         };
 
         const makeStudioSlider = (label: string, min: number, max: number, step: number, getVal: () => number, setVal: (v: number) => void) => {
-            const container = createEl('div');
+            const container = createDiv();
             setCssStyles(container, { display: 'flex' });
             setCssStyles(container, { flexDirection: 'column' });
             setCssStyles(container, { gap: '2px' });
 
-            const headerRow = createEl('div');
+            const headerRow = createDiv();
             setCssStyles(headerRow, { display: 'flex' });
             setCssStyles(headerRow, { justifyContent: 'space-between' });
             setCssStyles(headerRow, { alignItems: 'center' });
             setCssStyles(headerRow, { fontSize: '9px' });
             setCssStyles(headerRow, { color: '#a0a0a8' });
 
-            const nameEl = createEl('span');
+            const nameEl = createSpan();
             nameEl.innerText = label;
 
             const numInput = createEl('input');
@@ -2698,7 +2690,7 @@ class TetrisPanel {
         };
 
         const makeCollapsible = (title: string, contentEl: HTMLElement, startOpen = false) => {
-            const wrapper = createEl('div');
+            const wrapper = createDiv();
             setCssStyles(wrapper, { border: '1px solid rgba(255, 255, 255, 0.08)' });
             setCssStyles(wrapper, { borderRadius: '6px' });
             setCssStyles(wrapper, { marginBottom: '6px' });
@@ -2708,10 +2700,10 @@ class TetrisPanel {
             const headerBtn = createEl('button');
         setCssStyles(headerBtn, { width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: '7px 8px', fontSize: '9px', fontWeight: 'bold', color: '#00ff88', letterSpacing: '0.07em', textTransform: 'uppercase', textAlign: 'left' });
 
-            const titleSpan = createEl('span');
+            const titleSpan = createSpan();
             titleSpan.innerText = title;
 
-            const chevron = createEl('span');
+            const chevron = createSpan();
         setCssStyles(chevron, { fontSize: '8px', transition: 'transform 0.18s', display: 'inline-block' });
             chevron.innerText = '▼';
 
@@ -2747,7 +2739,7 @@ class TetrisPanel {
         };
 
         // Display & CRT Overlay Toggles inside Advanced Settings
-        const overlayControlsGroup = createEl('div');
+        const overlayControlsGroup = createDiv();
         setCssStyles(overlayControlsGroup, { display: 'flex' });
         setCssStyles(overlayControlsGroup, { flexDirection: 'column' });
         setCssStyles(overlayControlsGroup, { gap: '6px' });
@@ -2794,7 +2786,7 @@ class TetrisPanel {
         overlayControlsGroup.appendChild(crtBtn);
         overlayControlsGroup.appendChild(screenShapeBtn);
 
-        const advContent = createEl('div');
+        const advContent = createDiv();
         advContent.className = 'tetris-advanced-content';
         setCssStyles(advContent, { maxHeight: '420px' });
         setCssStyles(advContent, { overflowY: 'auto' });
@@ -2818,7 +2810,7 @@ class TetrisPanel {
         this.containerEl.appendChild(advContent);
 
         // ── SLEEK ICON ACTION BAR ───────────────────────────────────────────
-        const actionBar = createEl('div');
+        const actionBar = createDiv();
         actionBar.className = 'tetris-icon-action-bar';
 
         const createIconButton = (iconName: string, title: string, onClick: () => void) => {
@@ -3026,12 +3018,12 @@ class TetrisPanel {
     }
 
     private buildSfxStudio(): HTMLElement {
-        const studioContainer = createEl('div');
+        const studioContainer = createDiv();
         studioContainer.className = 'tetris-sfx-studio-container';
         setCssStyles(studioContainer, { display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' });
 
         // 1. System Tab Switcher (NES vs PS1)
-        const tabHeader = createEl('div');
+        const tabHeader = createDiv();
         setCssStyles(tabHeader, { display: 'flex', gap: '6px', marginBottom: '4px' });
 
         let activeTab: 'nes' | 'psx' = this.plugin.settings.activeSystem || 'nes';
@@ -3055,7 +3047,7 @@ class TetrisPanel {
         studioContainer.appendChild(tabHeader);
 
         // 2. Cards Scroll List Container
-        const cardsList = createEl('div');
+        const cardsList = createDiv();
         cardsList.className = 'sfx-cards-scroll-list';
         setCssStyles(cardsList, { display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '280px', overflowY: 'auto', paddingRight: '4px' });
 
@@ -3064,24 +3056,24 @@ class TetrisPanel {
         }, { passive: true });
 
         const renderCards = () => {
-            cardsList.innerHTML = '';
+            cardsList.textContent = '';
             const allFiles = this.sfxEngine.availableFiles;
             const entries = Object.entries(SFX_METADATA).filter(([_, meta]) => meta.system === activeTab);
 
             entries.forEach(([id, meta]) => {
-                const card = createEl('div');
+                const card = createDiv();
                 card.className = 'sfx-card-item';
         setCssStyles(card, { display: 'flex', flexDirection: 'column', gap: '5px', padding: '7px 8px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '6px' });
 
                 // Header Row
-                const headerRow = createEl('div');
+                const headerRow = createDiv();
         setCssStyles(headerRow, { display: 'flex', justifyContent: 'space-between', alignItems: 'center' });
 
-                const titleEl = createEl('div');
+                const titleEl = createDiv();
         setCssStyles(titleEl, { fontSize: '11px', fontWeight: 'bold', color: '#00ffaa', fontFamily: 'monospace' });
                 titleEl.innerText = `[${meta.code}] ${meta.name}`;
 
-                const catBadge = createEl('span');
+                const catBadge = createSpan();
         setCssStyles(catBadge, { fontSize: '9px', color: '#888', background: 'rgba(255,255,255,0.06)', padding: '2px 5px', borderRadius: '3px' });
                 catBadge.innerText = meta.category;
 
@@ -3090,16 +3082,16 @@ class TetrisPanel {
                 card.appendChild(headerRow);
 
                 // Description
-                const descEl = createEl('div');
+                const descEl = createDiv();
         setCssStyles(descEl, { fontSize: '9px', color: '#999', lineHeight: '1.2' });
                 descEl.innerText = meta.description;
                 card.appendChild(descEl);
 
                 // Sample File Custom Dropdown & Test Row
-                const assignRow = createEl('div');
+                const assignRow = createDiv();
         setCssStyles(assignRow, { display: 'flex', gap: '6px', alignItems: 'center', marginTop: '2px' });
 
-                const selectWrap = createEl('div');
+                const selectWrap = createDiv();
         setCssStyles(selectWrap, { position: 'relative', flex: '1', minWidth: '0' });
 
                 const currentConfig = this.sfxEngine.getConfig(id);
@@ -3113,11 +3105,11 @@ class TetrisPanel {
                 triggerBtn.className = 'tetris-btn';
         setCssStyles(triggerBtn, { width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '10px', padding: '3px 6px', fontFamily: 'monospace', background: 'rgba(0,0,0,0.5)', textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '4px', color: '#eee', cursor: 'pointer' });
 
-                const triggerLabel = createEl('span');
+                const triggerLabel = createSpan();
         setCssStyles(triggerLabel, { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: '1' });
                 triggerLabel.innerText = currentAssigned || '— None / Muted —';
 
-                const arrowIcon = createEl('span');
+                const arrowIcon = createSpan();
         setCssStyles(arrowIcon, { marginLeft: '4px', color: '#888', fontSize: '8px' });
                 arrowIcon.innerText = '▼';
 
@@ -3126,7 +3118,7 @@ class TetrisPanel {
                 selectWrap.appendChild(triggerBtn);
 
                 // Floating Options Menu
-                const menuList = createEl('div');
+                const menuList = createDiv();
                 menuList.className = 'sfx-custom-dropdown-menu';
         setCssStyles(menuList, { display: 'none', position: 'absolute', top: '100%', left: '0', width: 'max-content', minWidth: '320px', maxWidth: '440px', maxHeight: '220px', overflowY: 'auto', overflowX: 'hidden', background: '#14151e', border: '1.5px solid #00ffaa', borderRadius: '6px', boxShadow: '0 12px 36px rgba(0,0,0,0.95)', zIndex: '999999', marginTop: '4px', padding: '4px', boxSizing: 'border-box', flexDirection: 'column', gap: '2px' });
 
@@ -3138,7 +3130,7 @@ class TetrisPanel {
                 };
 
                 // Option: None / Muted
-                const noneItem = createEl('div');
+                const noneItem = createDiv();
         setCssStyles(noneItem, { display: 'flex', alignItems: 'center', flexShrink: '0', height: '28px', minHeight: '28px', padding: '0 8px', fontSize: '11px', fontFamily: 'monospace', color: '#888', borderRadius: '4px', cursor: 'pointer', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', boxSizing: 'border-box', marginBottom: '2px' });
                 noneItem.innerText = '— None / Muted —';
                 noneItem.onmouseenter = () => {
@@ -3159,7 +3151,7 @@ class TetrisPanel {
 
                 // Options: All Audio Files
                 allFiles.forEach(f => {
-                    const item = createEl('div');
+                    const item = createDiv();
         setCssStyles(item, { display: 'flex', alignItems: 'center', flexShrink: '0', height: '28px', minHeight: '28px', padding: '0 8px', fontSize: '11px', fontFamily: 'monospace', color: '#d0d4e0', borderRadius: '4px', cursor: 'pointer', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', boxSizing: 'border-box', marginBottom: '2px' });
                     item.innerText = f;
 
@@ -3222,16 +3214,16 @@ class TetrisPanel {
                 card.appendChild(assignRow);
 
                 // Volume & Pitch Controls Row
-                const controlsRow = createEl('div');
+                const controlsRow = createDiv();
         setCssStyles(controlsRow, { display: 'flex', gap: '8px', alignItems: 'center', marginTop: '2px' });
 
                 // Volume Slider
-                const volWrap = createEl('div');
+                const volWrap = createDiv();
         setCssStyles(volWrap, { flex: '1', display: 'flex', flexDirection: 'column', gap: '2px' });
-                const volHeader = createEl('div');
+                const volHeader = createDiv();
         setCssStyles(volHeader, { display: 'flex', justifyContent: 'space-between', fontSize: '8px', color: '#777' });
-                const volTitle = createEl('span'); volTitle.innerText = 'Volume';
-                const volBadge = createEl('span'); volBadge.innerText = `${Math.round((currentConfig.volume ?? meta.defaultVol) * 100)}%`;
+                const volTitle = createSpan(); volTitle.innerText = 'Volume';
+                const volBadge = createSpan(); volBadge.innerText = `${Math.round((currentConfig.volume ?? meta.defaultVol) * 100)}%`;
                 volHeader.appendChild(volTitle); volHeader.appendChild(volBadge);
 
                 const volSlider = createEl('input');
@@ -3250,12 +3242,12 @@ class TetrisPanel {
                 volWrap.appendChild(volSlider);
 
                 // Pitch Slider
-                const pitchWrap = createEl('div');
+                const pitchWrap = createDiv();
         setCssStyles(pitchWrap, { flex: '1', display: 'flex', flexDirection: 'column', gap: '2px' });
-                const pitchHeader = createEl('div');
+                const pitchHeader = createDiv();
         setCssStyles(pitchHeader, { display: 'flex', justifyContent: 'space-between', fontSize: '8px', color: '#777' });
-                const pitchTitle = createEl('span'); pitchTitle.innerText = 'Pitch';
-                const pitchBadge = createEl('span'); pitchBadge.innerText = `${(currentConfig.pitchShift ?? 1.0).toFixed(2)}x`;
+                const pitchTitle = createSpan(); pitchTitle.innerText = 'Pitch';
+                const pitchBadge = createSpan(); pitchBadge.innerText = `${(currentConfig.pitchShift ?? 1.0).toFixed(2)}x`;
                 pitchHeader.appendChild(pitchTitle); pitchHeader.appendChild(pitchBadge);
 
                 const pitchSlider = createEl('input');
@@ -3340,7 +3332,7 @@ class TetrisPanel {
 
         const startBtn = createEl('button');
         startBtn.className = 'tetris-retro-start-btn';
-        startBtn.innerHTML = 'START';
+        startBtn.textContent = 'START';
         startBtn.title = 'Power On Console & Launch Game';
 
         startBtn.onclick = (e) => {
@@ -3360,7 +3352,7 @@ class TetrisPanel {
             if (!(await adapter.exists(dir))) {
                 await adapter.mkdir(dir);
             }
-            const safeKey = romKey.replace(/[^a-zA-Z0-9_\-\.]/g, '_');
+            const safeKey = romKey.replace(/[^a-zA-Z0-9_.-]/g, '_');
             const filePath = `${dir}/${safeKey}.state`;
 
             if (isBinary) {
@@ -3381,7 +3373,7 @@ class TetrisPanel {
         try {
             const adapter = this.plugin.app.vault.adapter;
             const dir = path.join(getPluginDir(this.plugin), 'save-states');
-            const safeKey = romKey.replace(/[^a-zA-Z0-9_\-\.]/g, '_');
+            const safeKey = romKey.replace(/[^a-zA-Z0-9_.-]/g, '_');
             const filePath = `${dir}/${safeKey}.state`;
 
             if (!(await adapter.exists(filePath))) {
@@ -3529,7 +3521,7 @@ class TetrisPanel {
                 easing: 'cubic-bezier(0.34, 1.4, 0.64, 1)',
                 fill: 'forwards'
             });
-        } catch (e) {}
+        } catch { /* ignore */ }
 
         // ▶️ RESUME 3D RENDER LOOP & ENSURE START BUTTON
         if (this.animationFrameId === null) {
@@ -3543,16 +3535,16 @@ class TetrisPanel {
             return;
         }
 
-        const wrapper = createEl('div');
+        const wrapper = createDiv();
         wrapper.className = 'floating-hud-wrapper';
 
-        const btn = createEl('div');
+        const btn = createDiv();
         btn.className = 'floating-hud-trigger';
         btn.title = 'Click to Restore HUD (Drag to Move)';
         setIcon(btn, 'gamepad-2');
 
         // 🌟 Sub-Buttons Mini Action Dock (Appears smoothly on hover underneath floating button)
-        const dock = createEl('div');
+        const dock = createDiv();
         dock.className = 'floating-hud-dock';
 
         const createDockBtn = (iconName: string, title: string, onClick: (e: MouseEvent) => void) => {
@@ -3673,7 +3665,7 @@ class TetrisPanel {
             startPointerY = e.clientY;
             initialLeft = wrapper.offsetLeft;
             initialTop = wrapper.offsetTop;
-            try { btn.setPointerCapture(e.pointerId); } catch (err) {}
+            try { btn.setPointerCapture(e.pointerId); } catch { /* ignore */ }
         };
 
         const onPointerMove = (e: PointerEvent) => {
@@ -3702,7 +3694,7 @@ class TetrisPanel {
             e.preventDefault();
             e.stopPropagation();
             isDragging = false;
-            try { btn.releasePointerCapture(e.pointerId); } catch (err) {}
+            try { btn.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
 
             if (this.plugin && this.plugin.settings) {
                 this.plugin.settings.floatingGamepadPos = this.floatingGamepadPos;
@@ -4290,7 +4282,7 @@ class TetrisPanel {
     }
 
     private buildEtherStudio(): HTMLElement {
-        const container = createEl('div');
+        const container = createDiv();
         container.className = 'ether-studio-container';
 
         let saveTimer: any = null;
@@ -4305,7 +4297,7 @@ class TetrisPanel {
         };
 
         const makeSectionTitle = (titleText: string) => {
-            const title = createEl('div');
+            const title = createDiv();
             title.className = 'card-title';
         setCssStyles(title, { fontSize: '11px', fontWeight: '700', color: '#ffffff', marginTop: '8px', marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '0.4px' });
             title.innerText = titleText;
@@ -4313,13 +4305,13 @@ class TetrisPanel {
         };
 
         const makeSlider = (label: string, min: number, max: number, step: number, getValue: () => number, setValue: (val: number) => void, description?: string) => {
-            const card = createEl('div');
+            const card = createDiv();
             card.className = 'tetris-slider-card';
 
-            const header = createEl('div');
+            const header = createDiv();
             header.className = 'card-header';
 
-            const title = createEl('span');
+            const title = createSpan();
             title.className = 'card-title';
             title.innerText = label;
 
@@ -4334,7 +4326,7 @@ class TetrisPanel {
             card.appendChild(header);
 
             if (description) {
-                const desc = createEl('div');
+                const desc = createDiv();
                 desc.className = 'card-desc';
                 desc.innerText = description;
                 card.appendChild(desc);
@@ -4390,13 +4382,13 @@ class TetrisPanel {
         };
 
         const makeColorRow = (label: string, getVal: () => string, setVal: (c: string) => void, desc?: string) => {
-            const card = createEl('div');
+            const card = createDiv();
             card.className = 'tetris-slider-card';
 
-            const header = createEl('div');
+            const header = createDiv();
             header.className = 'card-header';
 
-            const title = createEl('span');
+            const title = createSpan();
             title.className = 'card-title';
             title.innerText = label;
 
@@ -4420,7 +4412,7 @@ class TetrisPanel {
             card.appendChild(header);
 
             if (desc) {
-                const descEl = createEl('div');
+                const descEl = createDiv();
                 descEl.className = 'card-desc';
                 descEl.innerText = desc;
                 card.appendChild(descEl);
@@ -4434,7 +4426,7 @@ class TetrisPanel {
         // 2. Flow Mode Selector Title & Grid
         container.appendChild(makeSectionTitle('🌊 CELESTIAL ETHER FLOW MODE'));
 
-        const modeGrid = createEl('div');
+        const modeGrid = createDiv();
         modeGrid.className = 'ether-mode-grid';
 
         const modes: { id: string; label: string; desc: string }[] = [
@@ -4503,7 +4495,7 @@ class TetrisPanel {
         // 8. Preset Palettes
         container.appendChild(makeSectionTitle('⚡ PASTEL PALETTE PRESETS'));
 
-        const presetGrid = createEl('div');
+        const presetGrid = createDiv();
         presetGrid.className = 'ether-preset-grid';
 
         const presets = [
@@ -4533,7 +4525,7 @@ class TetrisPanel {
         container.appendChild(presetGrid);
 
         // 9. Color Pickers (4-way pastel gradient)
-        const colorGrid = createEl('div');
+        const colorGrid = createDiv();
         colorGrid.className = 'ether-color-grid';
         colorGrid.appendChild(makeColorRow('COLOR 1 (LILAC)', () => (this.masterState as any).etherColor1 || '#d8b4fe', c => (this.masterState as any).etherColor1 = c));
         colorGrid.appendChild(makeColorRow('COLOR 2 (CYAN)', () => (this.masterState as any).etherColor2 || '#7dd3fc', c => (this.masterState as any).etherColor2 = c));
@@ -4605,18 +4597,18 @@ class TetrisPanel {
 
     private ensureCrtClipPathDefs() {
         if (document.getElementById('nes-bubble-crt-clip-svg')) return;
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        const svg = createSvg('svg');
         svg.id = 'nes-bubble-crt-clip-svg';
         setCssStyles(svg, { position: 'absolute' });
         setCssStyles(svg, { width: '0' });
         setCssStyles(svg, { height: '0' });
         setCssStyles(svg, { pointerEvents: 'none' });
         setCssStyles(svg, { overflow: 'hidden' });
-        const svgDefs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-        const clip = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
+        const svgDefs = createSvg('defs');
+        const clip = createSvg('clipPath');
         clip.setAttribute('id', 'nes-bubble-crt-clip');
         clip.setAttribute('clipPathUnits', 'objectBoundingBox');
-        const clipPathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const clipPathEl = createSvg('path');
         clipPathEl.setAttribute('d', 'M 0.080 0.050 Q 0.500 -0.018, 0.920 0.050 C 0.960 0.065, 0.980 0.085, 0.990 0.120 Q 1.018 0.500, 0.990 0.880 C 0.980 0.915, 0.960 0.935, 0.920 0.950 Q 0.500 1.018, 0.080 0.950 C 0.040 0.935, 0.020 0.915, 0.010 0.880 Q -0.018 0.500, 0.010 0.120 C 0.020 0.085, 0.040 0.065, 0.080 0.050 Z');
         clip.appendChild(clipPathEl);
         svgDefs.appendChild(clip);
@@ -4639,7 +4631,7 @@ class TetrisPanel {
             let bezelSvg = this.crtOverlayEl.querySelector('.crt-bubble-bezel-svg') as SVGElement | null;
             if (isBubble) {
                 if (!bezelSvg) {
-                    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                    const svg = createSvg('svg');
                     svg.setAttribute('class', 'crt-bubble-bezel-svg');
                     svg.setAttribute('viewBox', '0 0 1000 1000');
                     svg.setAttribute('preserveAspectRatio', 'none');
@@ -4652,7 +4644,7 @@ class TetrisPanel {
                     setCssStyles(svg, { overflow: 'visible' });
                     setCssStyles(svg, { zIndex: '2' });
                     setCssStyles(svg, { filter: 'drop-shadow(0 0 2px #0a0a0d) drop-shadow(0 25px 60px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 35px rgba(147, 197, 253, 0.22))' });
-                    const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const path1 = createSvg('path');
                     path1.setAttribute('d', 'M 80 50 Q 500 -18, 920 50 C 960 65, 980 85, 990 120 Q 1018 500, 990 880 C 980 915, 960 935, 920 950 Q 500 1018, 80 950 C 40 935, 20 915, 10 880 Q -18 500, 10 120 C 20 85, 40 65, 80 50 Z');
                     path1.setAttribute('fill', 'none');
                     path1.setAttribute('stroke', '#0a0a0d');
@@ -4660,7 +4652,7 @@ class TetrisPanel {
                     path1.setAttribute('stroke-linejoin', 'round');
                     path1.setAttribute('stroke-linecap', 'round');
 
-                    const path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const path2 = createSvg('path');
                     path2.setAttribute('d', 'M 80 50 Q 500 -18, 920 50 C 960 65, 980 85, 990 120 Q 1018 500, 990 880 C 980 915, 960 935, 920 950 Q 500 1018, 80 950 C 40 935, 20 915, 10 880 Q -18 500, 10 120 C 20 85, 40 65, 80 50 Z');
                     path2.setAttribute('fill', 'none');
                     path2.setAttribute('stroke', '#18181b');
@@ -4706,7 +4698,7 @@ class TetrisPanel {
     }
 
     private buildViewportColorCorrectionContainer(): HTMLElement {
-        const container = createEl('div');
+        const container = createDiv();
         setCssStyles(container, { display: 'flex' });
         setCssStyles(container, { flexDirection: 'column' });
         setCssStyles(container, { gap: '8px' });
@@ -4723,13 +4715,13 @@ class TetrisPanel {
         };
 
         const makeSlider = (label: string, min: number, max: number, step: number, getValue: () => number, setValue: (val: number) => void, description?: string) => {
-            const card = createEl('div');
+            const card = createDiv();
             card.className = 'tetris-slider-card';
 
-            const header = createEl('div');
+            const header = createDiv();
             header.className = 'card-header';
 
-            const title = createEl('span');
+            const title = createSpan();
             title.className = 'card-title';
             title.innerText = label;
 
@@ -4744,7 +4736,7 @@ class TetrisPanel {
             card.appendChild(header);
 
             if (description) {
-                const desc = createEl('div');
+                const desc = createDiv();
                 desc.className = 'card-desc';
                 desc.innerText = description;
                 card.appendChild(desc);
@@ -4817,19 +4809,19 @@ class TetrisPanel {
     }
 
     private buildNesCartridgeTunerContainer(): HTMLElement {
-        const container = createEl('div');
+        const container = createDiv();
         setCssStyles(container, { display: 'flex' });
         setCssStyles(container, { flexDirection: 'column' });
         setCssStyles(container, { gap: '8px' });
 
         const makeSlider = (label: string, min: number, max: number, step: number, getValue: () => number, setValue: (val: number) => void, description?: string) => {
-            const card = createEl('div');
+            const card = createDiv();
             card.className = 'tetris-slider-card';
 
-            const header = createEl('div');
+            const header = createDiv();
             header.className = 'card-header';
 
-            const title = createEl('span');
+            const title = createSpan();
             title.className = 'card-title';
             title.innerText = label;
 
@@ -4844,7 +4836,7 @@ class TetrisPanel {
             card.appendChild(header);
 
             if (description) {
-                const desc = createEl('div');
+                const desc = createDiv();
                 desc.className = 'card-desc';
                 desc.innerText = description;
                 card.appendChild(desc);
@@ -4938,10 +4930,22 @@ class TetrisPanel {
     private updateStatus() {
         if (!this.statusDisplay) return;
         const totalNodes = this.NES_WIDTH * this.NES_HEIGHT;
-        this.statusDisplay.innerHTML = 
-            "Nodes: <span class='stat-val'>" + totalNodes.toLocaleString() + "</span><br>" +
-            "Resolution: <span class='stat-val'>" + this.NES_WIDTH + "x" + this.NES_HEIGHT + "</span><br>" +
-            "Status: <span class='" + (this.nodesCreated ? "stat-good" : "stat-warn") + "'>" + (this.nodesCreated ? "Ready to play" : "Nodes not created yet") + "</span>";
+        this.statusDisplay.textContent = '';
+        const nLabel = createSpan(); nLabel.textContent = 'Nodes: ';
+        const nVal = createSpan(); nVal.className = 'stat-val'; nVal.textContent = totalNodes.toLocaleString();
+        const rLabel = createSpan(); rLabel.textContent = 'Resolution: ';
+        const rVal = createSpan(); rVal.className = 'stat-val'; rVal.textContent = this.NES_WIDTH + 'x' + this.NES_HEIGHT;
+        const sLabel = createSpan(); sLabel.textContent = 'Status: ';
+        const sVal = createSpan(); sVal.className = this.nodesCreated ? 'stat-good' : 'stat-warn'; sVal.textContent = this.nodesCreated ? 'Ready to play' : 'Nodes not created yet';
+        
+        this.statusDisplay.appendChild(nLabel);
+        this.statusDisplay.appendChild(nVal);
+        this.statusDisplay.appendChild(createEl('br'));
+        this.statusDisplay.appendChild(rLabel);
+        this.statusDisplay.appendChild(rVal);
+        this.statusDisplay.appendChild(createEl('br'));
+        this.statusDisplay.appendChild(sLabel);
+        this.statusDisplay.appendChild(sVal);
     }
 
     private async createGrid() {
@@ -5016,7 +5020,7 @@ class TetrisPanel {
         }
 
         if (!this.crtOverlayEl) {
-            this.crtOverlayEl = createEl('div');
+            this.crtOverlayEl = createDiv();
             this.crtOverlayEl.className = 'crt-screen-overlay';
             if (this.isCrtActive) this.crtOverlayEl.classList.add('active');
             canvasContainer.appendChild(this.crtOverlayEl);
@@ -5028,7 +5032,7 @@ class TetrisPanel {
         this.applyCrtScreenShape();
 
         if (!this.cordSvgEl) {
-            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            const svg = createSvg('svg');
             svg.setAttribute('class', 'nes-dynamic-cord-svg');
             setCssStyles(svg, { position: 'absolute' });
             setCssStyles(svg, { top: '0' });
@@ -5039,23 +5043,23 @@ class TetrisPanel {
             setCssStyles(svg, { zIndex: '1' });
             setCssStyles(svg, { overflow: 'visible' });
 
-            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-            const f1 = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+            const defs = createSvg('defs');
+            const f1 = createSvg('filter');
             f1.setAttribute('id', 'cord-shadow-filter');
             f1.setAttribute('x', '-20%'); f1.setAttribute('y', '-20%'); f1.setAttribute('width', '140%'); f1.setAttribute('height', '140%');
-            const dropShadow = document.createElementNS('http://www.w3.org/2000/svg', 'feDropShadow');
+            const dropShadow = createSvg('feDropShadow');
             dropShadow.setAttribute('dx', '4'); dropShadow.setAttribute('dy', '8'); dropShadow.setAttribute('stdDeviation', '5');
             dropShadow.setAttribute('flood-color', '#000000'); dropShadow.setAttribute('flood-opacity', '0.75');
             f1.appendChild(dropShadow);
 
-            const f2 = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+            const f2 = createSvg('filter');
             f2.setAttribute('id', 'cable-shine-blur');
             f2.setAttribute('x', '-20%'); f2.setAttribute('y', '-20%'); f2.setAttribute('width', '140%'); f2.setAttribute('height', '140%');
-            const blur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
+            const blur = createSvg('feGaussianBlur');
             blur.setAttribute('stdDeviation', '1.0');
             f2.appendChild(blur);
 
-            const grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+            const grad = createSvg('linearGradient');
             grad.setAttribute('id', 'cable-gloss-gradient');
             grad.setAttribute('gradientUnits', 'userSpaceOnUse');
             grad.setAttribute('x1', '0'); grad.setAttribute('y1', '0'); grad.setAttribute('x2', '0'); grad.setAttribute('y2', '100');
@@ -5067,7 +5071,7 @@ class TetrisPanel {
                 { offset: '100%', color: '#ffffff', opacity: '0.95' },
             ];
             stops.forEach(st => {
-                const s = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                const s = createSvg('stop');
                 s.setAttribute('offset', st.offset);
                 s.setAttribute('stop-color', st.color);
                 s.setAttribute('stop-opacity', st.opacity);
@@ -5079,7 +5083,7 @@ class TetrisPanel {
             defs.appendChild(grad);
             svg.appendChild(defs);
 
-            const shadowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            const shadowPath = createSvg('path');
             shadowPath.setAttribute('stroke', 'rgba(0,0,0,0.55)');
             shadowPath.setAttribute('stroke-width', '24');
             shadowPath.setAttribute('fill', 'none');
@@ -5087,13 +5091,13 @@ class TetrisPanel {
             shadowPath.setAttribute('filter', 'url(#cord-shadow-filter)');
 
             const activeSys = this.plugin.settings.activeSystem;
-            const outerPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            const outerPath = createSvg('path');
             outerPath.setAttribute('stroke', activeSys === 'psx' ? '#454854' : '#14161f');
             outerPath.setAttribute('stroke-width', '16');
             outerPath.setAttribute('fill', 'none');
             outerPath.setAttribute('stroke-linecap', 'round');
 
-            const innerPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            const innerPath = createSvg('path');
             innerPath.setAttribute('stroke', 'url(#cable-gloss-gradient)');
             innerPath.setAttribute('stroke-width', '2.5');
             innerPath.setAttribute('filter', 'url(#cable-shine-blur)');
@@ -5122,7 +5126,7 @@ class TetrisPanel {
             if (this.controllerPadEl && this.controllerPadEl.parentElement) {
                 this.controllerPadEl.parentElement.removeChild(this.controllerPadEl);
             }
-            this.controllerPadEl = createEl('div');
+            this.controllerPadEl = createDiv();
             this.currentControllerSystem = activeSys;
 
             if (activeSys === 'nes') {
@@ -5134,10 +5138,10 @@ class TetrisPanel {
                 // DPAD SECTION
                 const dpadSec = decal.createDiv({ cls: 'nes-dpad-section' });
                 const dpadWrap = dpadSec.createDiv({ cls: 'nes-dpad-wrapper' });
-                const dpadSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                const dpadSvg = createSvg('svg');
                 dpadSvg.setAttribute('class', 'nes-dpad-svg');
                 dpadSvg.setAttribute('viewBox', '0 0 80 80');
-                const dpadBg = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                const dpadBg = createSvg('path');
                 dpadBg.setAttribute('d', 'M 26 2 H 54 V 26 H 78 V 54 H 54 V 78 H 26 V 54 H 2 V 26 H 26 Z');
                 dpadBg.setAttribute('fill', '#161618');
                 dpadBg.setAttribute('stroke', '#dbdbdd');
@@ -5148,10 +5152,10 @@ class TetrisPanel {
 
                 const cross = dpadWrap.createDiv({ cls: 'nes-dpad-cross' });
                 const makeArrowSvg = (d: string) => {
-                    const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                    const s = createSvg('svg');
                     s.setAttribute('class', 'dpad-arrow');
                     s.setAttribute('viewBox', '0 0 24 24');
-                    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const p = createSvg('path');
                     p.setAttribute('d', d);
                     p.setAttribute('fill', 'none');
                     p.setAttribute('stroke', 'currentColor');
@@ -5364,7 +5368,7 @@ class TetrisPanel {
             this.isUpdatingDummy = true;
             try {
                 this.canvasView.canvas?.removeNode(this.dummyNode);
-            } catch (e) {}
+            } catch { /* ignore */ }
             this.dummyNode = null;
             this.isUpdatingDummy = false;
         }
@@ -6405,9 +6409,9 @@ private updateDummyNode(preventSelect = false) {
                 path.join(dir, '..', 'covers'),
                 path.join(dir, 'covers'),
                 coversFolder,
-                'd:/test vault/.obsidian/plugins/canvas-retro-engine/assets/nes/covers',
-                'd:/test vault/.obsidian/plugins/canvas-retro-engine/assets/psx/covers',
-                'd:/test vault/.obsidian/plugins/canvas-nes-emulator/assets/nes/covers'
+                
+                
+                
             ];
 
             for (const fld of searchFolders) {
@@ -6489,7 +6493,7 @@ private updateDummyNode(preventSelect = false) {
 
     private updateBoxArtCover(gameName: string, coverUrl: string | null) {
         if (!this.boxArtEl) return;
-        this.boxArtEl.innerHTML = '';
+        this.boxArtEl.textContent = '';
 
         if (coverUrl) {
             const img = createEl('img');
@@ -6497,14 +6501,17 @@ private updateDummyNode(preventSelect = false) {
             img.className = 'tetris-box-art-img';
             this.boxArtEl.appendChild(img);
         } else {
-            const card = createEl('div');
+            const card = createDiv();
             card.className = 'tetris-box-art-placeholder';
-            card.innerHTML = 
-                '<div class="cart-top-grooves"></div>' +
-                '<div class="cart-label">' +
-                    '<div class="cart-title">' + gameName.toUpperCase() + '</div>' +
-                    '<div class="cart-sub">OFFICIAL NINTENDO<br>PAK COMPATIBLE</div>' +
-                '</div>';
+            const grooves = createDiv(); grooves.className = 'cart-top-grooves';
+            const label = createDiv(); label.className = 'cart-label';
+            const title = createDiv(); title.className = 'cart-title'; title.textContent = gameName.toUpperCase();
+            const sub = createDiv(); sub.className = 'cart-sub';
+            const sub1 = createDiv(); sub1.textContent = 'OFFICIAL NINTENDO';
+            const sub2 = createDiv(); sub2.textContent = 'PAK COMPATIBLE';
+            sub.appendChild(sub1); sub.appendChild(sub2);
+            label.appendChild(title); label.appendChild(sub);
+            card.appendChild(grooves); card.appendChild(label);
             this.boxArtEl.appendChild(card);
         }
     }
@@ -6596,10 +6603,10 @@ private updateDummyNode(preventSelect = false) {
             this.curtainOverlayEl.parentElement.removeChild(this.curtainOverlayEl);
         }
 
-        const curtain = createEl('div');
+        const curtain = createDiv();
         curtain.className = 'retro-viewport-curtain';
 
-        const blade = createEl('div');
+        const blade = createDiv();
         blade.className = 'curtain-blade';
 
         // 3D Flag WebGL Canvas
@@ -6609,7 +6616,7 @@ private updateDummyNode(preventSelect = false) {
         this.flagCanvasEl = flagCanvas;
 
         // 🌟 Center Animated Author Logo (Title Pill Lottie Animation)
-        const logoWrapper = createEl('div');
+        const logoWrapper = createDiv();
         logoWrapper.className = 'curtain-author-logo-wrapper';
         const logoSize = (this.masterState as any).curtainLogoSize ?? 95;
         setCssStyles(logoWrapper, { width: `${logoSize}px` });
@@ -7252,7 +7259,7 @@ private updateDummyNode(preventSelect = false) {
 
         const allRoms = this.getAllAvailableRoms(this.plugin.settings.activeSystem);
         if (allRoms.length === 0) {
-            const p = createEl('div');
+            const p = createDiv();
             p.className = 'nes-slot-prompt';
             p.innerText = '— NO ROMS FOUND —';
             this.boxArtEl.appendChild(p);
@@ -9411,7 +9418,7 @@ private updateDummyNode(preventSelect = false) {
 
     private refreshRomSelectOptions() {
         if (!this.romSelectEl) return;
-        this.romSelectEl.innerHTML = '';
+        this.romSelectEl.textContent = '';
 
         const allRoms = this.getAllAvailableRoms(this.plugin.settings.activeSystem);
         allRoms.forEach((rom) => {
@@ -10015,7 +10022,7 @@ private updateDummyNode(preventSelect = false) {
                 if (document.hidden) {
                     // Only pause audio when the tab/window is truly hidden (actual app switch)
                     if (this.audioCtx && this.audioCtx.state === 'running') {
-                        try { this.audioCtx.suspend(); } catch (e) {}
+                        try { this.audioCtx.suspend(); } catch { /* ignore */ }
                     }
                     if (this.psxEngine) {
                         this.psxEngine.pause();
@@ -10025,7 +10032,7 @@ private updateDummyNode(preventSelect = false) {
             this.onWindowFocus = () => {
                 if (!document.hidden) {
                     if (this.isRunning && this.audioCtx && this.audioCtx.state === 'suspended') {
-                        try { this.audioCtx.resume(); } catch (e) {}
+                        try { this.audioCtx.resume(); } catch { /* ignore */ }
                     }
                     if (this.psxEngine) {
                         this.psxEngine.resume();
@@ -10046,7 +10053,7 @@ private updateDummyNode(preventSelect = false) {
             // NES
             this.audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
             if (this.audioCtx.state === 'suspended') {
-                try { await this.audioCtx.resume(); } catch (e) {}
+                try { await this.audioCtx.resume(); } catch { /* ignore */ }
             }
             
             this.nes = new NES({
@@ -10140,7 +10147,7 @@ private updateDummyNode(preventSelect = false) {
             });
             this.scriptNode.connect(this.audioCtx.destination);
             if (this.audioCtx.state === 'suspended') {
-                try { await this.audioCtx.resume(); } catch (e) {}
+                try { await this.audioCtx.resume(); } catch { /* ignore */ }
             }
 
             this.nes.loadROM(romString);
@@ -10524,7 +10531,7 @@ private updateDummyNode(preventSelect = false) {
                         } else {
                             this.activeRenderer.render(this.activeScene, this.current3DCamera);
                         }
-                    } catch (e) {}
+                    } catch { /* ignore */ }
                 }
 
                 // User-controlled flag linger / occlusion delay to ensure target scene has fully settled
