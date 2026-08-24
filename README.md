@@ -38,10 +38,20 @@ Place your files in the respective folders inside the plugin's `assets/` directo
 
 ## 💎 Also Check Out: Crystal Canvas
 
-If you enjoy 3D and spatial experiences on Obsidian Canvas, check out **[Crystal Canvas](https://www.momansour.com/crystal-canvas)** — the ultimate visual workspace and 3D spatial organization experience for Obsidian Canvas.
+If you enjoy interactive 3D hardware and spatial experiences on the Obsidian Canvas, check out **[Crystal Canvas](https://www.momansour.com/crystal-canvas)** — the ultimate visual workspace and 3D spatial organization engine for Obsidian.
 
-- 🌐 **[Explore Crystal Canvas](https://www.momansour.com/crystal-canvas)**
-- 📚 **[Documentation & Guides](https://www.momansour.com/docs)**
+[![Crystal Canvas](https://img.shields.io/badge/Crystal%20Canvas-Learn%20More%20%E2%86%92-6366f1?style=for-the-badge&logo=obsidian)](https://www.momansour.com/crystal-canvas)
+[![Documentation](https://img.shields.io/badge/Documentation-Guides%20%26%20Docs-059669?style=for-the-badge&logo=googledocs)](https://www.momansour.com/docs)
+
+### ✨ What is Crystal Canvas?
+Crystal Canvas elevates Obsidian Canvas into a high-performance, hardware-accelerated visual workspace designed for researchers, worldbuilders, and visual thinkers:
+
+- 🚀 **High-Performance GPU Architecture**: Hardware-accelerated rendering delivering buttery-smooth 144+ FPS fluid canvas navigation even with massive workspaces.
+- 🎨 **3D Asset Gallery & Atmospheric Shaders**: Bring your canvas to life with interactive 3D visual assets, procedural WebGL background environments, and modern styling.
+- 🗺️ **Interactive Mini-Map & Viewport HUD**: Real-time spatial radar, cluster tracking, and instant canvas overview navigation.
+- 🔄 **100% JSON Canvas 1.0 Spec Compatible**: Seamlessly reads and writes standard `.canvas` files with zero lock-in.
+
+👉 **[Discover Crystal Canvas at momansour.com →](https://www.momansour.com/crystal-canvas)** | 📖 **[Read the Documentation →](https://www.momansour.com/docs)**
 
 ---
 
