@@ -1,11 +1,4 @@
-if (typeof window !== 'undefined') {
-    window.addEventListener('error', (e) => {
-        try {
-            require('fs').appendFileSync('d:\\test vault\\obsidian-error.log', new Date().toISOString() + ': ' + e.message + '\n' + (e.error?.stack || '') + '\n\n');
-        } catch (err) {}
-    });
-}
-import { Plugin, ItemView, Notice, setIcon } from 'obsidian';
+import { Plugin, ItemView, Notice, setIcon, setCssStyles } from 'obsidian';
 // @ts-ignore
 import { NES } from 'jsnes';
 import { PsxEngine } from './psx-engine';
@@ -2551,10 +2544,10 @@ class TetrisPanel {
         this.containerEl.className = 'tetris-canvas-panel';
 
         if (this.plugin.settings && this.plugin.settings.hudPosition) {
-            this.containerEl.style.bottom = 'auto';
-            this.containerEl.style.right = 'auto';
-            this.containerEl.style.left = this.plugin.settings.hudPosition.left + 'px';
-            this.containerEl.style.top = this.plugin.settings.hudPosition.top + 'px';
+            setCssStyles(this.containerEl as any, { bottom: 'auto' });
+            setCssStyles(this.containerEl as any, { right: 'auto' });
+            setCssStyles(this.containerEl as any, { left: this.plugin.settings.hudPosition.left + 'px' });
+            setCssStyles(this.containerEl as any, { top: this.plugin.settings.hudPosition.top + 'px' });
         }
 
         if (this.plugin.settings && this.plugin.settings.selectedRoomEnvironment) {
@@ -2620,10 +2613,10 @@ class TetrisPanel {
             });
             const svg = logoContainer.querySelector('svg');
             if (svg) {
-                svg.style.backgroundColor = 'transparent';
-                svg.style.display = 'block';
-                svg.style.width = '100%';
-                svg.style.height = '100%';
+                setCssStyles(svg as any, { backgroundColor: 'transparent' });
+                setCssStyles(svg as any, { display: 'block' });
+                setCssStyles(svg as any, { width: '100%' });
+                setCssStyles(svg as any, { height: '100%' });
             }
         } catch (e) {
             console.error("Failed to load title pill lottie animation:", e);
@@ -2682,10 +2675,10 @@ class TetrisPanel {
             const relLeft = rect.left - parentRect.left;
             const relTop = rect.top - parentRect.top;
 
-            this.containerEl.style.bottom = 'auto';
-            this.containerEl.style.right = 'auto';
-            this.containerEl.style.left = relLeft + 'px';
-            this.containerEl.style.top = relTop + 'px';
+            setCssStyles(this.containerEl as any, { bottom: 'auto' });
+            setCssStyles(this.containerEl as any, { right: 'auto' });
+            setCssStyles(this.containerEl as any, { left: relLeft + 'px' });
+            setCssStyles(this.containerEl as any, { top: relTop + 'px' });
 
             panelStartX = relLeft;
             panelStartY = relTop;
@@ -2697,8 +2690,8 @@ class TetrisPanel {
             if (!dragging) return;
             const dx = e.clientX - dragStartX;
             const dy = e.clientY - dragStartY;
-            this.containerEl.style.left = (panelStartX + dx) + 'px';
-            this.containerEl.style.top = (panelStartY + dy) + 'px';
+            setCssStyles(this.containerEl as any, { left: (panelStartX + dx) + 'px' });
+            setCssStyles(this.containerEl as any, { top: (panelStartY + dy) + 'px' });
         });
         document.addEventListener('mouseup', () => {
             if (dragging) {
@@ -2717,10 +2710,10 @@ class TetrisPanel {
         this.previewCanvas = document.createElement('canvas');
         this.previewCanvas.width = this.SCREEN_WIDTH;
         this.previewCanvas.height = this.SCREEN_HEIGHT;
-        this.previewCanvas.style.width = '100%';
-        this.previewCanvas.style.height = '100%';
-        this.previewCanvas.style.display = 'none';
-        this.previewCanvas.style.imageRendering = 'pixelated';
+        setCssStyles(this.previewCanvas as any, { width: '100%' });
+        setCssStyles(this.previewCanvas as any, { height: '100%' });
+        setCssStyles(this.previewCanvas as any, { display: 'none' });
+        setCssStyles(this.previewCanvas as any, { imageRendering: 'pixelated' });
         this.previewCtx = this.previewCanvas.getContext('2d')!;
         this.previewCtx.imageSmoothingEnabled = false;
 
@@ -2739,22 +2732,22 @@ class TetrisPanel {
 
         // 1. Grid Resolution Slider (1x to 6x)
         const resSliderContainer = document.createElement('div');
-        resSliderContainer.style.display = 'flex';
-        resSliderContainer.style.flexDirection = 'column';
-        resSliderContainer.style.gap = '4px';
+        setCssStyles(resSliderContainer as any, { display: 'flex' });
+        setCssStyles(resSliderContainer as any, { flexDirection: 'column' });
+        setCssStyles(resSliderContainer as any, { gap: '4px' });
 
         const resHeaderRow = document.createElement('div');
-        resHeaderRow.style.display = 'flex';
-        resHeaderRow.style.justifyContent = 'space-between';
-        resHeaderRow.style.alignItems = 'center';
-        resHeaderRow.style.fontSize = '9px';
-        resHeaderRow.style.color = '#a0a0a8';
+        setCssStyles(resHeaderRow as any, { display: 'flex' });
+        setCssStyles(resHeaderRow as any, { justifyContent: 'space-between' });
+        setCssStyles(resHeaderRow as any, { alignItems: 'center' });
+        setCssStyles(resHeaderRow as any, { fontSize: '9px' });
+        setCssStyles(resHeaderRow as any, { color: '#a0a0a8' });
 
         const resLabel = document.createElement('span');
         resLabel.innerText = 'Canvas Matrix Grid Resolution';
 
         const resBadge = document.createElement('span');
-        resBadge.style.cssText = 'color:#00ff88; font-weight:bold; font-family:monospace;';
+        setCssStyles(resBadge as any, {"color":"#00ff88","fontWeight":"bold","fontFamily":"monospace"});
 
         resHeaderRow.appendChild(resLabel);
         resHeaderRow.appendChild(resBadge);
@@ -2792,22 +2785,22 @@ class TetrisPanel {
 
         // 2. Pixel Scale Slider (1x to 6x)
         const pixelScaleSliderContainer = document.createElement('div');
-        pixelScaleSliderContainer.style.display = 'flex';
-        pixelScaleSliderContainer.style.flexDirection = 'column';
-        pixelScaleSliderContainer.style.gap = '4px';
+        setCssStyles(pixelScaleSliderContainer as any, { display: 'flex' });
+        setCssStyles(pixelScaleSliderContainer as any, { flexDirection: 'column' });
+        setCssStyles(pixelScaleSliderContainer as any, { gap: '4px' });
 
         const scaleHeaderRow = document.createElement('div');
-        scaleHeaderRow.style.display = 'flex';
-        scaleHeaderRow.style.justifyContent = 'space-between';
-        scaleHeaderRow.style.alignItems = 'center';
-        scaleHeaderRow.style.fontSize = '9px';
-        scaleHeaderRow.style.color = '#a0a0a8';
+        setCssStyles(scaleHeaderRow as any, { display: 'flex' });
+        setCssStyles(scaleHeaderRow as any, { justifyContent: 'space-between' });
+        setCssStyles(scaleHeaderRow as any, { alignItems: 'center' });
+        setCssStyles(scaleHeaderRow as any, { fontSize: '9px' });
+        setCssStyles(scaleHeaderRow as any, { color: '#a0a0a8' });
 
         const scaleLabel = document.createElement('span');
         scaleLabel.innerText = 'Node Pixel Footprint Scale';
 
         const scaleBadge = document.createElement('span');
-        scaleBadge.style.cssText = 'color:#00ff88; font-weight:bold; font-family:monospace;';
+        setCssStyles(scaleBadge as any, {"color":"#00ff88","fontWeight":"bold","fontFamily":"monospace"});
 
         scaleHeaderRow.appendChild(scaleLabel);
         scaleHeaderRow.appendChild(scaleBadge);
@@ -2865,9 +2858,9 @@ class TetrisPanel {
         this.containerEl.appendChild(systemLogoSwitcher);
 
         const romSelectContainer = document.createElement('div');
-        romSelectContainer.style.display = 'flex';
-        romSelectContainer.style.flexDirection = 'column';
-        romSelectContainer.style.gap = '6px';
+        setCssStyles(romSelectContainer as any, { display: 'flex' });
+        setCssStyles(romSelectContainer as any, { flexDirection: 'column' });
+        setCssStyles(romSelectContainer as any, { gap: '6px' });
 
         this.romSelectEl = document.createElement('select');
         this.romSelectEl.className = 'tetris-select';
@@ -2876,7 +2869,7 @@ class TetrisPanel {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = '.nes';
-        fileInput.style.display = 'none';
+        setCssStyles(fileInput as any, { display: 'none' });
 
         fileInput.onchange = (e: any) => {
             const file = e.target.files?.[0];
@@ -2928,9 +2921,9 @@ class TetrisPanel {
 
         // Controller Scale Slider
         const scaleSliderContainer = document.createElement('div');
-        scaleSliderContainer.style.display = 'flex';
-        scaleSliderContainer.style.flexDirection = 'column';
-        scaleSliderContainer.style.gap = '4px';
+        setCssStyles(scaleSliderContainer as any, { display: 'flex' });
+        setCssStyles(scaleSliderContainer as any, { flexDirection: 'column' });
+        setCssStyles(scaleSliderContainer as any, { gap: '4px' });
 
         const scaleSlider = document.createElement('input');
         scaleSlider.type = 'range';
@@ -2947,13 +2940,13 @@ class TetrisPanel {
         scaleSliderContainer.appendChild(scaleSlider);
 
         const displayControlsRow = document.createElement('div');
-        displayControlsRow.style.display = 'flex';
-        displayControlsRow.style.gap = '6px';
-        displayControlsRow.style.marginTop = '4px';
+        setCssStyles(displayControlsRow as any, { display: 'flex' });
+        setCssStyles(displayControlsRow as any, { gap: '6px' });
+        setCssStyles(displayControlsRow as any, { marginTop: '4px' });
 
         const ctrlToggleBtn = document.createElement('button');
         ctrlToggleBtn.className = 'tetris-btn secondary';
-        ctrlToggleBtn.style.flex = '1';
+        setCssStyles(ctrlToggleBtn as any, { flex: '1' });
         ctrlToggleBtn.innerText = this.isControllerVisible ? '🎮 GAMEPAD ON' : '🎮 GAMEPAD OFF';
         ctrlToggleBtn.onclick = () => {
             this.toggleControllerVisibility();
@@ -2962,7 +2955,7 @@ class TetrisPanel {
 
         const crtToggleBtn = document.createElement('button');
         crtToggleBtn.className = 'tetris-btn secondary';
-        crtToggleBtn.style.flex = '1';
+        setCssStyles(crtToggleBtn as any, { flex: '1' });
         crtToggleBtn.innerText = this.isCrtActive ? '📺 CRT ON' : '📺 CRT OFF';
         crtToggleBtn.onclick = () => {
             this.isCrtActive = !this.isCrtActive;
@@ -2978,7 +2971,7 @@ class TetrisPanel {
 
         const shapeToggleBtn = document.createElement('button');
         shapeToggleBtn.className = 'tetris-btn secondary';
-        shapeToggleBtn.style.flex = '1';
+        setCssStyles(shapeToggleBtn as any, { flex: '1' });
         const updateShapeToggleText = () => {
             const isBubble = (this.masterState as any).crtScreenShape === 'vintage_bubble';
             shapeToggleBtn.innerText = isBubble ? '🕹️ BUBBLE CRT' : '📺 FLAT CRT';
@@ -3002,17 +2995,17 @@ class TetrisPanel {
         displayControlsRow.appendChild(shapeToggleBtn);
 
         const controllerSectionContent = document.createElement('div');
-        controllerSectionContent.style.display = 'flex';
-        controllerSectionContent.style.flexDirection = 'column';
-        controllerSectionContent.style.gap = '6px';
+        setCssStyles(controllerSectionContent as any, { display: 'flex' });
+        setCssStyles(controllerSectionContent as any, { flexDirection: 'column' });
+        setCssStyles(controllerSectionContent as any, { gap: '6px' });
         controllerSectionContent.appendChild(scaleSliderContainer);
         controllerSectionContent.appendChild(displayControlsRow);
 
         // Display & CRT Overlay Toggles inside Advanced Settings
         const overlayControlsGroup = document.createElement('div');
-        overlayControlsGroup.style.display = 'flex';
-        overlayControlsGroup.style.flexDirection = 'column';
-        overlayControlsGroup.style.gap = '6px';
+        setCssStyles(overlayControlsGroup as any, { display: 'flex' });
+        setCssStyles(overlayControlsGroup as any, { flexDirection: 'column' });
+        setCssStyles(overlayControlsGroup as any, { gap: '6px' });
 
         const ctrlBtn = document.createElement('button');
         ctrlBtn.className = 'tetris-btn secondary';
@@ -3058,9 +3051,9 @@ class TetrisPanel {
 
         const advContent = document.createElement('div');
         advContent.className = 'tetris-advanced-content';
-        advContent.style.maxHeight = '420px';
-        advContent.style.overflowY = 'auto';
-        advContent.style.display = 'none'; // Closed by default as requested
+        setCssStyles(advContent as any, { maxHeight: '420px' });
+        setCssStyles(advContent as any, { overflowY: 'auto' });
+        setCssStyles(advContent as any, { display: 'none' }); // Closed by default as requested
 
         advContent.addEventListener('wheel', (e: WheelEvent) => {
             if ((e.target as HTMLElement).closest('.tetris-studio-suite-scrollable, .sfx-cards-scroll-list, .tetris-sfx-studio-container')) return;
@@ -3199,9 +3192,9 @@ class TetrisPanel {
         // 6. Settings Toggle Drawer Button
         const settingsBtn = createIconButton('settings', 'Toggle Advanced Console & Emulator Settings', () => {
             const isOpen = advContent.style.display !== 'none';
-            advContent.style.display = isOpen ? 'none' : 'flex';
-            advContent.style.flexDirection = 'column';
-            advContent.style.gap = '6px';
+            setCssStyles(advContent as any, { display: isOpen ? 'none' : 'flex' });
+            setCssStyles(advContent as any, { flexDirection: 'column' });
+            setCssStyles(advContent as any, { gap: '6px' });
             if (!isOpen) settingsBtn.classList.add('active');
             else settingsBtn.classList.remove('active');
         });
@@ -3218,7 +3211,7 @@ class TetrisPanel {
 
         // Start app 100% minimized on launch without flashing maximized HUD
         this.isMinimized = true;
-        this.containerEl.style.display = 'none';
+        setCssStyles(this.containerEl as any, { display: 'none' });
         
         // Restore floating button position from settings if available
         if (this.plugin && this.plugin.settings && this.plugin.settings.floatingGamepadPos) {
@@ -3290,27 +3283,27 @@ class TetrisPanel {
     private buildSfxStudio(): HTMLElement {
         const studioContainer = document.createElement('div');
         studioContainer.className = 'tetris-sfx-studio-container';
-        studioContainer.style.cssText = 'display:flex; flex-direction:column; gap:8px; width:100%;';
+        setCssStyles(studioContainer as any, {"display":"flex","flexDirection":"column","gap":"8px","width":"100%"});
 
         // 1. System Tab Switcher (NES vs PS1)
         const tabHeader = document.createElement('div');
-        tabHeader.style.cssText = 'display:flex; gap:6px; margin-bottom:4px;';
+        setCssStyles(tabHeader as any, {"display":"flex","gap":"6px","marginBottom":"4px"});
 
         let activeTab: 'nes' | 'psx' = this.plugin.settings.activeSystem || 'nes';
 
         const nesTabBtn = document.createElement('button');
         nesTabBtn.className = 'tetris-btn ' + (activeTab === 'nes' ? 'primary' : 'secondary');
         nesTabBtn.innerText = '🎮 NES SAMPLES (17)';
-        nesTabBtn.style.flex = '1';
-        nesTabBtn.style.fontSize = '10px';
-        nesTabBtn.style.padding = '4px 6px';
+        setCssStyles(nesTabBtn as any, { flex: '1' });
+        setCssStyles(nesTabBtn as any, { fontSize: '10px' });
+        setCssStyles(nesTabBtn as any, { padding: '4px 6px' });
 
         const psxTabBtn = document.createElement('button');
         psxTabBtn.className = 'tetris-btn ' + (activeTab === 'psx' ? 'primary' : 'secondary');
         psxTabBtn.innerText = '🕹️ PS1 SAMPLES (21)';
-        psxTabBtn.style.flex = '1';
-        psxTabBtn.style.fontSize = '10px';
-        psxTabBtn.style.padding = '4px 6px';
+        setCssStyles(psxTabBtn as any, { flex: '1' });
+        setCssStyles(psxTabBtn as any, { fontSize: '10px' });
+        setCssStyles(psxTabBtn as any, { padding: '4px 6px' });
 
         tabHeader.appendChild(nesTabBtn);
         tabHeader.appendChild(psxTabBtn);
@@ -3319,32 +3312,32 @@ class TetrisPanel {
         // 2. Cards Scroll List Container
         const cardsList = document.createElement('div');
         cardsList.className = 'sfx-cards-scroll-list';
-        cardsList.style.cssText = 'display:flex; flex-direction:column; gap:6px; max-height:280px; overflow-y:auto; padding-right:4px;';
+        setCssStyles(cardsList as any, {"display":"flex","flexDirection":"column","gap":"6px","maxHeight":"280px","overflowY":"auto","paddingRight":"4px"});
 
         cardsList.addEventListener('wheel', (e) => {
             e.stopPropagation();
         }, { passive: true });
 
         const renderCards = () => {
-            cardsList.innerHTML = '';
+            cardsList.empty();
             const allFiles = this.sfxEngine.availableFiles;
             const entries = Object.entries(SFX_METADATA).filter(([_, meta]) => meta.system === activeTab);
 
             entries.forEach(([id, meta]) => {
                 const card = document.createElement('div');
                 card.className = 'sfx-card-item';
-                card.style.cssText = 'display:flex; flex-direction:column; gap:5px; padding:7px 8px; background:rgba(255, 255, 255, 0.03); border:1px solid rgba(255, 255, 255, 0.08); border-radius:6px;';
+                setCssStyles(card as any, {"display":"flex","flexDirection":"column","gap":"5px","padding":"7px 8px","background":"rgba(255, 255, 255, 0.03)","border":"1px solid rgba(255, 255, 255, 0.08)","borderRadius":"6px"});
 
                 // Header Row
                 const headerRow = document.createElement('div');
-                headerRow.style.cssText = 'display:flex; justify-content:space-between; align-items:center;';
+                setCssStyles(headerRow as any, {"display":"flex","justifyContent":"space-between","alignItems":"center"});
 
                 const titleEl = document.createElement('div');
-                titleEl.style.cssText = 'font-size:11px; font-weight:bold; color:#00ffaa; font-family:monospace;';
+                setCssStyles(titleEl as any, {"fontSize":"11px","fontWeight":"bold","color":"#00ffaa","fontFamily":"monospace"});
                 titleEl.innerText = `[${meta.code}] ${meta.name}`;
 
                 const catBadge = document.createElement('span');
-                catBadge.style.cssText = 'font-size:9px; color:#888; background:rgba(255,255,255,0.06); padding:2px 5px; border-radius:3px;';
+                setCssStyles(catBadge as any, {"fontSize":"9px","color":"#888","background":"rgba(255,255,255,0.06)","padding":"2px 5px","borderRadius":"3px"});
                 catBadge.innerText = meta.category;
 
                 headerRow.appendChild(titleEl);
@@ -3353,16 +3346,16 @@ class TetrisPanel {
 
                 // Description
                 const descEl = document.createElement('div');
-                descEl.style.cssText = 'font-size:9px; color:#999; line-height:1.2;';
+                setCssStyles(descEl as any, {"fontSize":"9px","color":"#999","lineHeight":"1.2"});
                 descEl.innerText = meta.description;
                 card.appendChild(descEl);
 
                 // Sample File Custom Dropdown & Test Row
                 const assignRow = document.createElement('div');
-                assignRow.style.cssText = 'display:flex; gap:6px; align-items:center; margin-top:2px;';
+                setCssStyles(assignRow as any, {"display":"flex","gap":"6px","alignItems":"center","marginTop":"2px"});
 
                 const selectWrap = document.createElement('div');
-                selectWrap.style.cssText = 'position:relative; flex:1; min-width:0;';
+                setCssStyles(selectWrap as any, {"position":"relative","flex":"1","minWidth":"0"});
 
                 const currentConfig = this.sfxEngine.getConfig(id);
                 let currentAssigned = currentConfig.sampleFile || '';
@@ -3373,14 +3366,14 @@ class TetrisPanel {
 
                 const triggerBtn = document.createElement('button');
                 triggerBtn.className = 'tetris-btn';
-                triggerBtn.style.cssText = 'width:100%; display:flex; justify-content:space-between; align-items:center; font-size:10px; padding:3px 6px; font-family:monospace; background:rgba(0,0,0,0.5); text-align:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; border:1px solid rgba(255,255,255,0.15); border-radius:4px; color:#eee; cursor:pointer;';
+                setCssStyles(triggerBtn as any, {"width":"100%","display":"flex","justifyContent":"space-between","alignItems":"center","fontSize":"10px","padding":"3px 6px","fontFamily":"monospace","background":"rgba(0,0,0,0.5)","textAlign":"left","overflow":"hidden","textOverflow":"ellipsis","whiteSpace":"nowrap","border":"1px solid rgba(255,255,255,0.15)","borderRadius":"4px","color":"#eee","cursor":"pointer"});
 
                 const triggerLabel = document.createElement('span');
-                triggerLabel.style.cssText = 'overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;';
+                setCssStyles(triggerLabel as any, {"overflow":"hidden","textOverflow":"ellipsis","whiteSpace":"nowrap","flex":"1"});
                 triggerLabel.innerText = currentAssigned || '— None / Muted —';
 
                 const arrowIcon = document.createElement('span');
-                arrowIcon.style.cssText = 'margin-left:4px; color:#888; font-size:8px;';
+                setCssStyles(arrowIcon as any, {"marginLeft":"4px","color":"#888","fontSize":"8px"});
                 arrowIcon.innerText = '▼';
 
                 triggerBtn.appendChild(triggerLabel);
@@ -3390,25 +3383,25 @@ class TetrisPanel {
                 // Floating Options Menu
                 const menuList = document.createElement('div');
                 menuList.className = 'sfx-custom-dropdown-menu';
-                menuList.style.cssText = 'display:none; position:absolute; top:100%; left:0; width:max-content; min-width:320px; max-width:440px; max-height:220px; overflow-y:auto; overflow-x:hidden; background:#14151e; border:1.5px solid #00ffaa; border-radius:6px; box-shadow:0 12px 36px rgba(0,0,0,0.95); z-index:999999; margin-top:4px; padding:4px; box-sizing:border-box; flex-direction:column; gap:2px;';
+                setCssStyles(menuList as any, {"display":"none","position":"absolute","top":"100%","left":"0","width":"max-content","minWidth":"320px","maxWidth":"440px","maxHeight":"220px","overflowY":"auto","overflowX":"hidden","background":"#14151e","border":"1.5px solid #00ffaa","borderRadius":"6px","boxShadow":"0 12px 36px rgba(0,0,0,0.95)","zIndex":"999999","marginTop":"4px","padding":"4px","boxSizing":"border-box","flexDirection":"column","gap":"2px"});
 
                 menuList.addEventListener('wheel', (e) => e.stopPropagation(), { passive: true });
 
                 const closeMenu = () => {
-                    menuList.style.display = 'none';
+                    setCssStyles(menuList as any, { display: 'none' });
                     this.sfxEngine.stopAudition();
                 };
 
                 // Option: None / Muted
                 const noneItem = document.createElement('div');
-                noneItem.style.cssText = 'display:flex; align-items:center; flex-shrink:0; height:28px; min-height:28px; padding:0 8px; font-size:11px; font-family:monospace; color:#888; border-radius:4px; cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; box-sizing:border-box; margin-bottom:2px;';
+                setCssStyles(noneItem as any, {"display":"flex","alignItems":"center","flexShrink":"0","height":"28px","minHeight":"28px","padding":"0 8px","fontSize":"11px","fontFamily":"monospace","color":"#888","borderRadius":"4px","cursor":"pointer","overflow":"hidden","textOverflow":"ellipsis","whiteSpace":"nowrap","boxSizing":"border-box","marginBottom":"2px"});
                 noneItem.innerText = '— None / Muted —';
                 noneItem.onmouseenter = () => {
-                    noneItem.style.background = 'rgba(255,255,255,0.1)';
+                    setCssStyles(noneItem as any, { background: 'rgba(255,255,255,0.1)' });
                     this.sfxEngine.stopAudition();
                 };
                 noneItem.onmouseleave = () => {
-                    noneItem.style.background = 'transparent';
+                    setCssStyles(noneItem as any, { background: 'transparent' });
                 };
                 noneItem.onclick = (e) => {
                     e.stopPropagation();
@@ -3422,21 +3415,21 @@ class TetrisPanel {
                 // Options: All Audio Files
                 allFiles.forEach(f => {
                     const item = document.createElement('div');
-                    item.style.cssText = 'display:flex; align-items:center; flex-shrink:0; height:28px; min-height:28px; padding:0 8px; font-size:11px; font-family:monospace; color:#d0d4e0; border-radius:4px; cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; box-sizing:border-box; margin-bottom:2px;';
+                    setCssStyles(item as any, {"display":"flex","alignItems":"center","flexShrink":"0","height":"28px","minHeight":"28px","padding":"0 8px","fontSize":"11px","fontFamily":"monospace","color":"#d0d4e0","borderRadius":"4px","cursor":"pointer","overflow":"hidden","textOverflow":"ellipsis","whiteSpace":"nowrap","boxSizing":"border-box","marginBottom":"2px"});
                     item.innerText = f;
 
                     if (f === currentAssigned) {
-                        item.style.color = '#00ffaa';
-                        item.style.fontWeight = 'bold';
-                        item.style.background = 'rgba(0, 255, 170, 0.12)';
+                        setCssStyles(item as any, { color: '#00ffaa' });
+                        setCssStyles(item as any, { fontWeight: 'bold' });
+                        setCssStyles(item as any, { background: 'rgba(0, 255, 170, 0.12)' });
                     }
 
                     item.onmouseenter = () => {
-                        item.style.background = 'rgba(0, 255, 170, 0.25)';
+                        setCssStyles(item as any, { background: 'rgba(0, 255, 170, 0.25)' });
                         this.sfxEngine.startAudition(f, currentConfig.volume, currentConfig.pitchShift);
                     };
                     item.onmouseleave = () => {
-                        item.style.background = (f === currentAssigned ? 'rgba(0, 255, 170, 0.12)' : 'transparent');
+                        setCssStyles(item as any, { background: (f === currentAssigned ? 'rgba(0, 255, 170, 0.12)' : 'transparent') });
                         this.sfxEngine.stopAudition();
                     };
                     item.onclick = (e) => {
@@ -3452,10 +3445,10 @@ class TetrisPanel {
 
                 triggerBtn.onclick = (e) => {
                     e.stopPropagation();
-                    const isVisible = menuList.style.display === 'flex';
-                    document.querySelectorAll('.sfx-custom-dropdown-menu').forEach((m: any) => { m.style.display = 'none'; });
+                    const isVisible = ((menuList as HTMLElement).style.display == 'flex' );
+                    document.querySelectorAll('.sfx-custom-dropdown-menu').forEach((m: any) => { setCssStyles(m as any, { display: 'none' }); });
                     if (!isVisible) {
-                        menuList.style.display = 'flex';
+                        setCssStyles(menuList as any, { display: 'flex' });
                     } else {
                         closeMenu();
                     }
@@ -3466,7 +3459,7 @@ class TetrisPanel {
                 // Play / Test Button
                 const playBtn = document.createElement('button');
                 playBtn.className = 'tetris-btn';
-                playBtn.style.cssText = 'padding:2px 8px; font-size:10px; white-space:nowrap; background:#00ffaa; color:#000; font-weight:bold; cursor:pointer;';
+                setCssStyles(playBtn as any, {"padding":"2px 8px","fontSize":"10px","whiteSpace":"nowrap","background":"#00ffaa","color":"#000","fontWeight":"bold","cursor":"pointer"});
                 playBtn.innerText = '▶ Test';
                 playBtn.onclick = () => {
                     const selectedFile = currentAssigned;
@@ -3475,8 +3468,8 @@ class TetrisPanel {
                     } else {
                         this.sfxEngine.preview(id);
                     }
-                    playBtn.style.background = '#ffffff';
-                    setTimeout(() => { playBtn.style.background = '#00ffaa'; }, 180);
+                    setCssStyles(playBtn as any, { background: '#ffffff' });
+                    setTimeout(() => { setCssStyles(playBtn as any, { background: '#00ffaa' }); }, 180);
                 };
 
                 assignRow.appendChild(selectWrap);
@@ -3485,13 +3478,13 @@ class TetrisPanel {
 
                 // Volume & Pitch Controls Row
                 const controlsRow = document.createElement('div');
-                controlsRow.style.cssText = 'display:flex; gap:8px; align-items:center; margin-top:2px;';
+                setCssStyles(controlsRow as any, {"display":"flex","gap":"8px","alignItems":"center","marginTop":"2px"});
 
                 // Volume Slider
                 const volWrap = document.createElement('div');
-                volWrap.style.cssText = 'flex:1; display:flex; flex-direction:column; gap:2px;';
+                setCssStyles(volWrap as any, {"flex":"1","display":"flex","flexDirection":"column","gap":"2px"});
                 const volHeader = document.createElement('div');
-                volHeader.style.cssText = 'display:flex; justify-content:space-between; font-size:8px; color:#777;';
+                setCssStyles(volHeader as any, {"display":"flex","justifyContent":"space-between","fontSize":"8px","color":"#777"});
                 const volTitle = document.createElement('span'); volTitle.innerText = 'Volume';
                 const volBadge = document.createElement('span'); volBadge.innerText = `${Math.round((currentConfig.volume ?? meta.defaultVol) * 100)}%`;
                 volHeader.appendChild(volTitle); volHeader.appendChild(volBadge);
@@ -3513,9 +3506,9 @@ class TetrisPanel {
 
                 // Pitch Slider
                 const pitchWrap = document.createElement('div');
-                pitchWrap.style.cssText = 'flex:1; display:flex; flex-direction:column; gap:2px;';
+                setCssStyles(pitchWrap as any, {"flex":"1","display":"flex","flexDirection":"column","gap":"2px"});
                 const pitchHeader = document.createElement('div');
-                pitchHeader.style.cssText = 'display:flex; justify-content:space-between; font-size:8px; color:#777;';
+                setCssStyles(pitchHeader as any, {"display":"flex","justifyContent":"space-between","fontSize":"8px","color":"#777"});
                 const pitchTitle = document.createElement('span'); pitchTitle.innerText = 'Pitch';
                 const pitchBadge = document.createElement('span'); pitchBadge.innerText = `${(currentConfig.pitchShift ?? 1.0).toFixed(2)}x`;
                 pitchHeader.appendChild(pitchTitle); pitchHeader.appendChild(pitchBadge);
@@ -3574,7 +3567,7 @@ class TetrisPanel {
         if (isOn) {
             this.triggerPowerOffSequence();
         } else {
-            if (this.retroStartBtnEl) this.retroStartBtnEl.style.display = 'none';
+            if (this.retroStartBtnEl) setCssStyles(this.retroStartBtnEl as any, { display: 'none' });
             this.pendingStartGridCreation = true;
             if (this.masterState.introEnabled) {
                 this.triggerIntroAnimation(true);
@@ -3592,7 +3585,7 @@ class TetrisPanel {
         const isOff = !this.isConsolePowerOn && !this.isIntroPlaying && !this.hasIntroRun;
 
         if (this.retroStartBtnEl && this.retroStartBtnEl.parentElement === this.boxArtEl) {
-            this.retroStartBtnEl.style.display = isOff ? 'flex' : 'none';
+            setCssStyles(this.retroStartBtnEl as any, { display: isOff ? 'flex' : 'none' });
             return;
         }
 
@@ -3602,7 +3595,7 @@ class TetrisPanel {
 
         const startBtn = document.createElement('button');
         startBtn.className = 'tetris-retro-start-btn';
-        startBtn.innerHTML = 'START';
+        startBtn.setText('START');
         startBtn.title = 'Power On Console & Launch Game';
 
         startBtn.onclick = (e) => {
@@ -3612,7 +3605,7 @@ class TetrisPanel {
 
         this.boxArtEl.appendChild(startBtn);
         this.retroStartBtnEl = startBtn;
-        startBtn.style.display = isOff ? 'flex' : 'none';
+        setCssStyles(startBtn as any, { display: isOff ? 'flex' : 'none' });
     }
 
     private async saveRomStateToDisk(romKey: string, data: any, isBinary: boolean): Promise<boolean> {
@@ -3731,14 +3724,14 @@ class TetrisPanel {
 
             anim.onfinish = () => {
                 if (this.containerEl) {
-                    this.containerEl.style.display = 'none';
-                    this.containerEl.style.transform = '';
-                    this.containerEl.style.opacity = '';
+                    setCssStyles(this.containerEl as any, { display: 'none' });
+                    setCssStyles(this.containerEl as any, { transform: '' });
+                    setCssStyles(this.containerEl as any, { opacity: '' });
                 }
                 this.showFloatingGamepadTrigger();
             };
         } catch (e) {
-            this.containerEl.style.display = 'none';
+            setCssStyles(this.containerEl as any, { display: 'none' });
             this.showFloatingGamepadTrigger();
         }
 
@@ -3766,7 +3759,7 @@ class TetrisPanel {
             this.floatingGamepadBtn = null;
         }
 
-        this.containerEl.style.display = '';
+        setCssStyles(this.containerEl as any, { display: '' });
         const hudRect = this.containerEl.getBoundingClientRect();
         const startLeft = hudRect.left - parentRect.left;
         const startTop = hudRect.top - parentRect.top;
@@ -3905,7 +3898,7 @@ class TetrisPanel {
         const dockSettingsBtn = createDockBtn('settings', 'Open HUD & Settings', () => {
             this.restoreHud();
             const adv = this.containerEl.querySelector('.tetris-advanced-content') as HTMLElement;
-            if (adv) adv.style.display = 'flex';
+            if (adv) setCssStyles(adv as any, { display: 'flex' });
         });
 
         dock.appendChild(dockPowerBtn);
@@ -3924,8 +3917,8 @@ class TetrisPanel {
         let startX = this.floatingGamepadPos ? this.floatingGamepadPos.x : (hostRect.width > 200 ? 30 : 20);
         let startY = this.floatingGamepadPos ? this.floatingGamepadPos.y : (hostRect.height > 200 ? 30 : 20);
 
-        wrapper.style.left = `${startX}px`;
-        wrapper.style.top = `${startY}px`;
+        setCssStyles(wrapper as any, { left: `${startX}px` });
+        setCssStyles(wrapper as any, { top: `${startY}px` });
 
         let isDragging = false;
         let startPointerX = 0;
@@ -3962,8 +3955,8 @@ class TetrisPanel {
             newX = Math.max(8, Math.min(newX, maxW));
             newY = Math.max(8, Math.min(newY, maxH));
 
-            wrapper.style.left = `${newX}px`;
-            wrapper.style.top = `${newY}px`;
+            setCssStyles(wrapper as any, { left: `${newX}px` });
+            setCssStyles(wrapper as any, { top: `${newY}px` });
             this.floatingGamepadPos = { x: newX, y: newY };
         };
 
@@ -4563,11 +4556,11 @@ class TetrisPanel {
         if (document.getElementById('nes-bubble-crt-clip-svg')) return;
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.id = 'nes-bubble-crt-clip-svg';
-        svg.style.position = 'absolute';
-        svg.style.width = '0';
-        svg.style.height = '0';
-        svg.style.pointerEvents = 'none';
-        svg.style.overflow = 'hidden';
+        setCssStyles(svg as any, { position: 'absolute' });
+        setCssStyles(svg as any, { width: '0' });
+        setCssStyles(svg as any, { height: '0' });
+        setCssStyles(svg as any, { pointerEvents: 'none' });
+        setCssStyles(svg as any, { overflow: 'hidden' });
         svg.innerHTML = `<defs>
             <clipPath id="nes-bubble-crt-clip" clipPathUnits="objectBoundingBox">
                 <path d="M 0.080 0.050 Q 0.500 -0.018, 0.920 0.050 C 0.960 0.065, 0.980 0.085, 0.990 0.120 Q 1.018 0.500, 0.990 0.880 C 0.980 0.915, 0.960 0.935, 0.920 0.950 Q 0.500 1.018, 0.080 0.950 C 0.040 0.935, 0.020 0.915, 0.010 0.880 Q -0.018 0.500, 0.010 0.120 C 0.020 0.085, 0.040 0.065, 0.080 0.050 Z" />
@@ -4595,15 +4588,15 @@ class TetrisPanel {
                     svg.setAttribute('class', 'crt-bubble-bezel-svg');
                     svg.setAttribute('viewBox', '0 0 1000 1000');
                     svg.setAttribute('preserveAspectRatio', 'none');
-                    svg.style.position = 'absolute';
-                    svg.style.top = '0';
-                    svg.style.left = '0';
-                    svg.style.width = '100%';
-                    svg.style.height = '100%';
-                    svg.style.pointerEvents = 'none';
-                    svg.style.overflow = 'visible';
-                    svg.style.zIndex = '2';
-                    svg.style.filter = 'drop-shadow(0 0 2px #0a0a0d) drop-shadow(0 25px 60px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 35px rgba(147, 197, 253, 0.22))';
+                    setCssStyles(svg as any, { position: 'absolute' });
+                    setCssStyles(svg as any, { top: '0' });
+                    setCssStyles(svg as any, { left: '0' });
+                    setCssStyles(svg as any, { width: '100%' });
+                    setCssStyles(svg as any, { height: '100%' });
+                    setCssStyles(svg as any, { pointerEvents: 'none' });
+                    setCssStyles(svg as any, { overflow: 'visible' });
+                    setCssStyles(svg as any, { zIndex: '2' });
+                    setCssStyles(svg as any, { filter: 'drop-shadow(0 0 2px #0a0a0d) drop-shadow(0 25px 60px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 35px rgba(147, 197, 253, 0.22))' });
                     svg.innerHTML = `
                         <!-- 14px dark matte bezel body #18181b + 2px #0a0a0d outer rim along smooth 4-arc convex squircle -->
                         <path d="M 80 50 Q 500 -18, 920 50 C 960 65, 980 85, 990 120 Q 1018 500, 990 880 C 980 915, 960 935, 920 950 Q 500 1018, 80 950 C 40 935, 20 915, 10 880 Q -18 500, 10 120 C 20 85, 40 65, 80 50 Z"
@@ -4621,10 +4614,10 @@ class TetrisPanel {
                     `;
                     this.crtOverlayEl.appendChild(svg);
                 } else {
-                    bezelSvg.style.display = 'block';
+                    setCssStyles(bezelSvg as any, { display: 'block' });
                 }
             } else {
-                if (bezelSvg) bezelSvg.style.display = 'none';
+                if (bezelSvg) setCssStyles(bezelSvg as any, { display: 'none' });
             }
         }
     }
@@ -4647,7 +4640,7 @@ class TetrisPanel {
         } else if (warmth < 0) {
             filterStr += ` hue-rotate(${-warmth * 25}deg)`;
         }
-        canvas.style.filter = filterStr;
+        setCssStyles(canvas as any, { filter: filterStr });
 
         if (this.activeRenderer) {
             this.activeRenderer.toneMappingExposure = (s.exposure ?? 1.0) * gamma;
@@ -4656,9 +4649,9 @@ class TetrisPanel {
 
     private buildViewportColorCorrectionContainer(): HTMLElement {
         const container = document.createElement('div');
-        container.style.display = 'flex';
-        container.style.flexDirection = 'column';
-        container.style.gap = '8px';
+        setCssStyles(container as any, { display: 'flex' });
+        setCssStyles(container as any, { flexDirection: 'column' });
+        setCssStyles(container as any, { gap: '8px' });
 
         let saveTimer: any = null;
         const debouncedSave = () => {
@@ -4767,9 +4760,9 @@ class TetrisPanel {
 
     private buildNesCartridgeTunerContainer(): HTMLElement {
         const container = document.createElement('div');
-        container.style.display = 'flex';
-        container.style.flexDirection = 'column';
-        container.style.gap = '8px';
+        setCssStyles(container as any, { display: 'flex' });
+        setCssStyles(container as any, { flexDirection: 'column' });
+        setCssStyles(container as any, { gap: '8px' });
 
         const makeSlider = (label: string, min: number, max: number, step: number, getValue: () => number, setValue: (val: number) => void, description?: string) => {
             const card = document.createElement('div');
@@ -4852,7 +4845,7 @@ class TetrisPanel {
         const resetBtn = document.createElement('button');
         resetBtn.className = 'tetris-suite-btn pin-btn';
         resetBtn.innerText = '↺ RESET NES CARTRIDGE ALIGNMENT TO DEFAULT';
-        resetBtn.style.marginTop = '4px';
+        setCssStyles(resetBtn as any, { marginTop: '4px' });
         resetBtn.onclick = () => {
             (this.masterState as any).nesCartScale = 0.85;
             (this.masterState as any).nesSlotX = -0.575;
@@ -4887,10 +4880,16 @@ class TetrisPanel {
     private updateStatus() {
         if (!this.statusDisplay) return;
         const totalNodes = this.NES_WIDTH * this.NES_HEIGHT;
-        this.statusDisplay.innerHTML = 
-            "Nodes: <span class='stat-val'>" + totalNodes.toLocaleString() + "</span><br>" +
-            "Resolution: <span class='stat-val'>" + this.NES_WIDTH + "x" + this.NES_HEIGHT + "</span><br>" +
-            "Status: <span class='" + (this.nodesCreated ? "stat-good" : "stat-warn") + "'>" + (this.nodesCreated ? "Ready to play" : "Nodes not created yet") + "</span>";
+        this.statusDisplay.empty();
+    const stLine1 = this.statusDisplay.createDiv();
+    stLine1.appendText('Nodes: ');
+    stLine1.createSpan({ cls: 'stat-val', text: totalNodes.toLocaleString() });
+    const stLine2 = this.statusDisplay.createDiv();
+    stLine2.appendText('Resolution: ');
+    stLine2.createSpan({ cls: 'stat-val', text: this.NES_WIDTH + 'x' + this.NES_HEIGHT });
+    const stLine3 = this.statusDisplay.createDiv();
+    stLine3.appendText('Status: ');
+    stLine3.createSpan({ cls: this.nodesCreated ? 'stat-good' : 'stat-warn', text: this.nodesCreated ? 'Ready to play' : 'Nodes not created yet' });
     }
 
     private async createGrid() {
@@ -4947,12 +4946,12 @@ class TetrisPanel {
         if (!this.overlayCanvas) {
             this.overlayCanvas = document.createElement('canvas');
             this.overlayCanvas.className = 'doom-viewport-overlay';
-            this.overlayCanvas.style.position = 'absolute';
-            this.overlayCanvas.style.top = '0';
-            this.overlayCanvas.style.left = '0';
-            this.overlayCanvas.style.zIndex = '999';
-            this.overlayCanvas.style.pointerEvents = 'none';
-            this.overlayCanvas.style.imageRendering = 'pixelated';
+            setCssStyles(this.overlayCanvas as any, { position: 'absolute' });
+            setCssStyles(this.overlayCanvas as any, { top: '0' });
+            setCssStyles(this.overlayCanvas as any, { left: '0' });
+            setCssStyles(this.overlayCanvas as any, { zIndex: '999' });
+            setCssStyles(this.overlayCanvas as any, { pointerEvents: 'none' });
+            setCssStyles(this.overlayCanvas as any, { imageRendering: 'pixelated' });
             
             canvasContainer.appendChild(this.overlayCanvas);
             this.overlayCtx = this.overlayCanvas.getContext('2d', { alpha: true })!;
@@ -4979,14 +4978,14 @@ class TetrisPanel {
         if (!this.cordSvgEl) {
             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             svg.setAttribute('class', 'nes-dynamic-cord-svg');
-            svg.style.position = 'absolute';
-            svg.style.top = '0';
-            svg.style.left = '0';
-            svg.style.width = '100%';
-            svg.style.height = '100%';
-            svg.style.pointerEvents = 'none';
-            svg.style.zIndex = '1';
-            svg.style.overflow = 'visible';
+            setCssStyles(svg as any, { position: 'absolute' });
+            setCssStyles(svg as any, { top: '0' });
+            setCssStyles(svg as any, { left: '0' });
+            setCssStyles(svg as any, { width: '100%' });
+            setCssStyles(svg as any, { height: '100%' });
+            setCssStyles(svg as any, { pointerEvents: 'none' });
+            setCssStyles(svg as any, { zIndex: '1' });
+            setCssStyles(svg as any, { overflow: 'visible' });
 
             const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
             defs.innerHTML = 
@@ -5730,16 +5729,16 @@ class TetrisPanel {
         
         this.overlayCanvas.width = w;
         this.overlayCanvas.height = h;
-        this.overlayCanvas.style.width = w + 'px';
-        this.overlayCanvas.style.height = h + 'px';
-        this.overlayCanvas.style.left = minX + 'px';
-        this.overlayCanvas.style.top = minY + 'px';
+        setCssStyles(this.overlayCanvas as any, { width: w + 'px' });
+        setCssStyles(this.overlayCanvas as any, { height: h + 'px' });
+        setCssStyles(this.overlayCanvas as any, { left: minX + 'px' });
+        setCssStyles(this.overlayCanvas as any, { top: minY + 'px' });
 
         if (this.crtOverlayEl) {
-            this.crtOverlayEl.style.width = w + 'px';
-            this.crtOverlayEl.style.height = h + 'px';
-            this.crtOverlayEl.style.left = minX + 'px';
-            this.crtOverlayEl.style.top = minY + 'px';
+            setCssStyles(this.crtOverlayEl as any, { width: w + 'px' });
+            setCssStyles(this.crtOverlayEl as any, { height: h + 'px' });
+            setCssStyles(this.crtOverlayEl as any, { left: minX + 'px' });
+            setCssStyles(this.crtOverlayEl as any, { top: minY + 'px' });
         }
 
         if (this.controllerPadEl) {
@@ -5750,8 +5749,8 @@ class TetrisPanel {
     private drawOverlay() {
         if (!this.overlayCtx || !this.overlayCanvas || !this.canvasView.canvas) return;
         if (!this.isConsolePowerOn) {
-            this.overlayCanvas.style.display = 'none';
-            if (this.crtOverlayEl) this.crtOverlayEl.style.display = 'none';
+            setCssStyles(this.overlayCanvas as any, { display: 'none' });
+            if (this.crtOverlayEl) setCssStyles(this.crtOverlayEl as any, { display: 'none' });
             return;
         }
 
@@ -6405,7 +6404,7 @@ private updateDummyNode(preventSelect = false) {
 
     private updateBoxArtCover(gameName: string, coverUrl: string | null) {
         if (!this.boxArtEl) return;
-        this.boxArtEl.innerHTML = '';
+        this.boxArtEl.empty();
 
         if (coverUrl) {
             const img = document.createElement('img');
@@ -6415,12 +6414,12 @@ private updateDummyNode(preventSelect = false) {
         } else {
             const card = document.createElement('div');
             card.className = 'tetris-box-art-placeholder';
-            card.innerHTML = 
-                '<div class="cart-top-grooves"></div>' +
-                '<div class="cart-label">' +
-                    '<div class="cart-title">' + gameName.toUpperCase() + '</div>' +
-                    '<div class="cart-sub">OFFICIAL NINTENDO<br>PAK COMPATIBLE</div>' +
-                '</div>';
+            card.createDiv({ cls: 'cart-top-grooves' });
+    const cLabel = card.createDiv({ cls: 'cart-label' });
+    cLabel.createDiv({ cls: 'cart-title', text: gameName.toUpperCase() });
+    const cSub = cLabel.createDiv({ cls: 'cart-sub' });
+    cSub.createDiv({ text: 'OFFICIAL NINTENDO' });
+    cSub.createDiv({ text: 'PAK COMPATIBLE' });
             this.boxArtEl.appendChild(card);
         }
     }
@@ -6528,8 +6527,8 @@ private updateDummyNode(preventSelect = false) {
         const logoWrapper = document.createElement('div');
         logoWrapper.className = 'curtain-author-logo-wrapper';
         const logoSize = (this.masterState as any).curtainLogoSize ?? 95;
-        logoWrapper.style.width = `${logoSize}px`;
-        logoWrapper.style.height = `${logoSize}px`;
+        setCssStyles(logoWrapper as any, { width: `${logoSize}px` });
+        setCssStyles(logoWrapper as any, { height: `${logoSize}px` });
         this.curtainLogoWrapperEl = logoWrapper;
 
         try {
@@ -6543,10 +6542,10 @@ private updateDummyNode(preventSelect = false) {
             });
             const svg = logoWrapper.querySelector('svg');
             if (svg) {
-                svg.style.backgroundColor = 'transparent';
-                svg.style.display = 'block';
-                svg.style.width = '100%';
-                svg.style.height = '100%';
+                setCssStyles(svg as any, { backgroundColor: 'transparent' });
+                setCssStyles(svg as any, { display: 'block' });
+                setCssStyles(svg as any, { width: '100%' });
+                setCssStyles(svg as any, { height: '100%' });
             }
         } catch (e) {
             console.error("Failed to load curtain lottie animation:", e);
@@ -6873,8 +6872,8 @@ private updateDummyNode(preventSelect = false) {
             if (this.curtainLogoWrapperEl) {
                 const desiredSize = ((s.curtainLogoSize ?? 95)) + 'px';
                 if (this.curtainLogoWrapperEl.style.width !== desiredSize) {
-                    this.curtainLogoWrapperEl.style.width = desiredSize;
-                    this.curtainLogoWrapperEl.style.height = desiredSize;
+                    setCssStyles(this.curtainLogoWrapperEl as any, { width: desiredSize });
+                    setCssStyles(this.curtainLogoWrapperEl as any, { height: desiredSize });
                 }
             }
 
@@ -6969,9 +6968,9 @@ private updateDummyNode(preventSelect = false) {
 
         const logo = this.curtainLogoWrapperEl;
         if (logo) {
-            logo.style.opacity = '0';
-            logo.style.transform = 'scale(0.80)';
-            logo.style.transition = 'none';
+            setCssStyles(logo as any, { opacity: '0' });
+            setCssStyles(logo as any, { transform: 'scale(0.80)' });
+            setCssStyles(logo as any, { transition: 'none' });
         }
 
         this.flagSweepProgress = 0.0;
@@ -7001,11 +7000,11 @@ private updateDummyNode(preventSelect = false) {
             if (logo) {
                 if (progress >= 0.40) {
                     const logoT = Math.min(1.0, (progress - 0.40) / 0.35);
-                    logo.style.opacity = String(logoT);
-                    logo.style.transform = `scale(${0.80 + 0.20 * logoT})`;
+                    setCssStyles(logo as any, { opacity: String(logoT) });
+                    setCssStyles(logo as any, { transform: `scale(${0.80 + 0.20 * logoT})` });
                 } else {
-                    logo.style.opacity = '0';
-                    logo.style.transform = 'scale(0.80)';
+                    setCssStyles(logo as any, { opacity: '0' });
+                    setCssStyles(logo as any, { transform: 'scale(0.80)' });
                 }
             }
 
@@ -7017,8 +7016,8 @@ private updateDummyNode(preventSelect = false) {
                 this.flagCurrentSpeed = baseSpeed;
                 this.flagIsAnimating = false;
                 if (logo) {
-                    logo.style.opacity = '1';
-                    logo.style.transform = 'scale(1)';
+                    setCssStyles(logo as any, { opacity: '1' });
+                    setCssStyles(logo as any, { transform: 'scale(1)' });
                 }
                 curtain.classList.add('in-transit');
                 onCovered();
@@ -7046,9 +7045,9 @@ private updateDummyNode(preventSelect = false) {
 
         const logo = this.curtainLogoWrapperEl;
         if (logo) {
-            logo.style.opacity = '1';
-            logo.style.transform = 'scale(1)';
-            logo.style.transition = 'none';
+            setCssStyles(logo as any, { opacity: '1' });
+            setCssStyles(logo as any, { transform: 'scale(1)' });
+            setCssStyles(logo as any, { transition: 'none' });
         }
 
         this.flagSweepProgress = 0.0;
@@ -7080,11 +7079,11 @@ private updateDummyNode(preventSelect = false) {
             if (logo) {
                 if (progress >= 0.25) {
                     const logoOutT = Math.min(1.0, (progress - 0.25) / 0.35);
-                    logo.style.opacity = String(1.0 - logoOutT);
-                    logo.style.transform = `scale(${1.0 - 0.20 * logoOutT})`;
+                    setCssStyles(logo as any, { opacity: String(1.0 - logoOutT) });
+                    setCssStyles(logo as any, { transform: `scale(${1.0 - 0.20 * logoOutT})` });
                 } else {
-                    logo.style.opacity = '1';
-                    logo.style.transform = 'scale(1)';
+                    setCssStyles(logo as any, { opacity: '1' });
+                    setCssStyles(logo as any, { transform: 'scale(1)' });
                 }
             }
 
@@ -7098,8 +7097,8 @@ private updateDummyNode(preventSelect = false) {
                 curtain.classList.remove('active');
                 curtain.classList.remove('in-transit');
                 if (logo) {
-                    logo.style.opacity = '0';
-                    logo.style.transform = 'scale(0.80)';
+                    setCssStyles(logo as any, { opacity: '0' });
+                    setCssStyles(logo as any, { transform: 'scale(0.80)' });
                 }
                 onComplete();
             }
@@ -7177,7 +7176,7 @@ private updateDummyNode(preventSelect = false) {
 
         const width = this.boxArtEl.clientWidth || 320;
         const canvasHeight = 380;
-        this.boxArtEl.style.height = '380px';
+        setCssStyles(this.boxArtEl as any, { height: '380px' });
 
         const masterState = this.masterState;
 
@@ -7197,11 +7196,11 @@ private updateDummyNode(preventSelect = false) {
         renderer.toneMappingExposure = masterState.exposure;
         renderer.shadowMap.enabled = masterState.shadowsEnabled;
         renderer.shadowMap.type = THREE.PCFShadowMap;
-        renderer.domElement.style.background = 'transparent';
-        renderer.domElement.style.cursor = 'pointer';
-        renderer.domElement.style.borderRadius = '12px';
-        renderer.domElement.style.overflow = 'hidden';
-        renderer.domElement.style.display = 'block';
+        setCssStyles(renderer.domElement as any, { background: 'transparent' });
+        setCssStyles(renderer.domElement as any, { cursor: 'pointer' });
+        setCssStyles(renderer.domElement as any, { borderRadius: '12px' });
+        setCssStyles(renderer.domElement as any, { overflow: 'hidden' });
+        setCssStyles(renderer.domElement as any, { display: 'block' });
         this.boxArtEl.insertBefore(renderer.domElement, this.boxArtEl.firstChild);
         this.ensureCurtainOverlay();
         this.ensureRetroStartButton();
@@ -7905,7 +7904,7 @@ private updateDummyNode(preventSelect = false) {
                     }
 
                     this.lightPickingMode = 'none';
-                    renderer.domElement.style.cursor = 'pointer';
+                    setCssStyles(renderer.domElement as any, { cursor: 'pointer' });
                     if (typeof (this as any).refreshActiveLightInspector === 'function') {
                         (this as any).refreshActiveLightInspector();
                     }
@@ -9327,7 +9326,7 @@ private updateDummyNode(preventSelect = false) {
 
     private refreshRomSelectOptions() {
         if (!this.romSelectEl) return;
-        this.romSelectEl.innerHTML = '';
+        this.romSelectEl.empty();
 
         const allRoms = this.getAllAvailableRoms(this.plugin.settings.activeSystem);
         allRoms.forEach((rom) => {
@@ -9379,21 +9378,21 @@ private updateDummyNode(preventSelect = false) {
         // 1. Keep controller pad hidden (isControllerVisible = false) during screen power-on animation
         this.isControllerVisible = false;
         if (this.controllerPadEl) {
-            this.controllerPadEl.style.display = 'none';
+            setCssStyles(this.controllerPadEl as any, { display: 'none' });
         }
         if (this.cordSvgEl) {
-            this.cordSvgEl.style.display = 'none';
+            setCssStyles(this.cordSvgEl as any, { display: 'none' });
         }
 
         // 2. Trigger GPU Hardware-Accelerated CRT TV Screen Power-On Animation (Dot -> Horizontal Line -> Full Height Screen)
         if (this.overlayCanvas) {
-            this.overlayCanvas.style.display = 'block';
+            setCssStyles(this.overlayCanvas as any, { display: 'block' });
             this.overlayCanvas.classList.remove('tetris-crt-power-on');
             void this.overlayCanvas.offsetWidth; // Force reflow
             this.overlayCanvas.classList.add('tetris-crt-power-on');
         }
         if (this.crtOverlayEl && this.isCrtActive) {
-            this.crtOverlayEl.style.display = 'block';
+            setCssStyles(this.crtOverlayEl as any, { display: 'block' });
             this.crtOverlayEl.classList.remove('tetris-crt-power-on');
             void this.crtOverlayEl.offsetWidth; // Force reflow
             this.crtOverlayEl.classList.add('tetris-crt-power-on');
@@ -9420,8 +9419,8 @@ private updateDummyNode(preventSelect = false) {
                 const defaultRightShift = 55;
                 const baseLeft = (minX + (w - padW) / 2) + defaultRightShift;
                 const baseTop = (minY + h + 140);
-                this.controllerPadEl.style.left = (baseLeft + ox) + 'px';
-                this.controllerPadEl.style.top = (baseTop + oy) + 'px';
+                setCssStyles(this.controllerPadEl as any, { left: (baseLeft + ox) + 'px' });
+                setCssStyles(this.controllerPadEl as any, { top: (baseTop + oy) + 'px' });
 
                 // EMOJI / RETRO EMERGENCE: Tucked behind TV screen (-160px up) sliding DOWNWARDS into position with spring bounce!
                 const startTransform = 'perspective(800px) translateY(-160px) scale(' + targetScale + ') rotateX(-4deg)';
@@ -9430,9 +9429,9 @@ private updateDummyNode(preventSelect = false) {
                 const endTransform = 'perspective(800px) translateY(0px) scale(' + targetScale + ') rotateX(1.5deg)';
 
                 // Set initial hidden start transform & opacity BEFORE making element visible
-                this.controllerPadEl.style.transform = startTransform;
-                this.controllerPadEl.style.opacity = '0';
-                this.controllerPadEl.style.display = 'block';
+                setCssStyles(this.controllerPadEl as any, { transform: startTransform });
+                setCssStyles(this.controllerPadEl as any, { opacity: '0' });
+                setCssStyles(this.controllerPadEl as any, { display: 'block' });
 
                 const anim = this.controllerPadEl.animate([
                     { transform: startTransform, opacity: 0 },
@@ -9449,13 +9448,13 @@ private updateDummyNode(preventSelect = false) {
                 anim.onfinish = () => {
                     this.isControllerAnimatingIn = false;
                     if (this.controllerPadEl) {
-                        this.controllerPadEl.style.opacity = '1';
+                        setCssStyles(this.controllerPadEl as any, { opacity: '1' });
                     }
                     this.updateControllerTransform();
                 };
             }
             if (this.cordSvgEl && this.isControllerVisible) {
-                this.cordSvgEl.style.display = 'block';
+                setCssStyles(this.cordSvgEl as any, { display: 'block' });
             }
             this.updateCordPhysics();
         }, 1300);
@@ -9523,15 +9522,15 @@ private updateDummyNode(preventSelect = false) {
 
             anim.onfinish = () => {
                 if (this.controllerPadEl) {
-                    this.controllerPadEl.style.display = 'none';
-                    this.controllerPadEl.style.opacity = '0';
+                    setCssStyles(this.controllerPadEl as any, { display: 'none' });
+                    setCssStyles(this.controllerPadEl as any, { opacity: '0' });
                 }
             };
         }
 
         if (this.cordSvgEl) {
             setTimeout(() => {
-                if (this.cordSvgEl) this.cordSvgEl.style.display = 'none';
+                if (this.cordSvgEl) setCssStyles(this.cordSvgEl as any, { display: 'none' });
             }, 300);
         }
 
@@ -9552,19 +9551,19 @@ private updateDummyNode(preventSelect = false) {
         // 3. After screen collapse animation finishes (900ms), hide screen elements & stop emulator!
         setTimeout(() => {
             if (this.overlayCanvas) {
-                this.overlayCanvas.style.display = 'none';
+                setCssStyles(this.overlayCanvas as any, { display: 'none' });
                 this.overlayCanvas.classList.remove('tetris-crt-power-off');
             }
             if (this.crtOverlayEl) {
-                this.crtOverlayEl.style.display = 'none';
+                setCssStyles(this.crtOverlayEl as any, { display: 'none' });
                 this.crtOverlayEl.classList.remove('active');
                 this.crtOverlayEl.classList.remove('tetris-crt-power-off');
             }
             if (this.controllerPadEl) {
-                this.controllerPadEl.style.display = 'none';
+                setCssStyles(this.controllerPadEl as any, { display: 'none' });
             }
             if (this.cordSvgEl) {
-                this.cordSvgEl.style.display = 'none';
+                setCssStyles(this.cordSvgEl as any, { display: 'none' });
             }
             this.isControllerVisible = false;
             this.isControllerAnimatingIn = false;
@@ -9594,29 +9593,29 @@ private updateDummyNode(preventSelect = false) {
         const baseLeft = (minX + (w - padW) / 2) + defaultRightShift;
         const baseTop = (minY + h + 140);
 
-        this.controllerPadEl.style.left = (baseLeft + ox) + 'px';
-        this.controllerPadEl.style.top = (baseTop + oy) + 'px';
+        setCssStyles(this.controllerPadEl as any, { left: (baseLeft + ox) + 'px' });
+        setCssStyles(this.controllerPadEl as any, { top: (baseTop + oy) + 'px' });
 
         if (!this.isControllerAnimatingIn) {
-            this.controllerPadEl.style.transform = 'perspective(800px) scale(' + targetScale + ') rotateX(1.5deg)';
-            this.controllerPadEl.style.opacity = '1';
+            setCssStyles(this.controllerPadEl as any, { transform: 'perspective(800px) scale(' + targetScale + ') rotateX(1.5deg)' });
+            setCssStyles(this.controllerPadEl as any, { opacity: '1' });
         }
 
-        this.controllerPadEl.style.display = this.isControllerVisible ? 'block' : 'none';
+        setCssStyles(this.controllerPadEl as any, { display: this.isControllerVisible ? 'block' : 'none' });
 
         this.updateCordPhysics();
     }
 
     private updateCordPhysics() {
         if (!this.cordSvgEl || !this.controllerPadEl) {
-            if (this.cordSvgEl) this.cordSvgEl.style.display = 'none';
+            if (this.cordSvgEl) setCssStyles(this.cordSvgEl as any, { display: 'none' });
             return;
         }
         if (!this.isControllerVisible && !this.isControllerAnimatingIn) {
-            if (this.cordSvgEl) this.cordSvgEl.style.display = 'none';
+            if (this.cordSvgEl) setCssStyles(this.cordSvgEl as any, { display: 'none' });
             return;
         }
-        this.cordSvgEl.style.display = 'block';
+        setCssStyles(this.cordSvgEl as any, { display: 'block' });
 
         const minX = this.dummyNode ? this.dummyNode.x : this.cachedMinX;
         const minY = this.dummyNode ? this.dummyNode.y : this.cachedMinY;
@@ -9721,9 +9720,9 @@ private updateDummyNode(preventSelect = false) {
         const baseLeft = (minX + (w - padW) / 2) + defaultRightShift;
         const baseTop = (minY + h + 140);
 
-        this.controllerPadEl.style.left = (baseLeft + ox) + 'px';
-        this.controllerPadEl.style.top = (baseTop + oy) + 'px';
-        this.controllerPadEl.style.display = 'block';
+        setCssStyles(this.controllerPadEl as any, { left: (baseLeft + ox) + 'px' });
+        setCssStyles(this.controllerPadEl as any, { top: (baseTop + oy) + 'px' });
+        setCssStyles(this.controllerPadEl as any, { display: 'block' });
 
         const p = `perspective(800px) translateY(-160px) scale(${targetScale}) rotateX(-4deg)`;
         const x = `perspective(800px) translateY(18px) scale(${targetScale * 1.03}) rotateX(4deg)`;
@@ -9745,16 +9744,16 @@ private updateDummyNode(preventSelect = false) {
             anim.onfinish = () => {
                 this.isControllerAnimatingIn = false;
                 if (this.controllerPadEl) {
-                    this.controllerPadEl.style.opacity = '1';
-                    this.controllerPadEl.style.transform = g;
+                    setCssStyles(this.controllerPadEl as any, { opacity: '1' });
+                    setCssStyles(this.controllerPadEl as any, { transform: g });
                 }
                 this.updateControllerTransform();
             };
         } catch (e) {
             this.isControllerAnimatingIn = false;
             if (this.controllerPadEl) {
-                this.controllerPadEl.style.opacity = '1';
-                this.controllerPadEl.style.transform = g;
+                setCssStyles(this.controllerPadEl as any, { opacity: '1' });
+                setCssStyles(this.controllerPadEl as any, { transform: g });
             }
             this.updateControllerTransform();
         }
@@ -9777,10 +9776,10 @@ private updateDummyNode(preventSelect = false) {
 
         if (target) {
             if (this.controllerPadEl) {
-                this.controllerPadEl.style.display = 'block';
+                setCssStyles(this.controllerPadEl as any, { display: 'block' });
             }
             if (this.cordSvgEl) {
-                this.cordSvgEl.style.display = 'block';
+                setCssStyles(this.cordSvgEl as any, { display: 'block' });
             }
             if (!wasVisible) {
                 this.animateControllerIn();
@@ -9790,10 +9789,10 @@ private updateDummyNode(preventSelect = false) {
             this.updateCordPhysics();
         } else {
             if (this.controllerPadEl) {
-                this.controllerPadEl.style.display = 'none';
+                setCssStyles(this.controllerPadEl as any, { display: 'none' });
             }
             if (this.cordSvgEl) {
-                this.cordSvgEl.style.display = 'none';
+                setCssStyles(this.cordSvgEl as any, { display: 'none' });
             }
             this.isControllerAnimatingIn = false;
         }
@@ -9810,7 +9809,7 @@ private updateDummyNode(preventSelect = false) {
             this.nodesCreated = true;
         }
         if (this.overlayCanvas) {
-            this.overlayCanvas.style.display = 'block';
+            setCssStyles(this.overlayCanvas as any, { display: 'block' });
             if (!isScreenAlreadyMounted) {
                 this.overlayCanvas.classList.remove('tetris-crt-power-on');
                 void this.overlayCanvas.offsetWidth;
@@ -9818,7 +9817,7 @@ private updateDummyNode(preventSelect = false) {
             }
         }
         if (this.crtOverlayEl && this.isCrtActive) {
-            this.crtOverlayEl.style.display = 'block';
+            setCssStyles(this.crtOverlayEl as any, { display: 'block' });
             if (!isScreenAlreadyMounted) {
                 this.crtOverlayEl.classList.remove('tetris-crt-power-on');
                 void this.crtOverlayEl.offsetWidth;
@@ -9832,7 +9831,7 @@ private updateDummyNode(preventSelect = false) {
         }
         this.updateControllerTransform();
         if (this.powerBtnEl) this.powerBtnEl.classList.add('active');
-        if (this.retroStartBtnEl) this.retroStartBtnEl.style.display = 'none';
+        if (this.retroStartBtnEl) setCssStyles(this.retroStartBtnEl as any, { display: 'none' });
 
         const isPSX = (this.plugin.settings.activeSystem === 'psx');
 
@@ -10396,10 +10395,10 @@ private updateDummyNode(preventSelect = false) {
         }
 
         // Forcefully hide screen and controller instantly (flag covers them during transition)
-        if (this.overlayCanvas) this.overlayCanvas.style.display = 'none';
-        if (this.crtOverlayEl) this.crtOverlayEl.style.display = 'none';
-        if (this.controllerPadEl) this.controllerPadEl.style.display = 'none';
-        if (this.cordSvgEl) this.cordSvgEl.style.display = 'none';
+        if (this.overlayCanvas) setCssStyles(this.overlayCanvas as any, { display: 'none' });
+        if (this.crtOverlayEl) setCssStyles(this.crtOverlayEl as any, { display: 'none' });
+        if (this.controllerPadEl) setCssStyles(this.controllerPadEl as any, { display: 'none' });
+        if (this.cordSvgEl) setCssStyles(this.cordSvgEl as any, { display: 'none' });
         this.isControllerVisible = false;
         this.isConsolePowerOn = false;
         this.hasIntroRun = false;

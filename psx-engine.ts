@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Nostalgist } from 'nostalgist';
+import { setCssStyles } from 'obsidian';
 
 export class PsxEngine {
     private container: HTMLElement;
@@ -24,14 +25,16 @@ export class PsxEngine {
         this.canvas = document.createElement('canvas');
         this.canvas.width = 640;
         this.canvas.height = 480;
-        this.canvas.style.position = 'fixed';
-        this.canvas.style.left = '-9999px';
-        this.canvas.style.top = '-9999px';
-        this.canvas.style.width = '640px';
-        this.canvas.style.height = '480px';
-        this.canvas.style.pointerEvents = 'none';
-        this.canvas.style.opacity = '0';
-        this.canvas.style.zIndex = '-9999';
+        setCssStyles(this.canvas, {
+            position: 'fixed',
+            left: '-9999px',
+            top: '-9999px',
+            width: '640px',
+            height: '480px',
+            pointerEvents: 'none',
+            opacity: '0',
+            zIndex: '-9999'
+        });
         const docBody = this.container.ownerDocument?.body || document.body;
         docBody.appendChild(this.canvas);
 
