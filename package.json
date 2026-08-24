@@ -1,7 +1,7 @@
 {
   "name": "canvas-retro-engine",
   "version": "1.0.0",
-  "description": "Obsidian plugin for retro gaming on Canvas with 3D hardware and CRT TV emulation.",
+  "description": "Play 8-bit NES and 32-bit PlayStation 1 games directly on Canvas with interactive 3D console hardware, CRT screen shaders, and tactile gamepad overlays.",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
@@ -16,13 +16,12 @@
     "retro",
     "threejs"
   ],
-  "author": "Canvas Retro Engine Contributors",
+  "author": "Mo.",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^16.11.6",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
-    "builtin-modules": "^3.2.0",
     "esbuild": "0.17.3",
     "eslint-plugin-obsidianmd": "^0.4.1",
     "obsidian": "latest",

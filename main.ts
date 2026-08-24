@@ -1,4 +1,4 @@
-import { Plugin, ItemView, Notice, setIcon } from 'obsidian';
+import { Plugin, ItemView, Notice, setIcon, requestUrl } from 'obsidian';
 // @ts-ignore
 import { NES } from 'jsnes';
 import { PsxEngine } from './psx-engine';
@@ -60,10 +60,10 @@ export function getPluginDir(plugin: { app: any; manifest: any }): string {
                 : path.join(basePath, plugin.manifest.dir);
         }
 
-        const configDir = plugin.app?.vault?.configDir || '.obsidian';
+        const configDir = plugin.app?.vault?.configDir || ((this.app?.vault as any)?.configDir || '.obsidian');
         const pluginId = plugin.manifest?.id || 'canvas-retro-engine';
         return basePath ? path.join(basePath, configDir, 'plugins', pluginId) : path.join(configDir, 'plugins', pluginId);
-    } catch (e) {
+    } catch (_e) {
         return '';
     }
 }
@@ -75,14 +75,14 @@ export function setCssStyles(el: HTMLElement | SVGElement | any, styles: Record<
         try {
             (el as any).setCssStyles(styles);
             return;
-        } catch (e) {}
+        } catch {}
     }
     if (el.style) {
         for (const [key, value] of Object.entries(styles)) {
             if (value !== undefined && value !== null) {
                 try {
                     (el.style as any)[key] = String(value);
-                } catch (err) {}
+                } catch {}
             }
         }
     }
@@ -90,7 +90,7 @@ export function setCssStyles(el: HTMLElement | SVGElement | any, styles: Record<
 
 function createNesCartridgeSpineTexture(romName: string): THREE.CanvasTexture {
     const W = 512, H = 80;
-    const canvas = createEl('canvas');
+    const _canvas = createEl('canvas');
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext('2d')!;
@@ -175,7 +175,7 @@ function createNesCartridgeSpineTexture(romName: string): THREE.CanvasTexture {
 
 function createNesCartridgeTexture(romName: string, coverPath: string | null): THREE.CanvasTexture {
     const W = 512, H = 768;
-    const canvas = createEl('canvas');
+    const _canvas = createEl('canvas');
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext('2d')!;
@@ -280,7 +280,7 @@ function loadNesCartridgeGeometriesSync(): NesCartridgeGeometries | null {
             };
             return cachedNesCartridgeGeometries;
         }
-    } catch (e) {
+    } catch (_e) {
         console.warn("Could not synchronously parse nes_cartridge.glb:", e);
     }
     return cachedNesCartridgeGeometries;
@@ -391,7 +391,7 @@ function createNesCartridge3DMesh(romName: string, coverPath: string | null, plu
 
 function createPsxJewelCaseSpineTexture(romName: string): THREE.CanvasTexture {
     const W = 512, H = 60;
-    const canvas = createEl('canvas');
+    const _canvas = createEl('canvas');
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext('2d')!;
@@ -414,7 +414,7 @@ function createPsxJewelCaseSpineTexture(romName: string): THREE.CanvasTexture {
 
 function createPsxJewelCaseTexture(romName: string, coverPath: string | null): THREE.CanvasTexture {
     const W = 500, H = 500;
-    const canvas = createEl('canvas');
+    const _canvas = createEl('canvas');
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext('2d')!;
@@ -444,291 +444,11 @@ function createPsxJewelCaseTexture(romName: string, coverPath: string | null): T
     return texture;
 }
 
-function createNesConsoleDoorTexture(): THREE.CanvasTexture {
-    const W = 1024, H = 256;
-    const canvas = createEl('canvas');
-    canvas.width = W; canvas.height = H;
-    const ctx = canvas.getContext('2d')!;
 
-    // Official NES Light Gray Casing Color (#d0d2d6)
-    ctx.fillStyle = '#d0d2d6';
-    ctx.fillRect(0, 0, W, H);
-
-    // Bottom lip subtle bevel shadow line
-    ctx.fillStyle = '#b8bac0';
-    ctx.fillRect(0, H - 12, W, 12);
-    ctx.fillStyle = '#a2a4aa';
-    ctx.fillRect(0, H - 4, W, 4);
-
-    // Nintendo Logo (Red #e60012)
-    ctx.fillStyle = '#e60012';
-    ctx.font = 'bold 58px Arial, sans-serif';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.fillText('Nintendo', 72, 44);
-
-    // ENTERTAINMENT SYSTEM (Red #e60012)
-    ctx.font = 'bold 28px Arial, sans-serif';
-    ctx.fillText('ENTERTAINMENT SYSTEM™', 72, 118);
-
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.colorSpace = THREE.SRGBColorSpace;
-    texture.anisotropy = 16;
-    return texture;
-}
-
-function createNesConsoleButtonTexture(label: string): THREE.CanvasTexture {
-    const W = 256, H = 128;
-    const canvas = createEl('canvas');
-    canvas.width = W; canvas.height = H;
-    const ctx = canvas.getContext('2d')!;
-
-    // NES Button Gray (#9ca0a6)
-    ctx.fillStyle = '#9ca0a6';
-    ctx.fillRect(0, 0, W, H);
-
-    // Border bevel highlight/shadow
-    ctx.fillStyle = '#b8bac0';
-    ctx.fillRect(0, 0, W, 6);
-    ctx.fillStyle = '#72747a';
-    ctx.fillRect(0, H - 6, W, 6);
-
-    // Label Text (Dark Gray #323438)
-    ctx.fillStyle = '#323438';
-    ctx.font = 'bold 36px Arial, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(label, W / 2, H / 2);
-
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.colorSpace = THREE.SRGBColorSpace;
-    return texture;
-}
-
-function createPsxCdLabelTexture(romName: string, coverPath: string | null): THREE.CanvasTexture {
-    const S = 512;
-    const canvas = createEl('canvas');
-    canvas.width = S;
-    canvas.height = S;
-    const ctx = canvas.getContext('2d')!;
-
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.colorSpace = THREE.SRGBColorSpace;
-    texture.anisotropy = 16;
-
-    if (coverPath) {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.src = coverPath;
-        img.onload = () => {
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(S/2, S/2, S/2, 0, Math.PI * 2);
-            ctx.clip();
-            ctx.drawImage(img, 0, 0, S, S);
-            ctx.restore();
-
-            // Clear Center Hole Cutout
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            ctx.arc(S/2, S/2, S * 0.14, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.globalCompositeOperation = 'source-over';
-
-            // Inner Silver Ring
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.arc(S/2, S/2, S * 0.16, 0, Math.PI * 2);
-            ctx.stroke();
-
-            texture.needsUpdate = true;
-        };
-    } else {
-        const bgGrad = ctx.createRadialGradient(S/2, S/2, S*0.1, S/2, S/2, S*0.5);
-        bgGrad.addColorStop(0, '#e6e8eb');
-        bgGrad.addColorStop(0.5, '#c5cbcf');
-        bgGrad.addColorStop(1, '#9da3a8');
-        ctx.fillStyle = bgGrad;
-        ctx.fillRect(0, 0, S, S);
-
-        ctx.fillStyle = '#111';
-        ctx.font = 'bold 28px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(romName.toUpperCase(), S/2, S/2 - 40);
-
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(S/2, S/2, S * 0.14, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalCompositeOperation = 'source-over';
-    }
-
-    return texture;
-}
-
-function createPsxCdDiscMesh(romName: string, coverPath: string | null): THREE.Group {
-    const cdGroup = new THREE.Group();
-
-    // 3D Disc geometry (Cylinder disc)
-    const cdGeo = new THREE.CylinderGeometry(0.76, 0.76, 0.015, 32);
-    
-    // Bottom surface: Authentic PS1 signature Dark Black/Purple disc bottom
-    const bottomMat = new THREE.MeshStandardMaterial({
-        color: 0x12081c,
-        metalness: 0.85,
-        roughness: 0.15
-    });
-
-    // Top surface: Game cover art printed on metallic CD label
-    const topMat = new THREE.MeshStandardMaterial({
-        map: createPsxCdLabelTexture(romName, coverPath),
-        metalness: 0.4,
-        roughness: 0.3
-    });
-
-    const cdMesh = new THREE.Mesh(cdGeo, [bottomMat, topMat, bottomMat]);
-    cdMesh.rotation.x = Math.PI / 2;
-    cdGroup.add(cdMesh);
-
-    // Center spindle ring hole cutout visual
-    const holeGeo = new THREE.CylinderGeometry(0.14, 0.14, 0.005, 16);
-    const holeMat = new THREE.MeshBasicMaterial({ color: 0x050508 });
-    const holeMesh = new THREE.Mesh(holeGeo, holeMat);
-    holeMesh.rotation.x = Math.PI / 2;
-    cdGroup.add(holeMesh);
-
-    return cdGroup;
-}
-
-function createPsxJewelCase3DMesh(romName: string, coverPath: string | null): THREE.Group {
-    const group = new THREE.Group();
-    
-    // Official CD jewel case dimensions (1.95 wide x 2.15 tall x 0.15 deep)
-    const W = 1.95, H = 2.15, D = 0.15;
-
-    // Pristine crystal acrylic glass plastic material (original specular sheen & light response)
-    const plasticMat = new THREE.MeshPhysicalMaterial({
-        color: 0xffffff,
-        metalness: 0.05,
-        roughness: 0.05,
-        transmission: 0.98,
-        thickness: 0.05,
-        transparent: true,
-        opacity: 0.15,
-        depthWrite: false
-    });
-
-    const spineMat = new THREE.MeshStandardMaterial({
-        map: createPsxJewelCaseSpineTexture(romName),
-        roughness: 0.5, metalness: 0.1
-    });
-
-    const coverMat = new THREE.MeshStandardMaterial({
-        map: createPsxJewelCaseTexture(romName, coverPath),
-        roughness: 0.35, metalness: 0.1
-    });
-    
-    const trayMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8 });
-
-    // Front clear lid + cover art hinged group (opens at left spine)
-    const lidHinge = new THREE.Group();
-    lidHinge.position.set(-W/2, 0, D/2); // Left edge pivot
-
-    const lidGeo = new THREE.BoxGeometry(W, H, 0.018);
-    const lidMesh = new THREE.Mesh(lidGeo, plasticMat);
-    lidMesh.position.set(W/2, 0, -0.009);
-    lidMesh.castShadow = true;
-    lidHinge.add(lidMesh);
-
-    // Cover art paper (recessed inside lid)
-    const artGeo = new THREE.BoxGeometry(W - 0.08, H - 0.08, 0.008);
-    const artMesh = new THREE.Mesh(artGeo, coverMat);
-    artMesh.position.set(W/2 + 0.02, 0, -0.005);
-    lidHinge.add(artMesh);
-
-    group.add(lidHinge);
-    group.userData.jewelLidHinge = lidHinge;
-
-    // Inner black tray liner (recessed back cavity)
-    const trayGeo = new THREE.BoxGeometry(W - 0.04, H - 0.04, 0.04);
-    const trayMesh = new THREE.Mesh(trayGeo, trayMat);
-    trayMesh.position.set(0.005, 0, -0.025);
-    trayMesh.castShadow = true;
-    trayMesh.receiveShadow = true;
-    group.add(trayMesh);
-
-    // Center rosette hub ring
-    const hubGeo = new THREE.CylinderGeometry(0.20, 0.20, 0.012, 24);
-    const hubMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1f, roughness: 0.7 });
-    const hubMesh = new THREE.Mesh(hubGeo, hubMat);
-    hubMesh.rotation.x = Math.PI / 2;
-    hubMesh.position.set(0, 0, -0.002);
-    group.add(hubMesh);
-
-    // 3D PlayStation CD Disc inside tray (sits proud on rosette spindle hub, fully visible when lid opens!)
-    const cdDisc = createPsxCdDiscMesh(romName, coverPath);
-    cdDisc.position.set(0, 0, 0.012);
-    group.add(cdDisc);
-    group.userData.cdDiscMesh = cdDisc;
-
-    // Back clear casing
-    const backGeo = new THREE.BoxGeometry(W, H, 0.022);
-    const backMesh = new THREE.Mesh(backGeo, plasticMat);
-    backMesh.position.set(0, 0, -D/2 + 0.011);
-    backMesh.castShadow = true;
-    group.add(backMesh);
-
-    // Spine (left edge offset by 0.003 to eliminate face collision)
-    const spineGeo = new THREE.BoxGeometry(0.012, H - 0.02, D - 0.004);
-    const spineMesh = new THREE.Mesh(spineGeo, spineMat);
-    spineMesh.position.set(-W/2 - 0.003, 0, 0);
-    spineMesh.renderOrder = 1;
-    group.add(spineMesh);
-
-    // Rotate to match NES cartridge orientation for Rolodex
-    group.rotation.x = Math.PI / 2;
-    group.scale.set(1.1, 1.1, 1.1);
-
-    return group;
-}
-
-function createSynthwaveRoomTexture(): THREE.CanvasTexture {
-    const W = 1024, H = 512;
-    const canvas = createEl('canvas');
-    canvas.width = W; canvas.height = H;
-    const ctx = canvas.getContext('2d')!;
-
-    const grad = ctx.createLinearGradient(0, 0, 0, H);
-    grad.addColorStop(0, '#100b24');
-    grad.addColorStop(0.5, '#1e0c38');
-    grad.addColorStop(1, '#080412');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W, H);
-
-    ctx.strokeStyle = 'rgba(0, 240, 255, 0.15)';
-    ctx.lineWidth = 1;
-    for (let x = 0; x < W; x += 32) {
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H * 0.7); ctx.stroke();
-    }
-    for (let y = 0; y < H * 0.7; y += 24) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-    }
-
-    const spot = ctx.createRadialGradient(W / 2, H * 0.35, 10, W / 2, H * 0.35, W * 0.45);
-    spot.addColorStop(0, 'rgba(255, 0, 128, 0.25)');
-    spot.addColorStop(0.6, 'rgba(0, 240, 255, 0.1)');
-    spot.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = spot;
-    ctx.fillRect(0, 0, W, H);
-
-    return new THREE.CanvasTexture(canvas);
-}
 
 function createMidnightRoomTexture(): THREE.CanvasTexture {
     const W = 1024, H = 512;
-    const canvas = createEl('canvas');
+    const _canvas = createEl('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
@@ -757,7 +477,7 @@ function createMidnightRoomTexture(): THREE.CanvasTexture {
 
 function create3D80sRoomTexture(): THREE.CanvasTexture {
     const W = 1024, H = 512;
-    const canvas = createEl('canvas');
+    const _canvas = createEl('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
@@ -788,7 +508,7 @@ function create3D80sRoomTexture(): THREE.CanvasTexture {
 
 function createMinimalRoomTexture(): THREE.CanvasTexture {
     const W = 1024, H = 512;
-    const canvas = createEl('canvas');
+    const _canvas = createEl('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
@@ -1554,12 +1274,11 @@ export default class CanvasNESEmulatorPlugin extends Plugin {
                     const dir = path.dirname(fullPath);
                     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
                     try {
-                        const res = await fetch(GITHUB_RAW + encodeURI(rel.replace(/\\/g, '/')));
-                        if (res.ok) {
-                            const ab = await res.arrayBuffer();
-                            fs.writeFileSync(fullPath, Buffer.from(ab));
-                        }
-                    } catch (e) {
+                        const res = await requestUrl({ url: GITHUB_RAW + encodeURI(rel.replace(/\\/g, '/')) });
+                    if (res.status === 200) {
+                        fs.writeFileSync(fullPath, Buffer.from(res.arrayBuffer));
+                    }
+                    } catch (_e) {
                         console.error("Asset download error:", rel, e);
                     }
                 }
@@ -1573,13 +1292,12 @@ export default class CanvasNESEmulatorPlugin extends Plugin {
             if (this.panel) {
                 this.panel.renderUnifiedCartridgeSystem();
             }
-        } catch (err) {
+        } catch (_err) {
             console.error("ensureAssetsDownloaded error:", err);
         }
     }
 
     async onload() {
-        console.log("Loading Canvas NES Emulator Plugin");
         await this.loadSettings();
         await this.ensureAssetsDownloaded();
 
@@ -1620,7 +1338,6 @@ export default class CanvasNESEmulatorPlugin extends Plugin {
     }
 
     async onunload() {
-        console.log("Unloading Canvas NES Emulator Plugin");
         if (this.panel) {
             this.panel.destroy();
         }
@@ -1718,7 +1435,7 @@ class RetroAudioEngine {
                 this.audioCtx = new AudioContextClass();
             }
             await this.preloadAllSfx();
-        } catch (e) {
+        } catch (_e) {
             console.error("Failed to init RetroAudioEngine:", e);
         }
     }
@@ -1756,12 +1473,12 @@ class RetroAudioEngine {
                                 ts = st?.ctime || st?.mtime || Date.now();
                             }
                             fileTimestamps.set(filename, ts);
-                        } catch (err) {
+                        } catch (_err) {
                             console.warn(`Could not decode audio file: ${filename}`, err);
                         }
                     }
                 }
-            } catch (err) {
+            } catch (_err) {
                 console.warn("Could not list SFX directory:", sfxDir, err);
             }
         }
@@ -1879,7 +1596,7 @@ class RetroAudioEngine {
             const playDuration = Math.max(0.01, rawEnd - startOffset);
 
             src.start(0, startOffset, playDuration);
-        } catch (e) {
+        } catch (_e) {
             console.error(`Error playing SFX ${id}:`, e);
         }
     }
@@ -1930,7 +1647,7 @@ class RetroAudioEngine {
             gain.connect(this.audioCtx.destination);
 
             src.start(0);
-        } catch (e) {
+        } catch (_e) {
             console.error(`Error playing reverse SFX ${id}:`, e);
         }
     }
@@ -1964,7 +1681,7 @@ class RetroAudioEngine {
 
             src.start(0, startOffset, playDuration);
             return playDuration;
-        } catch (e) {
+        } catch (_e) {
             console.error(`Error previewing SFX ${id}:`, e);
             return 0;
         }
@@ -1994,7 +1711,7 @@ class RetroAudioEngine {
 
             src.start(0);
             return buf.duration;
-        } catch (e) {
+        } catch (_e) {
             console.error(`Error previewing file ${filename}:`, e);
             return 0;
         }
@@ -2033,7 +1750,7 @@ class RetroAudioEngine {
                     this.currentAuditionSource = null;
                 }
             };
-        } catch (e) {
+        } catch (_e) {
             console.error(`Error auditioning ${filenameOrId}:`, e);
         }
     }
@@ -2043,7 +1760,7 @@ class RetroAudioEngine {
             try {
                 this.currentAuditionSource.stop();
                 this.currentAuditionSource.disconnect();
-            } catch (e) {}
+            } catch {}
             this.currentAuditionSource = null;
         }
     }
@@ -2583,9 +2300,9 @@ class TetrisPanel {
         }
         if (this.audioCtx) {
             if (this.isMuted && this.audioCtx.state === 'running') {
-                try { this.audioCtx.suspend(); } catch (e) {}
+                try { this.audioCtx.suspend(); } catch {}
             } else if (!this.isMuted && this.audioCtx.state === 'suspended') {
-                try { this.audioCtx.resume(); } catch (e) {}
+                try { this.audioCtx.resume(); } catch {}
             }
         }
         if (this.psxEngine && typeof (this.psxEngine as any).setMuted === 'function') {
@@ -2689,7 +2406,7 @@ class TetrisPanel {
                 setCssStyles(svg as any, { width: '100%' });
                 setCssStyles(svg as any, { height: '100%' });
             }
-        } catch (e) {
+        } catch (_e) {
             console.error("Failed to load title pill lottie animation:", e);
         }
 
@@ -3540,7 +3257,7 @@ class TetrisPanel {
                         this.sfxEngine.preview(id);
                     }
                     setCssStyles(playBtn as any, { background: '#ffffff' });
-                    setTimeout(() => { setCssStyles(playBtn as any, { background: '#00ffaa' }); }, 180);
+                    window.setTimeout(() => { setCssStyles(playBtn as any, { background: '#00ffaa' }); }, 180);
                 };
 
                 assignRow.appendChild(selectWrap);
@@ -3697,7 +3414,7 @@ class TetrisPanel {
                 await adapter.write(filePath, jsonStr);
             }
             return true;
-        } catch (e) {
+        } catch (_e) {
             console.error("Failed to save state to disk:", e);
             return false;
         }
@@ -3721,7 +3438,7 @@ class TetrisPanel {
                 const str = await adapter.read(filePath);
                 return JSON.parse(str);
             }
-        } catch (e) {
+        } catch (_e) {
             console.error("Failed to load state from disk:", e);
             return null;
         }
@@ -3801,14 +3518,14 @@ class TetrisPanel {
                 }
                 this.showFloatingGamepadTrigger();
             };
-        } catch (e) {
+        } catch (_e) {
             setCssStyles(this.containerEl as any, { display: 'none' });
             this.showFloatingGamepadTrigger();
         }
 
         // 🛑 PAUSE 3D RENDER LOOP: 100% compute freed for testing zero-overhead emulation
         if (this.animationFrameId !== null) {
-            cancelAnimationFrame(this.animationFrameId);
+            window.cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;
         }
     }
@@ -3855,7 +3572,7 @@ class TetrisPanel {
                 easing: 'cubic-bezier(0.34, 1.4, 0.64, 1)',
                 fill: 'forwards'
             });
-        } catch (e) {}
+        } catch {}
 
         // ▶️ RESUME 3D RENDER LOOP & ENSURE START BUTTON
         if (this.animationFrameId === null) {
@@ -3999,7 +3716,7 @@ class TetrisPanel {
             startPointerY = e.clientY;
             initialLeft = wrapper.offsetLeft;
             initialTop = wrapper.offsetTop;
-            try { btn.setPointerCapture(e.pointerId); } catch (err) {}
+            try { btn.setPointerCapture(e.pointerId); } catch {}
         };
 
         const onPointerMove = (e: PointerEvent) => {
@@ -4028,7 +3745,7 @@ class TetrisPanel {
             e.preventDefault();
             e.stopPropagation();
             isDragging = false;
-            try { btn.releasePointerCapture(e.pointerId); } catch (err) {}
+            try { btn.releasePointerCapture(e.pointerId); } catch {}
 
             if (this.plugin && this.plugin.settings) {
                 this.plugin.settings.floatingGamepadPos = this.floatingGamepadPos;
@@ -4694,7 +4411,7 @@ class TetrisPanel {
 
     private updateViewportColorCorrection() {
         if (!this.boxArtEl) return;
-        const canvas = this.boxArtEl.querySelector('canvas:not(.curtain-3d-flag-canvas)') as HTMLCanvasElement;
+        const _canvas = this.boxArtEl.querySelector('canvas:not(.curtain-3d-flag-canvas)') as HTMLCanvasElement;
         if (!canvas) return;
 
         const s = this.masterState as any;
@@ -4725,8 +4442,8 @@ class TetrisPanel {
 
         let saveTimer: any = null;
         const debouncedSave = () => {
-            if (saveTimer) clearTimeout(saveTimer);
-            saveTimer = setTimeout(() => {
+            if (saveTimer) window.clearTimeout(saveTimer);
+            saveTimer = window.setTimeout(() => {
                 if (this.plugin && this.plugin.settings) {
                     this.plugin.settings.masterState = Object.assign({}, this.masterState);
                     this.plugin.saveSettings();
@@ -4970,7 +4687,7 @@ class TetrisPanel {
         this.pixelColors = new Array(total).fill('#000000');
         this.pixelColors24 = new Uint32Array(total).fill(0);
         
-        const canvas = this.canvasView.canvas;
+        const _canvas = this.canvasView.canvas;
         const size = this.PIXEL_SCALE;
         const fullWidth = this.NES_WIDTH * size;
         const fullHeight = this.NES_HEIGHT * size;
@@ -5232,7 +4949,7 @@ class TetrisPanel {
                         const data = fs.readFileSync(fullImgPath);
                         controllerImgSrc = `data:image/png;base64,${data.toString('base64')}`;
                     }
-                } catch(e) {
+                } catch (_e) {
                     console.error("Failed to load PS1 controller PNG:", e);
                 }
 
@@ -5382,7 +5099,7 @@ class TetrisPanel {
             this.isUpdatingDummy = true;
             try {
                 this.canvasView.canvas?.removeNode(this.dummyNode);
-            } catch (e) {}
+            } catch {}
             this.dummyNode = null;
             this.isUpdatingDummy = false;
         }
@@ -5393,7 +5110,7 @@ class TetrisPanel {
 
     private getWorkspaceCoords(e: MouseEvent) {
         if (!this.canvasView.canvas) return { x: 0, y: 0 };
-        const canvas = this.canvasView.canvas;
+        const _canvas = this.canvasView.canvas;
         if (typeof canvas.posFromClient === 'function') {
             return canvas.posFromClient({ x: e.clientX, y: e.clientY });
         }
@@ -5656,7 +5373,7 @@ class TetrisPanel {
 
     private checkGroupMovements(skipRedraw = false) {
         if (!this.canvasView.canvas) return;
-        const canvas = this.canvasView.canvas;
+        const _canvas = this.canvasView.canvas;
         if (!canvas.nodes) return;
 
         let movedAny = false;
@@ -5740,14 +5457,14 @@ class TetrisPanel {
             this.drawOverlay();
         }
 
-        setTimeout(() => {
+        window.setTimeout(() => {
             this.syncGroupSelection();
         }, 50);
     };
 
     private syncGroupSelection() {
         if (!this.canvasView.canvas) return;
-        const canvas = this.canvasView.canvas;
+        const _canvas = this.canvasView.canvas;
         
         const selectedGroupNodes: any[] = [];
         if (canvas.nodes) {
@@ -5950,7 +5667,7 @@ class TetrisPanel {
 
 private updateDummyNode(preventSelect = false) {
         if (!this.canvasView.canvas) return;
-        const canvas = this.canvasView.canvas;
+        const _canvas = this.canvasView.canvas;
 
         // Calculate bounding box of selected pixels
         let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
@@ -5976,7 +5693,7 @@ private updateDummyNode(preventSelect = false) {
                 this.isUpdatingDummy = true;
                 try {
                     canvas.removeNode(this.dummyNode);
-                } catch (e) {
+                } catch (_e) {
                     console.error("Error removing dummy node:", e);
                 }
                 this.dummyNode = null;
@@ -6052,7 +5769,7 @@ private updateDummyNode(preventSelect = false) {
                         canvas.selectOnly(this.dummyNode);
                     }
                 }
-            } catch (e) {
+            } catch (_e) {
                 console.error("Error creating dummy node:", e);
             }
             this.isUpdatingDummy = false;
@@ -6371,7 +6088,7 @@ private updateDummyNode(preventSelect = false) {
                     }
                 }
             }
-        } catch (e) {
+        } catch (_e) {
             console.error("Error scanning plugin assets directory:", e);
         }
 
@@ -6384,7 +6101,7 @@ private updateDummyNode(preventSelect = false) {
                 const buf = fs.readFileSync(romPath);
                 return new Uint8Array(buf);
             }
-        } catch (e) {
+        } catch (_e) {
             console.error("Error reading file via fs:", e);
         }
         return null;
@@ -6396,7 +6113,7 @@ private updateDummyNode(preventSelect = false) {
                 const buf = await fs.promises.readFile(romPath);
                 return new Uint8Array(buf);
             }
-        } catch (e) {
+        } catch (_e) {
             console.error("Error reading file via fs async:", e);
         }
         return null;
@@ -6501,7 +6218,7 @@ private updateDummyNode(preventSelect = false) {
                     }
                 }
             }
-        } catch (e) {
+        } catch (_e) {
             console.error("Error finding cover image:", e);
         }
         this.coverCache.set(romPath, null);
@@ -6557,7 +6274,7 @@ private updateDummyNode(preventSelect = false) {
                     return `data:image/png;base64,${buf.toString('base64')}`;
                 }
             }
-        } catch (e) {
+        } catch (_e) {
             console.error("Failed to load asset logo data URL:", e);
         }
         return '';
@@ -6592,7 +6309,7 @@ private updateDummyNode(preventSelect = false) {
             if (obj.dispose && typeof obj.dispose === 'function' && !obj.isMesh && !obj.isScene && !obj.isGroup) {
                 obj.dispose();
             }
-        } catch (e) {
+        } catch (_e) {
             console.error("Error disposing Three.js object:", e);
         }
     }
@@ -6603,7 +6320,7 @@ private updateDummyNode(preventSelect = false) {
             root.traverse((node: any) => {
                 this.disposeThreeObject(node);
             });
-        } catch (e) {
+        } catch (_e) {
             console.error("Error disposing Three.js hierarchy:", e);
         }
     }
@@ -6653,7 +6370,7 @@ private updateDummyNode(preventSelect = false) {
                 setCssStyles(svg as any, { width: '100%' });
                 setCssStyles(svg as any, { height: '100%' });
             }
-        } catch (e) {
+        } catch (_e) {
             console.error("Failed to load curtain lottie animation:", e);
         }
 
@@ -6956,7 +6673,7 @@ private updateDummyNode(preventSelect = false) {
                 return;
             }
 
-            this.flagAnimFrameId = requestAnimationFrame(renderLoop);
+            this.flagAnimFrameId = window.requestAnimationFrame(renderLoop);
 
             if (this.flagCanvasEl) {
                 if (this.flagCanvasCachedWidth <= 0 || this.flagCanvasCachedHeight <= 0) {
@@ -7032,7 +6749,7 @@ private updateDummyNode(preventSelect = false) {
             this.flagRenderer.render(this.flagScene, this.flagCamera);
         };
 
-        this.flagAnimFrameId = requestAnimationFrame(renderLoop);
+        this.flagAnimFrameId = window.requestAnimationFrame(renderLoop);
     }
 
     private togglePinCurtain(pin?: boolean) {
@@ -7115,7 +6832,7 @@ private updateDummyNode(preventSelect = false) {
             }
 
             if (progress < 1.0) {
-                requestAnimationFrame(animateIn);
+                window.requestAnimationFrame(animateIn);
             } else {
                 this.flagSweepProgress = 1.0;
                 this.flagWaveGrowth = 1.0;
@@ -7130,7 +6847,7 @@ private updateDummyNode(preventSelect = false) {
             }
         };
 
-        requestAnimationFrame(animateIn);
+        window.requestAnimationFrame(animateIn);
     }
 
     private playCurtainSweepOut(onComplete: () => void) {
@@ -7194,7 +6911,7 @@ private updateDummyNode(preventSelect = false) {
             }
 
             if (progress < 1.0) {
-                requestAnimationFrame(animateOut);
+                window.requestAnimationFrame(animateOut);
             } else {
                 this.flagSweepProgress = 1.0;
                 this.flagWaveGrowth = 0.35;
@@ -7210,7 +6927,7 @@ private updateDummyNode(preventSelect = false) {
             }
         };
 
-        requestAnimationFrame(animateOut);
+        window.requestAnimationFrame(animateOut);
     }
 
 
@@ -7225,7 +6942,7 @@ private updateDummyNode(preventSelect = false) {
 
         // Prevent parallel animation loops and WebGL context leaks
         if (this.animationFrameId !== null) {
-            cancelAnimationFrame(this.animationFrameId);
+            window.cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;
         }
 
@@ -7238,7 +6955,7 @@ private updateDummyNode(preventSelect = false) {
                         if (pass.dispose && typeof pass.dispose === 'function') pass.dispose();
                     });
                 }
-            } catch (e) {
+            } catch (_e) {
                 console.error("Error disposing active composer:", e);
             }
             this.activeComposer = null;
@@ -7248,7 +6965,7 @@ private updateDummyNode(preventSelect = false) {
             try {
                 this.disposeThreeHierarchy(this.activeScene);
                 this.activeScene.clear();
-            } catch (e) {
+            } catch (_e) {
                 console.error("Error disposing active Three.js scene:", e);
             }
             this.activeScene = null;
@@ -7258,7 +6975,7 @@ private updateDummyNode(preventSelect = false) {
             try {
                 this.activeRenderer.dispose();
                 this.activeRenderer.forceContextLoss();
-            } catch (e) {
+            } catch (_e) {
                 console.error("Error disposing active WebGL renderer:", e);
             }
             this.activeRenderer = null;
@@ -7579,7 +7296,7 @@ private updateDummyNode(preventSelect = false) {
             });
             bokehPass.enabled = (masterState.dofEnabled !== false);
             composer.addPass(bokehPass);
-        } catch (e) {
+        } catch (_e) {
             console.warn("BokehPass warning:", e);
         }
 
@@ -7638,7 +7355,7 @@ private updateDummyNode(preventSelect = false) {
                     }, (error) => {
                         console.error("Error parsing NES GLB Model:", error);
                     });
-                } catch (e) {
+                } catch (_e) {
                     console.error("Failed to read NES GLB file:", e);
                 }
             }
@@ -7689,7 +7406,7 @@ private updateDummyNode(preventSelect = false) {
                         placeholder.position.set(0, 1.4, -0.5);
                         consoleGroup.add(placeholder);
                     });
-                } catch (e) {
+                } catch (_e) {
                     console.error("Error reading PS1 GLB File:", e);
                     const boxGeo = new THREE.BoxGeometry(3.6, 0.65, 3.0);
                     const boxMat = new THREE.MeshStandardMaterial({ color: 0xcccccc });
@@ -7718,8 +7435,6 @@ private updateDummyNode(preventSelect = false) {
         scene.add(consoleGroup);
 
         // ── RACK STACK GEOMETRY CONFIGURATION & WHEEL SCROLL STATE ──────────
-        const STACK_BASE_Y = -1.4;
-        const STACK_BASE_Z = 1.0;
         const REST_ROT_X = 0.38;  
 
         interface BiomechanicalProfile {
@@ -7876,7 +7591,7 @@ private updateDummyNode(preventSelect = false) {
 
                 // Clear any pending enter timeout from rapid mouse movement
                 if (pendingHoverEnterTimeout) {
-                    clearTimeout(pendingHoverEnterTimeout);
+                    window.clearTimeout(pendingHoverEnterTimeout);
                     pendingHoverEnterTimeout = null;
                 }
 
@@ -7898,7 +7613,7 @@ private updateDummyNode(preventSelect = false) {
                         const delayMs = hadPrevious ? 45 : 0;
 
                         if (delayMs > 0) {
-                            pendingHoverEnterTimeout = setTimeout(() => {
+                            pendingHoverEnterTimeout = window.setTimeout(() => {
                                 if (hoveredStackIdx === targetIdx) {
                                     this.sfxEngine.play(isPSX ? 'psx_case_hover_enter' : 'nes_card_hover_enter', 0.75);
                                 }
@@ -7915,7 +7630,7 @@ private updateDummyNode(preventSelect = false) {
 
         const onMouseLeave = () => {
             if (pendingHoverEnterTimeout) {
-                clearTimeout(pendingHoverEnterTimeout);
+                window.clearTimeout(pendingHoverEnterTimeout);
                 pendingHoverEnterTimeout = null;
             }
             const isScrolling = (Date.now() - lastWheelTimestamp < 350) || (Math.abs(this.targetScrollOffset - this.currentScrollOffset) > 0.08);
@@ -8137,7 +7852,7 @@ private updateDummyNode(preventSelect = false) {
 
         const animate = () => {
             try {
-            this.animationFrameId = requestAnimationFrame(animate);
+            this.animationFrameId = window.requestAnimationFrame(animate);
 
             // 🛑 FREE 100% GPU & CPU POWER FOR THE 3D FLAG DURING SYSTEM TRANSITIONS
             if (this.isCurtainTransitioning || this.isMinimized) {
@@ -9405,7 +9120,6 @@ private updateDummyNode(preventSelect = false) {
                 }
             });
 
-            const isAnyCartAnimating = entries.some(e => e.state === 'ANIM_TO_BAY' || e.state === 'ANIM_TO_DECK');
             const requiresComposer = masterState.bloomEnabled || masterState.dofEnabled;
             if (requiresComposer) {
                 bloomPass.strength = masterState.bloomIntensity;
@@ -9416,15 +9130,15 @@ private updateDummyNode(preventSelect = false) {
             } else {
                 renderer.render(scene, camera);
             }
-            } catch (err) {
+            } catch (_err) {
                 console.error("Error in animate loop:", err);
-                if (this.animationFrameId !== null) cancelAnimationFrame(this.animationFrameId);
+                if (this.animationFrameId !== null) window.cancelAnimationFrame(this.animationFrameId);
                 new Notice("3D Render Error: " + err.message);
             }
         };
         animate();
 
-        } catch (e) {
+        } catch (_e) {
             new Notice("Error in build3DScene: " + e.message);
             console.error("build3DScene error:", e);
         }
@@ -9474,8 +9188,8 @@ private updateDummyNode(preventSelect = false) {
         this.pendingStartGridCreation = false;
         this.isConsolePowerOn = true;
 
-        if (this.startAnimTimeout1) clearTimeout(this.startAnimTimeout1);
-        if (this.startAnimTimeout2) clearTimeout(this.startAnimTimeout2);
+        if (this.startAnimTimeout1) window.clearTimeout(this.startAnimTimeout1);
+        if (this.startAnimTimeout2) window.clearTimeout(this.startAnimTimeout2);
 
         await this.createGrid();
         this.nodesCreated = true;
@@ -9507,7 +9221,7 @@ private updateDummyNode(preventSelect = false) {
         this.drawOverlay();
 
         // 3. Right after screen finishes expanding (1300ms), make controller visible and slide up from underneath!
-        this.startAnimTimeout1 = setTimeout(() => {
+        this.startAnimTimeout1 = window.setTimeout(() => {
             this.isControllerVisible = true;
             if (this.controllerPadEl && this.isControllerVisible) {
                 this.isControllerAnimatingIn = true;
@@ -9635,7 +9349,7 @@ private updateDummyNode(preventSelect = false) {
         }
 
         if (this.cordSvgEl) {
-            setTimeout(() => {
+            window.setTimeout(() => {
                 if (this.cordSvgEl) setCssStyles(this.cordSvgEl as any, { display: 'none' });
             }, 300);
         }
@@ -9655,7 +9369,7 @@ private updateDummyNode(preventSelect = false) {
         }
 
         // 3. After screen collapse animation finishes (900ms), hide screen elements & stop emulator!
-        setTimeout(() => {
+        window.setTimeout(() => {
             if (this.overlayCanvas) {
                 setCssStyles(this.overlayCanvas as any, { display: 'none' });
                 this.overlayCanvas.classList.remove('tetris-crt-power-off');
@@ -9800,7 +9514,7 @@ private updateDummyNode(preventSelect = false) {
 
         // Continue spring physics loop while cord is swaying or controller is animating in
         if ((this.isControllerAnimatingIn || Math.abs(this.cordSwayX) > 0.1 || Math.abs(this.cordSwayY) > 0.1 || Math.abs(vx) > 0.1 || Math.abs(vy) > 0.1) && !this.cordPhysicsRaf) {
-            this.cordPhysicsRaf = requestAnimationFrame(() => {
+            this.cordPhysicsRaf = window.requestAnimationFrame(() => {
                 this.cordPhysicsRaf = 0;
                 this.updateCordPhysics();
             });
@@ -9855,7 +9569,7 @@ private updateDummyNode(preventSelect = false) {
                 }
                 this.updateControllerTransform();
             };
-        } catch (e) {
+        } catch (_e) {
             this.isControllerAnimatingIn = false;
             if (this.controllerPadEl) {
                 setCssStyles(this.controllerPadEl as any, { opacity: '1' });
@@ -9977,7 +9691,7 @@ private updateDummyNode(preventSelect = false) {
                         for (let i = 0; i < b.length; i++) {
                             romString += String.fromCharCode(b[i]);
                         }
-                    } catch (e) {
+                    } catch (_e) {
                         console.error("Failed to load vault ROM:", e);
                     }
                 }
@@ -10036,7 +9750,7 @@ private updateDummyNode(preventSelect = false) {
                 if (document.hidden) {
                     // Only pause audio when the tab/window is truly hidden (actual app switch)
                     if (this.audioCtx && this.audioCtx.state === 'running') {
-                        try { this.audioCtx.suspend(); } catch (e) {}
+                        try { this.audioCtx.suspend(); } catch {}
                     }
                     if (this.psxEngine) {
                         this.psxEngine.pause();
@@ -10046,7 +9760,7 @@ private updateDummyNode(preventSelect = false) {
             this.onWindowFocus = () => {
                 if (!document.hidden) {
                     if (this.isRunning && this.audioCtx && this.audioCtx.state === 'suspended') {
-                        try { this.audioCtx.resume(); } catch (e) {}
+                        try { this.audioCtx.resume(); } catch {}
                     }
                     if (this.psxEngine) {
                         this.psxEngine.resume();
@@ -10058,16 +9772,16 @@ private updateDummyNode(preventSelect = false) {
 
             const loop = (now: number) => {
                 if (!this.isRunning) return;
-                this.rafId = requestAnimationFrame(loop);
+                this.rafId = window.requestAnimationFrame(loop);
                 this.drawOverlay();
             };
-            this.rafId = requestAnimationFrame(loop);
+            this.rafId = window.requestAnimationFrame(loop);
             
         } else {
             // NES
             this.audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
             if (this.audioCtx.state === 'suspended') {
-                try { await this.audioCtx.resume(); } catch (e) {}
+                try { await this.audioCtx.resume(); } catch {}
             }
             
             this.nes = new NES({
@@ -10161,7 +9875,7 @@ private updateDummyNode(preventSelect = false) {
             });
             this.scriptNode.connect(this.audioCtx.destination);
             if (this.audioCtx.state === 'suspended') {
-                try { await this.audioCtx.resume(); } catch (e) {}
+                try { await this.audioCtx.resume(); } catch {}
             }
 
             this.nes.loadROM(romString);
@@ -10175,7 +9889,7 @@ private updateDummyNode(preventSelect = false) {
 
             const loop = (now: number) => {
                 if (!this.isRunning) return;
-                this.rafId = requestAnimationFrame(loop);
+                this.rafId = window.requestAnimationFrame(loop);
 
                 const elapsed = now - lastFrameTime;
                 if (elapsed >= frameInterval) {
@@ -10209,7 +9923,7 @@ private updateDummyNode(preventSelect = false) {
                     }
                 }
 
-                const canvas = this.canvasView.canvas;
+                const _canvas = this.canvasView.canvas;
                 if (canvas) {
                     const currentTransform = canvas.tx + ',' + canvas.ty + ',' + canvas.zoom;
                     if (currentTransform !== this.lastTransform) {
@@ -10222,7 +9936,7 @@ private updateDummyNode(preventSelect = false) {
                     }
                 }
             };
-            this.rafId = requestAnimationFrame(loop);
+            this.rafId = window.requestAnimationFrame(loop);
         }
     }
 
@@ -10252,7 +9966,7 @@ private updateDummyNode(preventSelect = false) {
         }
         
         if (this.rafId) {
-            cancelAnimationFrame(this.rafId);
+            window.cancelAnimationFrame(this.rafId);
         }
 
         if (this.psxEngine) {
@@ -10291,7 +10005,7 @@ private updateDummyNode(preventSelect = false) {
             if (typeof nes.ppu.updatePalettes === 'function') {
                 nes.ppu.updatePalettes();
             }
-        } catch (err) {
+        } catch (_err) {
             console.warn("Could not apply custom NES palette:", err);
         }
     }
@@ -10438,7 +10152,7 @@ private updateDummyNode(preventSelect = false) {
         this.stopEmulator();
         
         if (this.animationFrameId !== null) {
-            cancelAnimationFrame(this.animationFrameId);
+            window.cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;
         }
 
@@ -10451,7 +10165,7 @@ private updateDummyNode(preventSelect = false) {
                         if (pass.dispose && typeof pass.dispose === 'function') pass.dispose();
                     });
                 }
-            } catch (e) {
+            } catch (_e) {
                 console.error("Error disposing active composer:", e);
             }
             this.activeComposer = null;
@@ -10461,7 +10175,7 @@ private updateDummyNode(preventSelect = false) {
             try {
                 this.disposeThreeHierarchy(this.activeScene);
                 this.activeScene.clear();
-            } catch (e) {
+            } catch (_e) {
                 console.error("Error disposing 3D scene", e);
             }
             this.activeScene = null;
@@ -10471,7 +10185,7 @@ private updateDummyNode(preventSelect = false) {
             try {
                 this.activeRenderer.dispose();
                 this.activeRenderer.forceContextLoss();
-            } catch (e) {
+            } catch (_e) {
                 console.error("Error disposing active renderer:", e);
             }
             this.activeRenderer = null;
@@ -10531,7 +10245,7 @@ private updateDummyNode(preventSelect = false) {
                 this.plugin.saveSettings();
 
                 // Give the browser event loop a breather so the 3D flag keeps waving at 60 FPS
-                await new Promise(r => setTimeout(r, 20));
+                await new Promise(r => window.setTimeout(r, 20));
 
                 // Safely swap system settings and rebuild 3D assets/models with zero visible lag:
                 await this.performInPlace3DSystemSwap();
@@ -10545,13 +10259,13 @@ private updateDummyNode(preventSelect = false) {
                         } else {
                             this.activeRenderer.render(this.activeScene, this.current3DCamera);
                         }
-                    } catch (e) {}
+                    } catch {}
                 }
 
                 // User-controlled flag linger / occlusion delay to ensure target scene has fully settled
                 const lingerDelay = Math.max(150, (this.masterState as any).curtainLingerMs ?? 200);
-                await new Promise(r => setTimeout(r, lingerDelay));
-            } catch (e) {
+                await new Promise(r => window.setTimeout(r, lingerDelay));
+            } catch (_e) {
                 console.error("Error during system transition:", e);
             } finally {
                 // Sweep the checkered flag away to the right, revealing the pristine 60 FPS scene with 0 pop-in
@@ -10661,7 +10375,7 @@ private updateDummyNode(preventSelect = false) {
                             const glbBuffer = await fs.promises.readFile(gltfPath);
                             arrayBuffer = glbBuffer.buffer.slice(glbBuffer.byteOffset, glbBuffer.byteOffset + glbBuffer.byteLength);
                             this.glbBufferCache.set(gltfPath, arrayBuffer);
-                        } catch (e) {
+                        } catch (_e) {
                             console.error("Failed to read GLTF file:", e);
                         }
                     }
@@ -10683,7 +10397,7 @@ private updateDummyNode(preventSelect = false) {
             }
         }
 
-        await new Promise(r => setTimeout(r, 0));
+        await new Promise(r => window.setTimeout(r, 0));
 
         // 🧹 Cleanly dispose and rebuild Cartridges / Jewel Cases in-place (ZERO LEAKS)
         if (this.activeSceneRef && this.activeEntriesRef) {
@@ -10735,7 +10449,7 @@ private updateDummyNode(preventSelect = false) {
             this.createGrid();
             if (this.isControllerVisible) {
                 this.isControllerAnimatingIn = true;
-                setTimeout(() => { this.isControllerAnimatingIn = false; }, 1500);
+                window.setTimeout(() => { this.isControllerAnimatingIn = false; }, 1500);
                 this.updateCordPhysics();
             }
         }

@@ -39,14 +39,14 @@ export function setCssStyles(el: HTMLElement | SVGElement | any, styles: Record<
         try {
             (el as any).setCssStyles(styles);
             return;
-        } catch (e) {}
+        } catch {}
     }
     if (el.style) {
         for (const [key, value] of Object.entries(styles)) {
             if (value !== undefined && value !== null) {
                 try {
                     (el.style as any)[key] = String(value);
-                } catch (err) {}
+                } catch {}
             }
         }
     }
@@ -234,7 +234,7 @@ export class PsxEngine {
             this.nostalgistInstance = await Nostalgist.launch(options);
             fs.appendFileSync(logFile, "[PsxEngine] Nostalgist successfully launched!\n");
 
-        } catch (e) {
+        } catch (_e) {
             const logFile = path.join(this.container.ownerDocument.defaultView?.process.cwd() || '', 'psx_error.log');
             fs.appendFileSync(logFile, `[PsxEngine] Nostalgist failed to launch: ${e}\n${(e as any).stack || ''}\n`);
             console.error("[PsxEngine] Nostalgist failed to launch:", e);
@@ -258,7 +258,7 @@ export class PsxEngine {
                 return buffer;
             }
             return null;
-        } catch (e) {
+        } catch (_e) {
             console.error("PSX saveState failed:", e);
             return null;
         }
@@ -272,7 +272,7 @@ export class PsxEngine {
             const blob = new Blob([targetBuffer]);
             await this.nostalgistInstance.loadState(blob);
             return true;
-        } catch (e) {
+        } catch (_e) {
             console.error("PSX loadState failed:", e);
             return false;
         }
@@ -331,14 +331,14 @@ export class PsxEngine {
                 const loseContextExt = gl.getExtension('WEBGL_lose_context');
                 if (loseContextExt) loseContextExt.loseContext();
             }
-        } catch (e) {
+        } catch (_e) {
             console.warn("[PsxEngine] WebGL loseContext warning:", e);
         }
 
         if (this.nostalgistInstance) {
             try {
                 this.nostalgistInstance.exit();
-            } catch (e) {}
+            } catch {}
             this.nostalgistInstance = null;
         }
         if (this.canvasTexture) {
