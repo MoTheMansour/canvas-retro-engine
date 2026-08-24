@@ -4,6 +4,34 @@ import * as path from 'path';
 import { Nostalgist } from 'nostalgist';
 import { setCssStyles } from 'obsidian';
 
+function createEl<K extends keyof HTMLElementTagNameMap>(
+    tag: K,
+    o?: any,
+    callback?: (el: HTMLElementTagNameMap[K]) => void
+): HTMLElementTagNameMap[K] {
+    const doc = typeof document !== 'undefined' ? document : (typeof window !== 'undefined' ? window.document : null);
+    const el = doc ? doc.createElement(tag) : ({} as any);
+    if (typeof o === 'string') {
+        el.className = o;
+    } else if (o) {
+        if (o.cls) el.className = Array.isArray(o.cls) ? o.cls.join(' ') : o.cls;
+        if (o.text) el.textContent = o.text;
+        if (o.attr) {
+            for (const [k, v] of Object.entries(o.attr)) {
+                if (v !== undefined && v !== null) el.setAttribute(k, String(v));
+            }
+        }
+        if (o.title) el.title = o.title;
+        if (o.value) (el as any).value = o.value;
+        if (o.type) (el as any).type = o.type;
+        if (o.placeholder) (el as any).placeholder = o.placeholder;
+        if (o.href) (el as any).href = o.href;
+    }
+    if (callback) callback(el);
+    return el;
+}
+
+
 export class PsxEngine {
     private container: HTMLElement;
     private canvas: HTMLCanvasElement;
