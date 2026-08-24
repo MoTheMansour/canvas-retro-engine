@@ -22,7 +22,7 @@ export class PsxEngine {
         this.onCanvasReady = onCanvasReady;
 
         // 1. Offscreen WebGL Canvas for RetroArch core rendering (always active)
-        this.canvas = document.createElement('canvas');
+        this.canvas = createEl('canvas');
         this.canvas.width = 640;
         this.canvas.height = 480;
         setCssStyles(this.canvas, {

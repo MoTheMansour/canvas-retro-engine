@@ -20,7 +20,7 @@ const logoAnimationData = {"v":"5.8.1","fr":60,"ip":0,"op":240,"w":1500,"h":1500
 // --- THREE.JS WEBGL 3D NES CARTRIDGE PROCEDURAL ENGINE ---
 function createNesCartridgeSpineTexture(romName: string): THREE.CanvasTexture {
     const W = 512, H = 80;
-    const canvas = document.createElement('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext('2d')!;
@@ -105,7 +105,7 @@ function createNesCartridgeSpineTexture(romName: string): THREE.CanvasTexture {
 
 function createNesCartridgeTexture(romName: string, coverPath: string | null): THREE.CanvasTexture {
     const W = 512, H = 768;
-    const canvas = document.createElement('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext('2d')!;
@@ -321,7 +321,7 @@ function createNesCartridge3DMesh(romName: string, coverPath: string | null, plu
 
 function createPsxJewelCaseSpineTexture(romName: string): THREE.CanvasTexture {
     const W = 512, H = 60;
-    const canvas = document.createElement('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext('2d')!;
@@ -344,7 +344,7 @@ function createPsxJewelCaseSpineTexture(romName: string): THREE.CanvasTexture {
 
 function createPsxJewelCaseTexture(romName: string, coverPath: string | null): THREE.CanvasTexture {
     const W = 500, H = 500;
-    const canvas = document.createElement('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext('2d')!;
@@ -376,7 +376,7 @@ function createPsxJewelCaseTexture(romName: string, coverPath: string | null): T
 
 function createNesConsoleDoorTexture(): THREE.CanvasTexture {
     const W = 1024, H = 256;
-    const canvas = document.createElement('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
@@ -409,7 +409,7 @@ function createNesConsoleDoorTexture(): THREE.CanvasTexture {
 
 function createNesConsoleButtonTexture(label: string): THREE.CanvasTexture {
     const W = 256, H = 128;
-    const canvas = document.createElement('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
@@ -437,7 +437,7 @@ function createNesConsoleButtonTexture(label: string): THREE.CanvasTexture {
 
 function createPsxCdLabelTexture(romName: string, coverPath: string | null): THREE.CanvasTexture {
     const S = 512;
-    const canvas = document.createElement('canvas');
+    const canvas = createEl('canvas');
     canvas.width = S;
     canvas.height = S;
     const ctx = canvas.getContext('2d')!;
@@ -626,7 +626,7 @@ function createPsxJewelCase3DMesh(romName: string, coverPath: string | null): TH
 
 function createSynthwaveRoomTexture(): THREE.CanvasTexture {
     const W = 1024, H = 512;
-    const canvas = document.createElement('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
@@ -658,7 +658,7 @@ function createSynthwaveRoomTexture(): THREE.CanvasTexture {
 
 function createMidnightRoomTexture(): THREE.CanvasTexture {
     const W = 1024, H = 512;
-    const canvas = document.createElement('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
@@ -687,7 +687,7 @@ function createMidnightRoomTexture(): THREE.CanvasTexture {
 
 function create3D80sRoomTexture(): THREE.CanvasTexture {
     const W = 1024, H = 512;
-    const canvas = document.createElement('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
@@ -718,7 +718,7 @@ function create3D80sRoomTexture(): THREE.CanvasTexture {
 
 function createMinimalRoomTexture(): THREE.CanvasTexture {
     const W = 1024, H = 512;
-    const canvas = document.createElement('canvas');
+    const canvas = createEl('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
@@ -2540,7 +2540,7 @@ class TetrisPanel {
     }
 
     private buildUI() {
-        this.containerEl = document.createElement('div');
+        this.containerEl = createEl('div');
         this.containerEl.className = 'tetris-canvas-panel';
 
         if (this.plugin.settings && this.plugin.settings.hudPosition) {
@@ -2570,31 +2570,31 @@ class TetrisPanel {
             }
         }, { passive: false });
 
-        const miniIcon = document.createElement('div');
+        const miniIcon = createEl('div');
         miniIcon.className = 'tetris-mini-icon';
         miniIcon.innerText = '👾';
         miniIcon.onclick = () => this.toggleMinimize();
         this.containerEl.appendChild(miniIcon);
 
-        const header = document.createElement('div');
+        const header = createEl('div');
         header.className = 'tetris-header';
 
-        const titleContainer = document.createElement('div');
+        const titleContainer = createEl('div');
         titleContainer.className = 'tetris-title-container';
 
-        const titleEl = document.createElement('div');
+        const titleEl = createEl('div');
         titleEl.className = 'tetris-title';
         titleEl.innerText = 'CANVAS RETRO ENGINE';
         titleContainer.appendChild(titleEl);
 
-        const authorCredit = document.createElement('div');
+        const authorCredit = createEl('div');
         authorCredit.className = 'tetris-author-credit';
 
-        const byText = document.createElement('span');
+        const byText = createEl('span');
         byText.innerText = 'by';
         authorCredit.appendChild(byText);
 
-        const logoContainer = document.createElement('div');
+        const logoContainer = createEl('div');
         logoContainer.className = 'tetris-author-logo-container';
         authorCredit.appendChild(logoContainer);
 
@@ -2626,13 +2626,13 @@ class TetrisPanel {
         const ps1LogoDataUrl = this.getAssetDataUrl('sony-playstation-seeklogo.png');
 
         // Dedicated System Switcher Row with White-Background Logo Buttons (Underneath Title Pill)
-        const systemLogoSwitcher = document.createElement('div');
+        const systemLogoSwitcher = createEl('div');
         systemLogoSwitcher.className = 'retro-system-logo-switcher';
 
-        const nesBtn = document.createElement('button');
+        const nesBtn = createEl('button');
         nesBtn.className = 'system-logo-btn nes-logo-btn' + (this.plugin.settings.activeSystem === 'nes' ? ' active' : '');
         if (nesLogoDataUrl) {
-            const nesImg = document.createElement('img');
+            const nesImg = createEl('img');
             nesImg.src = nesLogoDataUrl;
             nesImg.alt = 'NES';
             nesBtn.appendChild(nesImg);
@@ -2642,10 +2642,10 @@ class TetrisPanel {
         this.nesBtnRef = nesBtn;
         nesBtn.onclick = () => { this.triggerSystemSwitch('nes'); };
 
-        const psxBtn = document.createElement('button');
+        const psxBtn = createEl('button');
         psxBtn.className = 'system-logo-btn psx-logo-btn' + (this.plugin.settings.activeSystem === 'psx' ? ' active' : '');
         if (ps1LogoDataUrl) {
-            const psxImg = document.createElement('img');
+            const psxImg = createEl('img');
             psxImg.src = ps1LogoDataUrl;
             psxImg.alt = 'PS1';
             psxBtn.appendChild(psxImg);
@@ -2707,7 +2707,7 @@ class TetrisPanel {
             }
         });
 
-        this.previewCanvas = document.createElement('canvas');
+        this.previewCanvas = createEl('canvas');
         this.previewCanvas.width = this.SCREEN_WIDTH;
         this.previewCanvas.height = this.SCREEN_HEIGHT;
         setCssStyles(this.previewCanvas as any, { width: '100%' });
@@ -2720,9 +2720,9 @@ class TetrisPanel {
 
 
         const makeSection = (label: string, el: HTMLElement) => {
-            const sec = document.createElement('div');
+            const sec = createEl('div');
             sec.className = 'tetris-section';
-            const lbl = document.createElement('div');
+            const lbl = createEl('div');
             lbl.className = 'tetris-label';
             lbl.innerText = label;
             sec.appendChild(lbl);
@@ -2731,22 +2731,22 @@ class TetrisPanel {
         };
 
         // 1. Grid Resolution Slider (1x to 6x)
-        const resSliderContainer = document.createElement('div');
+        const resSliderContainer = createEl('div');
         setCssStyles(resSliderContainer as any, { display: 'flex' });
         setCssStyles(resSliderContainer as any, { flexDirection: 'column' });
         setCssStyles(resSliderContainer as any, { gap: '4px' });
 
-        const resHeaderRow = document.createElement('div');
+        const resHeaderRow = createEl('div');
         setCssStyles(resHeaderRow as any, { display: 'flex' });
         setCssStyles(resHeaderRow as any, { justifyContent: 'space-between' });
         setCssStyles(resHeaderRow as any, { alignItems: 'center' });
         setCssStyles(resHeaderRow as any, { fontSize: '9px' });
         setCssStyles(resHeaderRow as any, { color: '#a0a0a8' });
 
-        const resLabel = document.createElement('span');
+        const resLabel = createEl('span');
         resLabel.innerText = 'Canvas Matrix Grid Resolution';
 
-        const resBadge = document.createElement('span');
+        const resBadge = createEl('span');
         setCssStyles(resBadge as any, {"color":"#00ff88","fontWeight":"bold","fontFamily":"monospace"});
 
         resHeaderRow.appendChild(resLabel);
@@ -2761,7 +2761,7 @@ class TetrisPanel {
             [512, 480, '6x (512×480 — Super-Res)']
         ];
 
-        const resSlider = document.createElement('input');
+        const resSlider = createEl('input');
         resSlider.type = 'range';
         resSlider.className = 'tetris-slider';
         resSlider.min = '1';
@@ -2784,22 +2784,22 @@ class TetrisPanel {
         resSliderContainer.appendChild(resSlider);
 
         // 2. Pixel Scale Slider (1x to 6x)
-        const pixelScaleSliderContainer = document.createElement('div');
+        const pixelScaleSliderContainer = createEl('div');
         setCssStyles(pixelScaleSliderContainer as any, { display: 'flex' });
         setCssStyles(pixelScaleSliderContainer as any, { flexDirection: 'column' });
         setCssStyles(pixelScaleSliderContainer as any, { gap: '4px' });
 
-        const scaleHeaderRow = document.createElement('div');
+        const scaleHeaderRow = createEl('div');
         setCssStyles(scaleHeaderRow as any, { display: 'flex' });
         setCssStyles(scaleHeaderRow as any, { justifyContent: 'space-between' });
         setCssStyles(scaleHeaderRow as any, { alignItems: 'center' });
         setCssStyles(scaleHeaderRow as any, { fontSize: '9px' });
         setCssStyles(scaleHeaderRow as any, { color: '#a0a0a8' });
 
-        const scaleLabel = document.createElement('span');
+        const scaleLabel = createEl('span');
         scaleLabel.innerText = 'Node Pixel Footprint Scale';
 
-        const scaleBadge = document.createElement('span');
+        const scaleBadge = createEl('span');
         setCssStyles(scaleBadge as any, {"color":"#00ff88","fontWeight":"bold","fontFamily":"monospace"});
 
         scaleHeaderRow.appendChild(scaleLabel);
@@ -2814,7 +2814,7 @@ class TetrisPanel {
             [16, '6x (16px / node)']
         ];
 
-        const pixelSlider = document.createElement('input');
+        const pixelSlider = createEl('input');
         pixelSlider.type = 'range';
         pixelSlider.className = 'tetris-slider';
         pixelSlider.min = '1';
@@ -2835,14 +2835,14 @@ class TetrisPanel {
         pixelScaleSliderContainer.appendChild(scaleHeaderRow);
         pixelScaleSliderContainer.appendChild(pixelSlider);
 
-        const deltaSelect = document.createElement('select');
+        const deltaSelect = createEl('select');
         deltaSelect.className = 'tetris-select';
         [
             { v: '0', t: '0% Change (Perfect)' },
             { v: '15', t: '15% Change' },
             { v: '35', t: '35% Change' }
         ].forEach(({ v, t }) => {
-            const el = document.createElement('option');
+            const el = createEl('option');
             el.value = v; el.text = t;
             deltaSelect.appendChild(el);
         });
@@ -2851,22 +2851,22 @@ class TetrisPanel {
         };
 
         // Unified 3D Physical Cartridge Bay & Deck Container
-        this.boxArtEl = document.createElement('div');
+        this.boxArtEl = createEl('div');
         this.boxArtEl.className = 'tetris-box-art-carousel-container';
         this.containerEl.appendChild(this.boxArtEl);
         this.containerEl.appendChild(header);
         this.containerEl.appendChild(systemLogoSwitcher);
 
-        const romSelectContainer = document.createElement('div');
+        const romSelectContainer = createEl('div');
         setCssStyles(romSelectContainer as any, { display: 'flex' });
         setCssStyles(romSelectContainer as any, { flexDirection: 'column' });
         setCssStyles(romSelectContainer as any, { gap: '6px' });
 
-        this.romSelectEl = document.createElement('select');
+        this.romSelectEl = createEl('select');
         this.romSelectEl.className = 'tetris-select';
         this.refreshRomSelectOptions();
 
-        const fileInput = document.createElement('input');
+        const fileInput = createEl('input');
         fileInput.type = 'file';
         fileInput.accept = '.nes';
         setCssStyles(fileInput as any, { display: 'none' });
@@ -2920,12 +2920,12 @@ class TetrisPanel {
         romSelectContainer.appendChild(fileInput);
 
         // Controller Scale Slider
-        const scaleSliderContainer = document.createElement('div');
+        const scaleSliderContainer = createEl('div');
         setCssStyles(scaleSliderContainer as any, { display: 'flex' });
         setCssStyles(scaleSliderContainer as any, { flexDirection: 'column' });
         setCssStyles(scaleSliderContainer as any, { gap: '4px' });
 
-        const scaleSlider = document.createElement('input');
+        const scaleSlider = createEl('input');
         scaleSlider.type = 'range';
         scaleSlider.min = '0.5';
         scaleSlider.max = '2.0';
@@ -2939,12 +2939,12 @@ class TetrisPanel {
 
         scaleSliderContainer.appendChild(scaleSlider);
 
-        const displayControlsRow = document.createElement('div');
+        const displayControlsRow = createEl('div');
         setCssStyles(displayControlsRow as any, { display: 'flex' });
         setCssStyles(displayControlsRow as any, { gap: '6px' });
         setCssStyles(displayControlsRow as any, { marginTop: '4px' });
 
-        const ctrlToggleBtn = document.createElement('button');
+        const ctrlToggleBtn = createEl('button');
         ctrlToggleBtn.className = 'tetris-btn secondary';
         setCssStyles(ctrlToggleBtn as any, { flex: '1' });
         ctrlToggleBtn.innerText = this.isControllerVisible ? '🎮 GAMEPAD ON' : '🎮 GAMEPAD OFF';
@@ -2953,7 +2953,7 @@ class TetrisPanel {
             ctrlToggleBtn.innerText = this.isControllerVisible ? '🎮 GAMEPAD ON' : '🎮 GAMEPAD OFF';
         };
 
-        const crtToggleBtn = document.createElement('button');
+        const crtToggleBtn = createEl('button');
         crtToggleBtn.className = 'tetris-btn secondary';
         setCssStyles(crtToggleBtn as any, { flex: '1' });
         crtToggleBtn.innerText = this.isCrtActive ? '📺 CRT ON' : '📺 CRT OFF';
@@ -2969,7 +2969,7 @@ class TetrisPanel {
             new Notice(this.isCrtActive ? "3D CRT Filter Enabled 📺" : "CRT Filter Disabled");
         };
 
-        const shapeToggleBtn = document.createElement('button');
+        const shapeToggleBtn = createEl('button');
         shapeToggleBtn.className = 'tetris-btn secondary';
         setCssStyles(shapeToggleBtn as any, { flex: '1' });
         const updateShapeToggleText = () => {
@@ -2994,7 +2994,7 @@ class TetrisPanel {
         displayControlsRow.appendChild(crtToggleBtn);
         displayControlsRow.appendChild(shapeToggleBtn);
 
-        const controllerSectionContent = document.createElement('div');
+        const controllerSectionContent = createEl('div');
         setCssStyles(controllerSectionContent as any, { display: 'flex' });
         setCssStyles(controllerSectionContent as any, { flexDirection: 'column' });
         setCssStyles(controllerSectionContent as any, { gap: '6px' });
@@ -3002,12 +3002,12 @@ class TetrisPanel {
         controllerSectionContent.appendChild(displayControlsRow);
 
         // Display & CRT Overlay Toggles inside Advanced Settings
-        const overlayControlsGroup = document.createElement('div');
+        const overlayControlsGroup = createEl('div');
         setCssStyles(overlayControlsGroup as any, { display: 'flex' });
         setCssStyles(overlayControlsGroup as any, { flexDirection: 'column' });
         setCssStyles(overlayControlsGroup as any, { gap: '6px' });
 
-        const ctrlBtn = document.createElement('button');
+        const ctrlBtn = createEl('button');
         ctrlBtn.className = 'tetris-btn secondary';
         ctrlBtn.innerText = this.isControllerVisible ? '🎮 GAMEPAD CONTROLLER: ON' : '🎮 GAMEPAD CONTROLLER: OFF';
         ctrlBtn.onclick = () => {
@@ -3015,7 +3015,7 @@ class TetrisPanel {
             ctrlBtn.innerText = this.isControllerVisible ? '🎮 GAMEPAD CONTROLLER: ON' : '🎮 GAMEPAD CONTROLLER: OFF';
         };
 
-        const crtBtn = document.createElement('button');
+        const crtBtn = createEl('button');
         crtBtn.className = 'tetris-btn secondary';
         crtBtn.innerText = this.isCrtActive ? '📺 CRT SCANLINE SHADER: ON' : '📺 CRT SCANLINE SHADER: OFF';
         crtBtn.onclick = () => {
@@ -3025,7 +3025,7 @@ class TetrisPanel {
             crtBtn.innerText = this.isCrtActive ? '📺 CRT SCANLINE SHADER: ON' : '📺 CRT SCANLINE SHADER: OFF';
         };
 
-        const screenShapeBtn = document.createElement('button');
+        const screenShapeBtn = createEl('button');
         screenShapeBtn.className = 'tetris-btn secondary';
         const updateShapeBtnText = () => {
             const isBubble = (this.masterState as any).crtScreenShape === 'vintage_bubble';
@@ -3049,7 +3049,7 @@ class TetrisPanel {
         overlayControlsGroup.appendChild(crtBtn);
         overlayControlsGroup.appendChild(screenShapeBtn);
 
-        const advContent = document.createElement('div');
+        const advContent = createEl('div');
         advContent.className = 'tetris-advanced-content';
         setCssStyles(advContent as any, { maxHeight: '420px' });
         setCssStyles(advContent as any, { overflowY: 'auto' });
@@ -3073,11 +3073,11 @@ class TetrisPanel {
         this.containerEl.appendChild(advContent);
 
         // ── SLEEK ICON ACTION BAR ───────────────────────────────────────────
-        const actionBar = document.createElement('div');
+        const actionBar = createEl('div');
         actionBar.className = 'tetris-icon-action-bar';
 
         const createIconButton = (iconName: string, title: string, onClick: () => void) => {
-            const btn = document.createElement('button');
+            const btn = createEl('button');
             btn.className = 'tetris-icon-btn';
             btn.type = 'button';
             setIcon(btn, iconName);
@@ -3281,24 +3281,24 @@ class TetrisPanel {
     }
 
     private buildSfxStudio(): HTMLElement {
-        const studioContainer = document.createElement('div');
+        const studioContainer = createEl('div');
         studioContainer.className = 'tetris-sfx-studio-container';
         setCssStyles(studioContainer as any, {"display":"flex","flexDirection":"column","gap":"8px","width":"100%"});
 
         // 1. System Tab Switcher (NES vs PS1)
-        const tabHeader = document.createElement('div');
+        const tabHeader = createEl('div');
         setCssStyles(tabHeader as any, {"display":"flex","gap":"6px","marginBottom":"4px"});
 
         let activeTab: 'nes' | 'psx' = this.plugin.settings.activeSystem || 'nes';
 
-        const nesTabBtn = document.createElement('button');
+        const nesTabBtn = createEl('button');
         nesTabBtn.className = 'tetris-btn ' + (activeTab === 'nes' ? 'primary' : 'secondary');
         nesTabBtn.innerText = '🎮 NES SAMPLES (17)';
         setCssStyles(nesTabBtn as any, { flex: '1' });
         setCssStyles(nesTabBtn as any, { fontSize: '10px' });
         setCssStyles(nesTabBtn as any, { padding: '4px 6px' });
 
-        const psxTabBtn = document.createElement('button');
+        const psxTabBtn = createEl('button');
         psxTabBtn.className = 'tetris-btn ' + (activeTab === 'psx' ? 'primary' : 'secondary');
         psxTabBtn.innerText = '🕹️ PS1 SAMPLES (21)';
         setCssStyles(psxTabBtn as any, { flex: '1' });
@@ -3310,7 +3310,7 @@ class TetrisPanel {
         studioContainer.appendChild(tabHeader);
 
         // 2. Cards Scroll List Container
-        const cardsList = document.createElement('div');
+        const cardsList = createEl('div');
         cardsList.className = 'sfx-cards-scroll-list';
         setCssStyles(cardsList as any, {"display":"flex","flexDirection":"column","gap":"6px","maxHeight":"280px","overflowY":"auto","paddingRight":"4px"});
 
@@ -3324,19 +3324,19 @@ class TetrisPanel {
             const entries = Object.entries(SFX_METADATA).filter(([_, meta]) => meta.system === activeTab);
 
             entries.forEach(([id, meta]) => {
-                const card = document.createElement('div');
+                const card = createEl('div');
                 card.className = 'sfx-card-item';
                 setCssStyles(card as any, {"display":"flex","flexDirection":"column","gap":"5px","padding":"7px 8px","background":"rgba(255, 255, 255, 0.03)","border":"1px solid rgba(255, 255, 255, 0.08)","borderRadius":"6px"});
 
                 // Header Row
-                const headerRow = document.createElement('div');
+                const headerRow = createEl('div');
                 setCssStyles(headerRow as any, {"display":"flex","justifyContent":"space-between","alignItems":"center"});
 
-                const titleEl = document.createElement('div');
+                const titleEl = createEl('div');
                 setCssStyles(titleEl as any, {"fontSize":"11px","fontWeight":"bold","color":"#00ffaa","fontFamily":"monospace"});
                 titleEl.innerText = `[${meta.code}] ${meta.name}`;
 
-                const catBadge = document.createElement('span');
+                const catBadge = createEl('span');
                 setCssStyles(catBadge as any, {"fontSize":"9px","color":"#888","background":"rgba(255,255,255,0.06)","padding":"2px 5px","borderRadius":"3px"});
                 catBadge.innerText = meta.category;
 
@@ -3345,16 +3345,16 @@ class TetrisPanel {
                 card.appendChild(headerRow);
 
                 // Description
-                const descEl = document.createElement('div');
+                const descEl = createEl('div');
                 setCssStyles(descEl as any, {"fontSize":"9px","color":"#999","lineHeight":"1.2"});
                 descEl.innerText = meta.description;
                 card.appendChild(descEl);
 
                 // Sample File Custom Dropdown & Test Row
-                const assignRow = document.createElement('div');
+                const assignRow = createEl('div');
                 setCssStyles(assignRow as any, {"display":"flex","gap":"6px","alignItems":"center","marginTop":"2px"});
 
-                const selectWrap = document.createElement('div');
+                const selectWrap = createEl('div');
                 setCssStyles(selectWrap as any, {"position":"relative","flex":"1","minWidth":"0"});
 
                 const currentConfig = this.sfxEngine.getConfig(id);
@@ -3364,15 +3364,15 @@ class TetrisPanel {
                     if (fallback) currentAssigned = fallback;
                 }
 
-                const triggerBtn = document.createElement('button');
+                const triggerBtn = createEl('button');
                 triggerBtn.className = 'tetris-btn';
                 setCssStyles(triggerBtn as any, {"width":"100%","display":"flex","justifyContent":"space-between","alignItems":"center","fontSize":"10px","padding":"3px 6px","fontFamily":"monospace","background":"rgba(0,0,0,0.5)","textAlign":"left","overflow":"hidden","textOverflow":"ellipsis","whiteSpace":"nowrap","border":"1px solid rgba(255,255,255,0.15)","borderRadius":"4px","color":"#eee","cursor":"pointer"});
 
-                const triggerLabel = document.createElement('span');
+                const triggerLabel = createEl('span');
                 setCssStyles(triggerLabel as any, {"overflow":"hidden","textOverflow":"ellipsis","whiteSpace":"nowrap","flex":"1"});
                 triggerLabel.innerText = currentAssigned || '— None / Muted —';
 
-                const arrowIcon = document.createElement('span');
+                const arrowIcon = createEl('span');
                 setCssStyles(arrowIcon as any, {"marginLeft":"4px","color":"#888","fontSize":"8px"});
                 arrowIcon.innerText = '▼';
 
@@ -3381,7 +3381,7 @@ class TetrisPanel {
                 selectWrap.appendChild(triggerBtn);
 
                 // Floating Options Menu
-                const menuList = document.createElement('div');
+                const menuList = createEl('div');
                 menuList.className = 'sfx-custom-dropdown-menu';
                 setCssStyles(menuList as any, {"display":"none","position":"absolute","top":"100%","left":"0","width":"max-content","minWidth":"320px","maxWidth":"440px","maxHeight":"220px","overflowY":"auto","overflowX":"hidden","background":"#14151e","border":"1.5px solid #00ffaa","borderRadius":"6px","boxShadow":"0 12px 36px rgba(0,0,0,0.95)","zIndex":"999999","marginTop":"4px","padding":"4px","boxSizing":"border-box","flexDirection":"column","gap":"2px"});
 
@@ -3393,7 +3393,7 @@ class TetrisPanel {
                 };
 
                 // Option: None / Muted
-                const noneItem = document.createElement('div');
+                const noneItem = createEl('div');
                 setCssStyles(noneItem as any, {"display":"flex","alignItems":"center","flexShrink":"0","height":"28px","minHeight":"28px","padding":"0 8px","fontSize":"11px","fontFamily":"monospace","color":"#888","borderRadius":"4px","cursor":"pointer","overflow":"hidden","textOverflow":"ellipsis","whiteSpace":"nowrap","boxSizing":"border-box","marginBottom":"2px"});
                 noneItem.innerText = '— None / Muted —';
                 noneItem.onmouseenter = () => {
@@ -3414,7 +3414,7 @@ class TetrisPanel {
 
                 // Options: All Audio Files
                 allFiles.forEach(f => {
-                    const item = document.createElement('div');
+                    const item = createEl('div');
                     setCssStyles(item as any, {"display":"flex","alignItems":"center","flexShrink":"0","height":"28px","minHeight":"28px","padding":"0 8px","fontSize":"11px","fontFamily":"monospace","color":"#d0d4e0","borderRadius":"4px","cursor":"pointer","overflow":"hidden","textOverflow":"ellipsis","whiteSpace":"nowrap","boxSizing":"border-box","marginBottom":"2px"});
                     item.innerText = f;
 
@@ -3457,7 +3457,7 @@ class TetrisPanel {
                 selectWrap.appendChild(menuList);
 
                 // Play / Test Button
-                const playBtn = document.createElement('button');
+                const playBtn = createEl('button');
                 playBtn.className = 'tetris-btn';
                 setCssStyles(playBtn as any, {"padding":"2px 8px","fontSize":"10px","whiteSpace":"nowrap","background":"#00ffaa","color":"#000","fontWeight":"bold","cursor":"pointer"});
                 playBtn.innerText = '▶ Test';
@@ -3477,19 +3477,19 @@ class TetrisPanel {
                 card.appendChild(assignRow);
 
                 // Volume & Pitch Controls Row
-                const controlsRow = document.createElement('div');
+                const controlsRow = createEl('div');
                 setCssStyles(controlsRow as any, {"display":"flex","gap":"8px","alignItems":"center","marginTop":"2px"});
 
                 // Volume Slider
-                const volWrap = document.createElement('div');
+                const volWrap = createEl('div');
                 setCssStyles(volWrap as any, {"flex":"1","display":"flex","flexDirection":"column","gap":"2px"});
-                const volHeader = document.createElement('div');
+                const volHeader = createEl('div');
                 setCssStyles(volHeader as any, {"display":"flex","justifyContent":"space-between","fontSize":"8px","color":"#777"});
-                const volTitle = document.createElement('span'); volTitle.innerText = 'Volume';
-                const volBadge = document.createElement('span'); volBadge.innerText = `${Math.round((currentConfig.volume ?? meta.defaultVol) * 100)}%`;
+                const volTitle = createEl('span'); volTitle.innerText = 'Volume';
+                const volBadge = createEl('span'); volBadge.innerText = `${Math.round((currentConfig.volume ?? meta.defaultVol) * 100)}%`;
                 volHeader.appendChild(volTitle); volHeader.appendChild(volBadge);
 
-                const volSlider = document.createElement('input');
+                const volSlider = createEl('input');
                 volSlider.type = 'range';
                 volSlider.className = 'tetris-slider';
                 volSlider.min = '0';
@@ -3505,15 +3505,15 @@ class TetrisPanel {
                 volWrap.appendChild(volSlider);
 
                 // Pitch Slider
-                const pitchWrap = document.createElement('div');
+                const pitchWrap = createEl('div');
                 setCssStyles(pitchWrap as any, {"flex":"1","display":"flex","flexDirection":"column","gap":"2px"});
-                const pitchHeader = document.createElement('div');
+                const pitchHeader = createEl('div');
                 setCssStyles(pitchHeader as any, {"display":"flex","justifyContent":"space-between","fontSize":"8px","color":"#777"});
-                const pitchTitle = document.createElement('span'); pitchTitle.innerText = 'Pitch';
-                const pitchBadge = document.createElement('span'); pitchBadge.innerText = `${(currentConfig.pitchShift ?? 1.0).toFixed(2)}x`;
+                const pitchTitle = createEl('span'); pitchTitle.innerText = 'Pitch';
+                const pitchBadge = createEl('span'); pitchBadge.innerText = `${(currentConfig.pitchShift ?? 1.0).toFixed(2)}x`;
                 pitchHeader.appendChild(pitchTitle); pitchHeader.appendChild(pitchBadge);
 
-                const pitchSlider = document.createElement('input');
+                const pitchSlider = createEl('input');
                 pitchSlider.type = 'range';
                 pitchSlider.className = 'tetris-slider';
                 pitchSlider.min = '0.5';
@@ -3593,7 +3593,7 @@ class TetrisPanel {
             this.retroStartBtnEl.parentElement.removeChild(this.retroStartBtnEl);
         }
 
-        const startBtn = document.createElement('button');
+        const startBtn = createEl('button');
         startBtn.className = 'tetris-retro-start-btn';
         startBtn.setText('START');
         startBtn.title = 'Power On Console & Launch Game';
@@ -3798,28 +3798,20 @@ class TetrisPanel {
             return;
         }
 
-        const wrapper = document.createElement('div');
+        const wrapper = createEl('div');
         wrapper.className = 'floating-hud-wrapper';
 
-        const btn = document.createElement('div');
+        const btn = createEl('div');
         btn.className = 'floating-hud-trigger';
         btn.title = 'Click to Restore HUD (Drag to Move)';
-        btn.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="6" y1="12" x2="10" y2="12"></line>
-                <line x1="8" y1="10" x2="8" y2="14"></line>
-                <line x1="15" y1="13" x2="15.01" y2="13"></line>
-                <line x1="18" y1="11" x2="18.01" y2="11"></line>
-                <rect x="2" y="6" width="20" height="12" rx="6"></rect>
-            </svg>
-        `;
+        setIcon(btn, 'gamepad-2');
 
         // 🌟 Sub-Buttons Mini Action Dock (Appears smoothly on hover underneath floating button)
-        const dock = document.createElement('div');
+        const dock = createEl('div');
         dock.className = 'floating-hud-dock';
 
         const createDockBtn = (iconName: string, title: string, onClick: (e: MouseEvent) => void) => {
-            const dockBtn = document.createElement('button');
+            const dockBtn = createEl('button');
             dockBtn.className = 'floating-dock-btn';
             setIcon(dockBtn, iconName);
             dockBtn.title = title;
@@ -4561,11 +4553,15 @@ class TetrisPanel {
         setCssStyles(svg as any, { height: '0' });
         setCssStyles(svg as any, { pointerEvents: 'none' });
         setCssStyles(svg as any, { overflow: 'hidden' });
-        svg.innerHTML = `<defs>
-            <clipPath id="nes-bubble-crt-clip" clipPathUnits="objectBoundingBox">
-                <path d="M 0.080 0.050 Q 0.500 -0.018, 0.920 0.050 C 0.960 0.065, 0.980 0.085, 0.990 0.120 Q 1.018 0.500, 0.990 0.880 C 0.980 0.915, 0.960 0.935, 0.920 0.950 Q 0.500 1.018, 0.080 0.950 C 0.040 0.935, 0.020 0.915, 0.010 0.880 Q -0.018 0.500, 0.010 0.120 C 0.020 0.085, 0.040 0.065, 0.080 0.050 Z" />
-            </clipPath>
-        </defs>`;
+        const svgDefs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        const clip = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
+        clip.setAttribute('id', 'nes-bubble-crt-clip');
+        clip.setAttribute('clipPathUnits', 'objectBoundingBox');
+        const clipPathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        clipPathEl.setAttribute('d', 'M 0.080 0.050 Q 0.500 -0.018, 0.920 0.050 C 0.960 0.065, 0.980 0.085, 0.990 0.120 Q 1.018 0.500, 0.990 0.880 C 0.980 0.915, 0.960 0.935, 0.920 0.950 Q 0.500 1.018, 0.080 0.950 C 0.040 0.935, 0.020 0.915, 0.010 0.880 Q -0.018 0.500, 0.010 0.120 C 0.020 0.085, 0.040 0.065, 0.080 0.050 Z');
+        clip.appendChild(clipPathEl);
+        svgDefs.appendChild(clip);
+        svg.appendChild(svgDefs);
         document.body.appendChild(svg);
     }
 
@@ -4597,21 +4593,24 @@ class TetrisPanel {
                     setCssStyles(svg as any, { overflow: 'visible' });
                     setCssStyles(svg as any, { zIndex: '2' });
                     setCssStyles(svg as any, { filter: 'drop-shadow(0 0 2px #0a0a0d) drop-shadow(0 25px 60px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 35px rgba(147, 197, 253, 0.22))' });
-                    svg.innerHTML = `
-                        <!-- 14px dark matte bezel body #18181b + 2px #0a0a0d outer rim along smooth 4-arc convex squircle -->
-                        <path d="M 80 50 Q 500 -18, 920 50 C 960 65, 980 85, 990 120 Q 1018 500, 990 880 C 980 915, 960 935, 920 950 Q 500 1018, 80 950 C 40 935, 20 915, 10 880 Q -18 500, 10 120 C 20 85, 40 65, 80 50 Z"
-                              fill="none"
-                              stroke="#0a0a0d"
-                              stroke-width="30"
-                              stroke-linejoin="round"
-                              stroke-linecap="round"/>
-                        <path d="M 80 50 Q 500 -18, 920 50 C 960 65, 980 85, 990 120 Q 1018 500, 990 880 C 980 915, 960 935, 920 950 Q 500 1018, 80 950 C 40 935, 20 915, 10 880 Q -18 500, 10 120 C 20 85, 40 65, 80 50 Z"
-                              fill="none"
-                              stroke="#18181b"
-                              stroke-width="26"
-                              stroke-linejoin="round"
-                              stroke-linecap="round"/>
-                    `;
+                    const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    path1.setAttribute('d', 'M 80 50 Q 500 -18, 920 50 C 960 65, 980 85, 990 120 Q 1018 500, 990 880 C 980 915, 960 935, 920 950 Q 500 1018, 80 950 C 40 935, 20 915, 10 880 Q -18 500, 10 120 C 20 85, 40 65, 80 50 Z');
+                    path1.setAttribute('fill', 'none');
+                    path1.setAttribute('stroke', '#0a0a0d');
+                    path1.setAttribute('stroke-width', '30');
+                    path1.setAttribute('stroke-linejoin', 'round');
+                    path1.setAttribute('stroke-linecap', 'round');
+
+                    const path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    path2.setAttribute('d', 'M 80 50 Q 500 -18, 920 50 C 960 65, 980 85, 990 120 Q 1018 500, 990 880 C 980 915, 960 935, 920 950 Q 500 1018, 80 950 C 40 935, 20 915, 10 880 Q -18 500, 10 120 C 20 85, 40 65, 80 50 Z');
+                    path2.setAttribute('fill', 'none');
+                    path2.setAttribute('stroke', '#18181b');
+                    path2.setAttribute('stroke-width', '26');
+                    path2.setAttribute('stroke-linejoin', 'round');
+                    path2.setAttribute('stroke-linecap', 'round');
+
+                    svg.appendChild(path1);
+                    svg.appendChild(path2);
                     this.crtOverlayEl.appendChild(svg);
                 } else {
                     setCssStyles(bezelSvg as any, { display: 'block' });
@@ -4648,7 +4647,7 @@ class TetrisPanel {
     }
 
     private buildViewportColorCorrectionContainer(): HTMLElement {
-        const container = document.createElement('div');
+        const container = createEl('div');
         setCssStyles(container as any, { display: 'flex' });
         setCssStyles(container as any, { flexDirection: 'column' });
         setCssStyles(container as any, { gap: '8px' });
@@ -4665,17 +4664,17 @@ class TetrisPanel {
         };
 
         const makeSlider = (label: string, min: number, max: number, step: number, getValue: () => number, setValue: (val: number) => void, description?: string) => {
-            const card = document.createElement('div');
+            const card = createEl('div');
             card.className = 'tetris-slider-card';
 
-            const header = document.createElement('div');
+            const header = createEl('div');
             header.className = 'card-header';
 
-            const title = document.createElement('span');
+            const title = createEl('span');
             title.className = 'card-title';
             title.innerText = label;
 
-            const numInput = document.createElement('input');
+            const numInput = createEl('input');
             numInput.type = 'number';
             numInput.step = String(step);
             numInput.className = 'card-badge';
@@ -4686,13 +4685,13 @@ class TetrisPanel {
             card.appendChild(header);
 
             if (description) {
-                const desc = document.createElement('div');
+                const desc = createEl('div');
                 desc.className = 'card-desc';
                 desc.innerText = description;
                 card.appendChild(desc);
             }
 
-            const range = document.createElement('input');
+            const range = createEl('input');
             range.type = 'range';
             range.min = min.toString();
             range.max = max.toString();
@@ -4736,7 +4735,7 @@ class TetrisPanel {
         container.appendChild(makeSlider('TONE MAPPING EXPOSURE', 0.20, 3.50, 0.05, () => (this.masterState as any).exposure ?? 1.0, v => { (this.masterState as any).exposure = v; if (this.activeRenderer) this.activeRenderer.toneMappingExposure = v; }, 'ACES Filmic tone mapping exposure level in Three.js renderer.'));
         container.appendChild(makeSlider('COLOR GRADING GAMMA', 0.40, 2.40, 0.05, () => (this.masterState as any).viewportGamma ?? 1.0, v => (this.masterState as any).viewportGamma = v, 'Mid-tone gamma curve balance for deep retro film curves.'));
 
-        const resetBtn = document.createElement('button');
+        const resetBtn = createEl('button');
         resetBtn.className = 'tetris-suite-btn';
         resetBtn.innerText = '↺ RESET COLOR CORRECTION TO DEFAULT';
         resetBtn.onclick = () => {
@@ -4759,23 +4758,23 @@ class TetrisPanel {
     }
 
     private buildNesCartridgeTunerContainer(): HTMLElement {
-        const container = document.createElement('div');
+        const container = createEl('div');
         setCssStyles(container as any, { display: 'flex' });
         setCssStyles(container as any, { flexDirection: 'column' });
         setCssStyles(container as any, { gap: '8px' });
 
         const makeSlider = (label: string, min: number, max: number, step: number, getValue: () => number, setValue: (val: number) => void, description?: string) => {
-            const card = document.createElement('div');
+            const card = createEl('div');
             card.className = 'tetris-slider-card';
 
-            const header = document.createElement('div');
+            const header = createEl('div');
             header.className = 'card-header';
 
-            const title = document.createElement('span');
+            const title = createEl('span');
             title.className = 'card-title';
             title.innerText = label;
 
-            const numInput = document.createElement('input');
+            const numInput = createEl('input');
             numInput.type = 'number';
             numInput.step = String(step);
             numInput.className = 'card-badge';
@@ -4786,13 +4785,13 @@ class TetrisPanel {
             card.appendChild(header);
 
             if (description) {
-                const desc = document.createElement('div');
+                const desc = createEl('div');
                 desc.className = 'card-desc';
                 desc.innerText = description;
                 card.appendChild(desc);
             }
 
-            const range = document.createElement('input');
+            const range = createEl('input');
             range.type = 'range';
             range.min = min.toString();
             range.max = max.toString();
@@ -4842,7 +4841,7 @@ class TetrisPanel {
         container.appendChild(makeSlider('SLOT ROT Z (ROLL LEAN)', -1.50, 1.50, 0.02, () => (typeof (this.masterState as any).nesSlotRotZ === 'number' ? (this.masterState as any).nesSlotRotZ : (typeof (this.masterState as any).slotRotZ === 'number' ? (this.masterState as any).slotRotZ : 0.00)), v => { (this.masterState as any).nesSlotRotZ = v; (this.masterState as any).slotRotZ = v; }, 'Levels the cartridge sideways inside the chamber.'));
         container.appendChild(makeSlider('EJECT POP Z (POP DISTANCE)', 0.20, 2.00, 0.02, () => (typeof (this.masterState as any).nesEjectPopZ === 'number' ? (this.masterState as any).nesEjectPopZ : (typeof (this.masterState as any).ejectPopZ === 'number' ? (this.masterState as any).ejectPopZ : 0.86)), v => { (this.masterState as any).nesEjectPopZ = v; (this.masterState as any).ejectPopZ = v; }, 'How far forward the cartridge pops out upon ejection.'));
 
-        const resetBtn = document.createElement('button');
+        const resetBtn = createEl('button');
         resetBtn.className = 'tetris-suite-btn pin-btn';
         resetBtn.innerText = '↺ RESET NES CARTRIDGE ALIGNMENT TO DEFAULT';
         setCssStyles(resetBtn as any, { marginTop: '4px' });
@@ -4944,7 +4943,7 @@ class TetrisPanel {
         
         const canvasContainer = this.canvasView.canvas?.contentEl || this.canvasView.containerEl.querySelector('.canvas-node-layer') || this.canvasView.containerEl.querySelector('.canvas-nodes') || this.canvasView.containerEl.querySelector('.canvas') || this.canvasView.containerEl;
         if (!this.overlayCanvas) {
-            this.overlayCanvas = document.createElement('canvas');
+            this.overlayCanvas = createEl('canvas');
             this.overlayCanvas.className = 'doom-viewport-overlay';
             setCssStyles(this.overlayCanvas as any, { position: 'absolute' });
             setCssStyles(this.overlayCanvas as any, { top: '0' });
@@ -4964,7 +4963,7 @@ class TetrisPanel {
         }
 
         if (!this.crtOverlayEl) {
-            this.crtOverlayEl = document.createElement('div');
+            this.crtOverlayEl = createEl('div');
             this.crtOverlayEl.className = 'crt-screen-overlay';
             if (this.isCrtActive) this.crtOverlayEl.classList.add('active');
             canvasContainer.appendChild(this.crtOverlayEl);
@@ -4988,20 +4987,43 @@ class TetrisPanel {
             setCssStyles(svg as any, { overflow: 'visible' });
 
             const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-            defs.innerHTML = 
-                '<filter id="cord-shadow-filter" x="-20%" y="-20%" width="140%" height="140%">' +
-                    '<feDropShadow dx="4" dy="8" stdDeviation="5" flood-color="#000000" flood-opacity="0.75"/>' +
-                '</filter>' +
-                '<filter id="cable-shine-blur" x="-20%" y="-20%" width="140%" height="140%">' +
-                    '<feGaussianBlur stdDeviation="1.0"/>' +
-                '</filter>' +
-                '<linearGradient id="cable-gloss-gradient" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100">' +
-                    '<stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />' +
-                    '<stop offset="22%" stop-color="#ffffff" stop-opacity="0.75" />' +
-                    '<stop offset="50%" stop-color="#ffffff" stop-opacity="0.08" />' +
-                    '<stop offset="78%" stop-color="#ffffff" stop-opacity="0.75" />' +
-                    '<stop offset="100%" stop-color="#ffffff" stop-opacity="0.95" />' +
-                '</linearGradient>';
+            const f1 = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+            f1.setAttribute('id', 'cord-shadow-filter');
+            f1.setAttribute('x', '-20%'); f1.setAttribute('y', '-20%'); f1.setAttribute('width', '140%'); f1.setAttribute('height', '140%');
+            const dropShadow = document.createElementNS('http://www.w3.org/2000/svg', 'feDropShadow');
+            dropShadow.setAttribute('dx', '4'); dropShadow.setAttribute('dy', '8'); dropShadow.setAttribute('stdDeviation', '5');
+            dropShadow.setAttribute('flood-color', '#000000'); dropShadow.setAttribute('flood-opacity', '0.75');
+            f1.appendChild(dropShadow);
+
+            const f2 = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+            f2.setAttribute('id', 'cable-shine-blur');
+            f2.setAttribute('x', '-20%'); f2.setAttribute('y', '-20%'); f2.setAttribute('width', '140%'); f2.setAttribute('height', '140%');
+            const blur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
+            blur.setAttribute('stdDeviation', '1.0');
+            f2.appendChild(blur);
+
+            const grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+            grad.setAttribute('id', 'cable-gloss-gradient');
+            grad.setAttribute('gradientUnits', 'userSpaceOnUse');
+            grad.setAttribute('x1', '0'); grad.setAttribute('y1', '0'); grad.setAttribute('x2', '0'); grad.setAttribute('y2', '100');
+            const stops = [
+                { offset: '0%', color: '#ffffff', opacity: '0.95' },
+                { offset: '22%', color: '#ffffff', opacity: '0.75' },
+                { offset: '50%', color: '#ffffff', opacity: '0.08' },
+                { offset: '78%', color: '#ffffff', opacity: '0.75' },
+                { offset: '100%', color: '#ffffff', opacity: '0.95' },
+            ];
+            stops.forEach(st => {
+                const s = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                s.setAttribute('offset', st.offset);
+                s.setAttribute('stop-color', st.color);
+                s.setAttribute('stop-opacity', st.opacity);
+                grad.appendChild(s);
+            });
+
+            defs.appendChild(f1);
+            defs.appendChild(f2);
+            defs.appendChild(grad);
             svg.appendChild(defs);
 
             const shadowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -5047,68 +5069,87 @@ class TetrisPanel {
             if (this.controllerPadEl && this.controllerPadEl.parentElement) {
                 this.controllerPadEl.parentElement.removeChild(this.controllerPadEl);
             }
-            this.controllerPadEl = document.createElement('div');
+            this.controllerPadEl = createEl('div');
             this.currentControllerSystem = activeSys;
 
             if (activeSys === 'nes') {
                 this.controllerPadEl.className = 'retro-controller-overlay nes-controller-pad';
-                this.controllerPadEl.innerHTML = 
-                    '<div class="nes-cord-port"></div>' +
-                    '<div class="nes-decal-panel">' +
-                        '<div class="nes-dpad-section">' +
-                            '<div class="nes-dpad-wrapper">' +
-                                '<svg class="nes-dpad-svg" viewBox="0 0 80 80">' +
-                                    '<path d="M 26 2 H 54 V 26 H 78 V 54 H 54 V 78 H 26 V 54 H 2 V 26 H 26 Z" ' +
-                                          'fill="#161618" stroke="#dbdbdd" stroke-width="4" stroke-linejoin="miter" />' +
-                                '</svg>' +
-                                '<div class="nes-dpad-cross">' +
-                                    '<div class="dpad-btn dpad-up" title="Up (W / ↑)">' +
-                                        '<svg class="dpad-arrow" viewBox="0 0 24 24"><path d="M12 4L5 13h4v7h6v-7h4z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg>' +
-                                    '</div>' +
-                                    '<div class="dpad-btn dpad-left" title="Left (A / ←)">' +
-                                        '<svg class="dpad-arrow" viewBox="0 0 24 24"><path d="M4 12l9-7v4h7v6h-7v4z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg>' +
-                                    '</div>' +
-                                    '<div class="dpad-center-hole"></div>' +
-                                    '<div class="dpad-btn dpad-right" title="Right (D / →)">' +
-                                        '<svg class="dpad-arrow" viewBox="0 0 24 24"><path d="M20 12l-9 7v-4H4v-6h7V5z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg>' +
-                                    '</div>' +
-                                    '<div class="dpad-btn dpad-down" title="Down (S / ↓)">' +
-                                        '<svg class="dpad-arrow" viewBox="0 0 24 24"><path d="M12 20l7-9h-4V4H9v7H5z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg>' +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="nes-center-section">' +
-                            '<div class="nes-top-welded-bar"></div>' +
-                            '<div class="nes-rounded-bar"></div>' +
-                            '<div class="nes-select-start-bar">' +
-                                '<span>SELECT</span>' +
-                                '<span>START</span>' +
-                            '</div>' +
-                            '<div class="nes-pill-bezel">' +
-                                '<div class="pill-btn nes-select" title="Select (C / Shift)"></div>' +
-                                '<div class="pill-btn nes-start" title="Start (B / Enter)"></div>' +
-                            '</div>' +
-                            '<div class="nes-bottom-welded-bar"></div>' +
-                        '</div>' +
-                        '<div class="nes-right-section">' +
-                            '<div class="nes-brand">Nintendo<sup>®</sup></div>' +
-                            '<div class="nes-buttons-group">' +
-                                '<div class="nes-sharp-square-wrapper">' +
-                                    '<div class="nes-sharp-square-bezel">' +
-                                        '<div class="round-btn nes-btn-b" title="B Button (J)"></div>' +
-                                    '</div>' +
-                                    '<div class="nes-corner-label nes-label-b">B</div>' +
-                                '</div>' +
-                                '<div class="nes-sharp-square-wrapper">' +
-                                    '<div class="nes-sharp-square-bezel">' +
-                                        '<div class="round-btn nes-btn-a" title="A Button (K)"></div>' +
-                                    '</div>' +
-                                    '<div class="nes-corner-label nes-label-a">A</div>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>';
+                this.controllerPadEl.empty();
+                this.controllerPadEl.createDiv({ cls: 'nes-cord-port' });
+                const decal = this.controllerPadEl.createDiv({ cls: 'nes-decal-panel' });
+                
+                // DPAD SECTION
+                const dpadSec = decal.createDiv({ cls: 'nes-dpad-section' });
+                const dpadWrap = dpadSec.createDiv({ cls: 'nes-dpad-wrapper' });
+                const dpadSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                dpadSvg.setAttribute('class', 'nes-dpad-svg');
+                dpadSvg.setAttribute('viewBox', '0 0 80 80');
+                const dpadBg = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                dpadBg.setAttribute('d', 'M 26 2 H 54 V 26 H 78 V 54 H 54 V 78 H 26 V 54 H 2 V 26 H 26 Z');
+                dpadBg.setAttribute('fill', '#161618');
+                dpadBg.setAttribute('stroke', '#dbdbdd');
+                dpadBg.setAttribute('stroke-width', '4');
+                dpadBg.setAttribute('stroke-linejoin', 'miter');
+                dpadSvg.appendChild(dpadBg);
+                dpadWrap.appendChild(dpadSvg);
+
+                const cross = dpadWrap.createDiv({ cls: 'nes-dpad-cross' });
+                const makeArrowSvg = (d: string) => {
+                    const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                    s.setAttribute('class', 'dpad-arrow');
+                    s.setAttribute('viewBox', '0 0 24 24');
+                    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    p.setAttribute('d', d);
+                    p.setAttribute('fill', 'none');
+                    p.setAttribute('stroke', 'currentColor');
+                    p.setAttribute('stroke-width', '2.5');
+                    p.setAttribute('stroke-linejoin', 'round');
+                    s.appendChild(p);
+                    return s;
+                };
+
+                const upBtn = cross.createDiv({ cls: 'dpad-btn dpad-up', attr: { title: 'Up (W / ↑)' } });
+                upBtn.appendChild(makeArrowSvg('M12 4L5 13h4v7h6v-7h4z'));
+
+                const leftBtn = cross.createDiv({ cls: 'dpad-btn dpad-left', attr: { title: 'Left (A / ←)' } });
+                leftBtn.appendChild(makeArrowSvg('M4 12l9-7v4h7v6h-7v4z'));
+
+                cross.createDiv({ cls: 'dpad-center-hole' });
+
+                const rightBtn = cross.createDiv({ cls: 'dpad-btn dpad-right', attr: { title: 'Right (D / →)' } });
+                rightBtn.appendChild(makeArrowSvg('M20 12l-9 7v-4H4v-6h7V5z'));
+
+                const downBtn = cross.createDiv({ cls: 'dpad-btn dpad-down', attr: { title: 'Down (S / ↓)' } });
+                downBtn.appendChild(makeArrowSvg('M12 20l7-9h-4V4H9v7H5z'));
+
+                // CENTER SECTION
+                const centerSec = decal.createDiv({ cls: 'nes-center-section' });
+                centerSec.createDiv({ cls: 'nes-top-welded-bar' });
+                centerSec.createDiv({ cls: 'nes-rounded-bar' });
+                const selStartBar = centerSec.createDiv({ cls: 'nes-select-start-bar' });
+                selStartBar.createSpan({ text: 'SELECT' });
+                selStartBar.createSpan({ text: 'START' });
+                const pillBezel = centerSec.createDiv({ cls: 'nes-pill-bezel' });
+                pillBezel.createDiv({ cls: 'pill-btn nes-select', attr: { title: 'Select (C / Shift)' } });
+                pillBezel.createDiv({ cls: 'pill-btn nes-start', attr: { title: 'Start (B / Enter)' } });
+                centerSec.createDiv({ cls: 'nes-bottom-welded-bar' });
+
+                // RIGHT SECTION
+                const rightSec = decal.createDiv({ cls: 'nes-right-section' });
+                const brand = rightSec.createDiv({ cls: 'nes-brand' });
+                brand.appendText('Nintendo');
+                brand.createEl('sup', { text: '®' });
+
+                const btnGroup = rightSec.createDiv({ cls: 'nes-buttons-group' });
+                const wrapB = btnGroup.createDiv({ cls: 'nes-sharp-square-wrapper' });
+                const bezelB = wrapB.createDiv({ cls: 'nes-sharp-square-bezel' });
+                bezelB.createDiv({ cls: 'round-btn nes-btn-b', attr: { title: 'B Button (J)' } });
+                wrapB.createDiv({ cls: 'nes-corner-label nes-label-b', text: 'B' });
+
+                const wrapA = btnGroup.createDiv({ cls: 'nes-sharp-square-wrapper' });
+                const bezelA = wrapA.createDiv({ cls: 'nes-sharp-square-bezel' });
+                bezelA.createDiv({ cls: 'round-btn nes-btn-a', attr: { title: 'A Button (K)' } });
+                wrapA.createDiv({ cls: 'nes-corner-label nes-label-a', text: 'A' });
             } else {
                 this.controllerPadEl.className = 'retro-controller-overlay psx-mode';
                 let controllerImgSrc = '';
@@ -5126,34 +5167,30 @@ class TetrisPanel {
                     console.error("Failed to load PS1 controller PNG:", e);
                 }
 
-                this.controllerPadEl.innerHTML = 
-                    '<div class="psx-controller-body">' +
-                        '<img class="psx-png-body" src="' + controllerImgSrc + '" alt="PS1 Controller" />' +
-                        
-                        '<div class="psx-shoulder psx-l2" title="L2"></div>' +
-                        '<div class="psx-shoulder psx-r2" title="R2"></div>' +
-                        '<div class="psx-shoulder psx-l1" title="L1"></div>' +
-                        '<div class="psx-shoulder psx-r1" title="R1"></div>' +
-                        
-                        '<div class="psx-dpad-cross">' +
-                            '<div class="psx-dpad-btn psx-dpad-up" title="Up"></div>' +
-                            '<div class="psx-dpad-btn psx-dpad-left" title="Left"></div>' +
-                            '<div class="psx-dpad-btn psx-dpad-right" title="Right"></div>' +
-                            '<div class="psx-dpad-btn psx-dpad-down" title="Down"></div>' +
-                        '</div>' +
-                        
-                        '<div class="psx-select-start-container">' +
-                            '<div class="psx-pill-btn psx-select" title="Select"></div>' +
-                            '<div class="psx-pill-btn psx-start" title="Start (Play Button)"></div>' +
-                        '</div>' +
-                        
-                        '<div class="psx-buttons-diamond">' +
-                            '<div class="psx-round-btn psx-btn-triangle" title="Triangle"></div>' +
-                            '<div class="psx-round-btn psx-btn-square" title="Square"></div>' +
-                            '<div class="psx-round-btn psx-btn-circle" title="Circle"></div>' +
-                            '<div class="psx-round-btn psx-btn-cross" title="Cross"></div>' +
-                        '</div>' +
-                    '</div>';
+                this.controllerPadEl.empty();
+                const bodyEl = this.controllerPadEl.createDiv({ cls: 'psx-controller-body' });
+                bodyEl.createEl('img', { cls: 'psx-png-body', attr: { src: controllerImgSrc, alt: 'PS1 Controller' } });
+
+                bodyEl.createDiv({ cls: 'psx-shoulder psx-l2', attr: { title: 'L2' } });
+                bodyEl.createDiv({ cls: 'psx-shoulder psx-r2', attr: { title: 'R2' } });
+                bodyEl.createDiv({ cls: 'psx-shoulder psx-l1', attr: { title: 'L1' } });
+                bodyEl.createDiv({ cls: 'psx-shoulder psx-r1', attr: { title: 'R1' } });
+
+                const dpadCross = bodyEl.createDiv({ cls: 'psx-dpad-cross' });
+                dpadCross.createDiv({ cls: 'psx-dpad-btn psx-dpad-up', attr: { title: 'Up' } });
+                dpadCross.createDiv({ cls: 'psx-dpad-btn psx-dpad-left', attr: { title: 'Left' } });
+                dpadCross.createDiv({ cls: 'psx-dpad-btn psx-dpad-right', attr: { title: 'Right' } });
+                dpadCross.createDiv({ cls: 'psx-dpad-btn psx-dpad-down', attr: { title: 'Down' } });
+
+                const selectStart = bodyEl.createDiv({ cls: 'psx-select-start-container' });
+                selectStart.createDiv({ cls: 'psx-pill-btn psx-select', attr: { title: 'Select' } });
+                selectStart.createDiv({ cls: 'psx-pill-btn psx-start', attr: { title: 'Start (Play Button)' } });
+
+                const diamond = bodyEl.createDiv({ cls: 'psx-buttons-diamond' });
+                diamond.createDiv({ cls: 'psx-round-btn psx-btn-triangle', attr: { title: 'Triangle' } });
+                diamond.createDiv({ cls: 'psx-round-btn psx-btn-square', attr: { title: 'Square' } });
+                diamond.createDiv({ cls: 'psx-round-btn psx-btn-circle', attr: { title: 'Circle' } });
+                diamond.createDiv({ cls: 'psx-round-btn psx-btn-cross', attr: { title: 'Cross' } });
             }
 
             canvasContainer.appendChild(this.controllerPadEl);
@@ -6407,12 +6444,12 @@ private updateDummyNode(preventSelect = false) {
         this.boxArtEl.empty();
 
         if (coverUrl) {
-            const img = document.createElement('img');
+            const img = createEl('img');
             img.src = coverUrl;
             img.className = 'tetris-box-art-img';
             this.boxArtEl.appendChild(img);
         } else {
-            const card = document.createElement('div');
+            const card = createEl('div');
             card.className = 'tetris-box-art-placeholder';
             card.createDiv({ cls: 'cart-top-grooves' });
     const cLabel = card.createDiv({ cls: 'cart-label' });
@@ -6511,20 +6548,20 @@ private updateDummyNode(preventSelect = false) {
             this.curtainOverlayEl.parentElement.removeChild(this.curtainOverlayEl);
         }
 
-        const curtain = document.createElement('div');
+        const curtain = createEl('div');
         curtain.className = 'retro-viewport-curtain';
 
-        const blade = document.createElement('div');
+        const blade = createEl('div');
         blade.className = 'curtain-blade';
 
         // 3D Flag WebGL Canvas
-        const flagCanvas = document.createElement('canvas');
+        const flagCanvas = createEl('canvas');
         flagCanvas.className = 'curtain-3d-flag-canvas';
         blade.appendChild(flagCanvas);
         this.flagCanvasEl = flagCanvas;
 
         // 🌟 Center Animated Author Logo (Title Pill Lottie Animation)
-        const logoWrapper = document.createElement('div');
+        const logoWrapper = createEl('div');
         logoWrapper.className = 'curtain-author-logo-wrapper';
         const logoSize = (this.masterState as any).curtainLogoSize ?? 95;
         setCssStyles(logoWrapper as any, { width: `${logoSize}px` });
@@ -7167,7 +7204,7 @@ private updateDummyNode(preventSelect = false) {
 
         const allRoms = this.getAllAvailableRoms(this.plugin.settings.activeSystem);
         if (allRoms.length === 0) {
-            const p = document.createElement('div');
+            const p = createEl('div');
             p.className = 'nes-slot-prompt';
             p.innerText = '— NO ROMS FOUND —';
             this.boxArtEl.appendChild(p);
@@ -9330,13 +9367,13 @@ private updateDummyNode(preventSelect = false) {
 
         const allRoms = this.getAllAvailableRoms(this.plugin.settings.activeSystem);
         allRoms.forEach((rom) => {
-            const opt = document.createElement('option');
+            const opt = createEl('option');
             opt.value = rom.path;
             opt.text = rom.isAsset ? ('🎮 ' + rom.name + ' (Plugin Assets)') : ('📁 ' + rom.name + ' (Vault)');
             this.romSelectEl.appendChild(opt);
         });
 
-        const uploadOption = document.createElement('option');
+        const uploadOption = createEl('option');
         uploadOption.value = 'upload';
         uploadOption.text = '📤 Load External .NES File...';
         this.romSelectEl.appendChild(uploadOption);
