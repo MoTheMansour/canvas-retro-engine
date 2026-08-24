@@ -254,12 +254,14 @@ function loadNesCartridgeGeometriesSync(plugin?: TetrisCanvasPlugin): NesCartrid
         if (plugin) {
             const pluginDir = getPluginDir(plugin);
             if (pluginDir) candidates.push(path.join(pluginDir, 'assets', 'nes', 'nes_cartridge.glb'));
+            const configDir = plugin.app?.vault?.configDir;
+            const adapter = plugin.app?.vault?.adapter as any;
+            const basePath = adapter?.getBasePath?.() || adapter?.basePath || '';
+            if (basePath && configDir) {
+                candidates.push(path.join(basePath, configDir, 'plugins', 'canvas-retro-engine', 'assets', 'nes', 'nes_cartridge.glb'));
+                candidates.push(path.join(basePath, configDir, 'plugins', 'canvas-nes-emulator', 'assets', 'nes', 'nes_cartridge.glb'));
+            }
         }
-        candidates.push(
-            
-            
-            
-        );
 
         let gltfPath = '';
         for (const c of candidates) {
@@ -1254,25 +1256,59 @@ class RetroAudioEngine {
         }
     }
 
-    public async preloadAllSfx() {
+        public async preloadAllSfx() {
         if (!this.audioCtx) return;
-        const adapter = this.plugin.app.vault.adapter;
-        const possibleDirs = [
-            
-            
+        const adapter = this.plugin.app.vault.adapter as any;
+        const basePath = adapter?.getBasePath?.() || adapter?.basePath || '';
+        const configDir = this.plugin.app.vault.configDir;
+        const pluginDir = getPluginDir(this.plugin);
+
+        const possibleDirs: string[] = [
+            path.join(pluginDir, 'assets', 'sfx'),
+            `${configDir}/plugins/${this.plugin.manifest?.id || 'canvas-retro-engine'}/assets/sfx`,
+            `${configDir}/plugins/canvas-retro-engine/assets/sfx`,
+            `${configDir}/plugins/canvas-nes-emulator/assets/sfx`
         ];
+        if (basePath) {
+            possibleDirs.push(path.join(basePath, configDir, 'plugins', 'canvas-retro-engine', 'assets', 'sfx'));
+            possibleDirs.push(path.join(basePath, configDir, 'plugins', 'canvas-nes-emulator', 'assets', 'sfx'));
+        }
         
         const fileTimestamps = new Map<string, number>();
 
         for (const sfxDir of possibleDirs) {
             try {
-                if (await adapter.exists(sfxDir)) {
+                if (fs.existsSync(sfxDir)) {
+                    const files = fs.readdirSync(sfxDir);
+                    const wavFiles = files.filter(f => f.toLowerCase().endsWith('.wav'));
+                    for (const cf of wavFiles) {
+                        const filename = path.basename(cf);
+                        if (!filename || this.rawWavBuffers.has(filename)) continue;
+                        try {
+                            const buf = fs.readFileSync(path.join(sfxDir, cf));
+                            const arrayBuf = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+                            const audioBuffer = await this.audioCtx.decodeAudioData(arrayBuf);
+                            this.rawWavBuffers.set(filename, audioBuffer);
+
+                            let ts = 0;
+                            const match = filename.match(/-(\d{10,14})\.wav$/i);
+                            if (match) {
+                                ts = parseInt(match[1]);
+                            } else {
+                                const st = fs.statSync(path.join(sfxDir, cf));
+                                ts = st?.ctimeMs || st?.mtimeMs || Date.now();
+                            }
+                            fileTimestamps.set(filename, ts);
+                        } catch (err) {
+                            console.warn(`Could not decode audio file: ${filename}`, err);
+                        }
+                    }
+                } else if (await adapter.exists(sfxDir)) {
                     const list = await adapter.list(sfxDir);
-                    const wavFiles = list.files.filter(f => f.toLowerCase().endsWith('.wav'));
-                    
+                    const wavFiles = list.files.filter((f: string) => f.toLowerCase().endsWith('.wav'));
                     for (const filePath of wavFiles) {
-                        const filename = filePath.split(/[/\\]/).pop() || '';
-                        if (!filename) continue;
+                        const filename = filePath.split(/[\/\\]/).pop() || '';
+                        if (!filename || this.rawWavBuffers.has(filename)) continue;
                         try {
                             const bin = await adapter.readBinary(filePath);
                             const audioBuffer = await this.audioCtx.decodeAudioData(bin.slice(0));
@@ -6426,14 +6462,19 @@ private updateDummyNode(preventSelect = false) {
                 ? path.join(pluginDir, 'assets', 'nes', 'covers')
                 : path.join(pluginDir, 'assets', 'psx', 'covers');
 
-            const searchFolders = [
+            const configDir = this.plugin.app.vault.configDir;
+            const adapter = this.plugin.app?.vault?.adapter as any;
+            const basePath = adapter?.getBasePath?.() || adapter?.basePath || '';
+            const searchFolders: string[] = [
                 path.join(dir, '..', 'covers'),
                 path.join(dir, 'covers'),
-                coversFolder,
-                
-                
-                
+                coversFolder
             ];
+            if (basePath) {
+                searchFolders.push(path.join(basePath, configDir, 'plugins', 'canvas-retro-engine', 'assets', 'nes', 'covers'));
+                searchFolders.push(path.join(basePath, configDir, 'plugins', 'canvas-retro-engine', 'assets', 'psx', 'covers'));
+                searchFolders.push(path.join(basePath, configDir, 'plugins', 'canvas-nes-emulator', 'assets', 'nes', 'covers'));
+            }
 
             for (const fld of searchFolders) {
                 if (fs.existsSync(fld)) {
@@ -6460,8 +6501,6 @@ private updateDummyNode(preventSelect = false) {
             }
 
             // 2. Scan the direct directory of the ROM file
-            const adapter = this.plugin.app?.vault?.adapter;
-            const basePath = (adapter as any)?.basePath || '';
             const absDir = path.isAbsolute(dir) ? dir : (basePath ? path.join(basePath, dir) : dir);
 
             if (fs.existsSync(absDir)) {
