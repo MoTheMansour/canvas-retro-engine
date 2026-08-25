@@ -48,20 +48,36 @@ export class PsxEngine {
     private onCanvasReady: (tex: THREE.Texture) => void;
     private nostalgistInstance: any = null;
     private isDestroyed: boolean = false;
+    private textureSmoothing: boolean = true;
+    private enhancedGraphics: boolean = true;
+    private speedMultiplier: number = 1.0;
+    private activeCheats: string[] = [];
 
     constructor(
         container: HTMLElement, 
         romPath: string, 
         biosPath: string | null,
-        onCanvasReady: (tex: THREE.Texture) => void
+        onCanvasReady: (tex: THREE.Texture) => void,
+        options?: {
+            textureSmoothing?: boolean;
+            enhancedGraphics?: boolean;
+            speed?: number;
+            cheats?: string[];
+        }
     ) {
         this.container = container;
         this.onCanvasReady = onCanvasReady;
+        if (options) {
+            if (options.textureSmoothing !== undefined) this.textureSmoothing = options.textureSmoothing;
+            if (options.enhancedGraphics !== undefined) this.enhancedGraphics = options.enhancedGraphics;
+            if (options.speed !== undefined) this.speedMultiplier = options.speed;
+            if (options.cheats) this.activeCheats = options.cheats;
+        }
 
-        // 1. Offscreen WebGL Canvas for RetroArch core rendering (always active)
+        // 1. Offscreen WebGL Canvas for RetroArch core rendering (always active) for RetroArch core rendering (always active)
         this.canvas = createEl('canvas');
-        this.canvas.width = 640;
-        this.canvas.height = 480;
+        this.canvas.width = this.enhancedGraphics ? 1024 : 640;
+        this.canvas.height = this.enhancedGraphics ? 768 : 480;
         setCssStyles(this.canvas, {
             position: 'fixed',
             left: '-9999px',
@@ -77,9 +93,8 @@ export class PsxEngine {
 
         // 2. Texture binding
         this.canvasTexture = new THREE.CanvasTexture(this.canvas);
-        // Use Linear filter for PS1 to smooth out jagged polygons (bilinear filtering)
-        this.canvasTexture.minFilter = THREE.LinearFilter;
-        this.canvasTexture.magFilter = THREE.LinearFilter;
+        this.canvasTexture.minFilter = this.textureSmoothing ? THREE.LinearFilter : THREE.NearestFilter;
+        this.canvasTexture.magFilter = this.textureSmoothing ? THREE.LinearFilter : THREE.NearestFilter;
         this.canvasTexture.generateMipmaps = false;
         
         // Critical for correct color rendering! Prevents gamma curve distortion which exposes PS1 15-bit color banding
@@ -205,11 +220,14 @@ export class PsxEngine {
                     'video_crop_overscan': 'true',
                     'video_scale_integer': 'false',
                     'video_aspect_ratio_auto': 'false',
-                    'aspect_ratio_index': '0'
+                    'aspect_ratio_index': '0',
+                    'video_smooth': this.textureSmoothing ? 'true' : 'false'
                 },
                 retroarchCoreConfig: {
                     'pcsx_rearmed_show_bios_bootlogo': 'enabled',
-                    'pcsx_rearmed_dithering': 'enabled',
+                    'pcsx_rearmed_dithering': this.enhancedGraphics ? 'disabled' : 'enabled',
+                    'pcsx_rearmed_neon_enhancement_enable': this.enhancedGraphics ? 'enabled' : 'disabled',
+                    'pcsx_rearmed_neon_enhancement_no_main': this.enhancedGraphics ? 'enabled' : 'disabled',
                     'pcsx_rearmed_spu_interpolation': 'simple',
                     'pcsx_rearmed_spu_reverb': 'enabled',
                     'pcsx_rearmed_frameskip': '0',
@@ -267,8 +285,86 @@ export class PsxEngine {
         }
     }
 
+        public setTextureSmoothing(enabled: boolean): void {
+        this.textureSmoothing = enabled;
+        if (this.canvasTexture) {
+            this.canvasTexture.minFilter = enabled ? THREE.LinearFilter : THREE.NearestFilter;
+            this.canvasTexture.magFilter = enabled ? THREE.LinearFilter : THREE.NearestFilter;
+            this.canvasTexture.needsUpdate = true;
+        }
+    }
+
+    public setSpeed(multiplier: number): void {
+        this.speedMultiplier = multiplier;
+        if (this.nostalgistInstance) {
+            try {
+                if (typeof this.nostalgistInstance.setSpeed === 'function') {
+                    this.nostalgistInstance.setSpeed(multiplier);
+                } else if (typeof this.nostalgistInstance.sendCommand === 'function') {
+                    if (multiplier < 1.0) {
+                        this.nostalgistInstance.sendCommand('SLOWMOTION');
+                    } else if (multiplier > 1.0) {
+                        this.nostalgistInstance.sendCommand('FAST_FORWARD');
+                    }
+                }
+            } catch { /* ignore */ }
+        }
+    }
+
+    public setCheats(cheats: string[]): void {
+        this.activeCheats = cheats;
+        this.applyCheats();
+    }
+
+        public applyCheats(): void {
+        if (!this.nostalgistInstance || !this.activeCheats || this.activeCheats.length === 0) return;
+        try {
+            const module = this.nostalgistInstance.Module;
+            if (!module || !module.HEAPU8) return;
+            const heapU8: Uint8Array = module.HEAPU8;
+
+            // Resolve Libretro PS1 Main System RAM buffer pointer (RETRO_MEMORY_SYSTEM_RAM = 2)
+            let ramPtr = 0;
+            if (typeof module._retro_get_memory_data === 'function') {
+                ramPtr = module._retro_get_memory_data(2);
+                if (!ramPtr) ramPtr = module._retro_get_memory_data(0);
+            }
+            if (!ramPtr && typeof module.ccall === 'function') {
+                try { ramPtr = module.ccall('retro_get_memory_data', 'number', ['number'], [2]); } catch {}
+            }
+
+            for (const rawCode of this.activeCheats) {
+                const clean = rawCode.trim().replace(/\s+/g, ' ').toUpperCase();
+                const parts = clean.split(' ');
+                if (parts.length === 2) {
+                    const rawAddr = parseInt(parts[0], 16);
+                    const val = parseInt(parts[1], 16);
+                    if (isNaN(rawAddr) || isNaN(val)) continue;
+
+                    const ramOffset = rawAddr & 0x001FFFFF;
+                    const codeType = (rawAddr >>> 24) & 0xFF;
+                    const targetAddr = ramPtr > 0 ? (ramPtr + ramOffset) : ramOffset;
+
+                    if (codeType === 0x80) {
+                        if (targetAddr + 1 < heapU8.length) {
+                            heapU8[targetAddr] = val & 0xFF;
+                            heapU8[targetAddr + 1] = (val >>> 8) & 0xFF;
+                        }
+                    } else if (codeType === 0x30) {
+                        if (targetAddr < heapU8.length) {
+                            heapU8[targetAddr] = val & 0xFF;
+                        }
+                    }
+                }
+            }
+        } catch { /* ignore */ }
+    }
+
     public update() {
         if (!this.isDestroyed && this.canvasTexture) {
+            if (this.activeCheats.length > 0) {
+                this.applyCheats();
+            }
             this.canvasTexture.needsUpdate = true;
         }
     }

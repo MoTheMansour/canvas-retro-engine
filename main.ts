@@ -1,4 +1,4 @@
-import { Plugin, ItemView, Notice, setIcon, requestUrl } from 'obsidian';
+import { Plugin, ItemView, Notice, setIcon, requestUrl, Modal, App } from 'obsidian';
 // @ts-ignore
 import { NES } from 'jsnes';
 import { PsxEngine } from './psx-engine';
@@ -14,6 +14,124 @@ import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import lottie from 'lottie-web';
+
+
+interface NesGameGenieCode {
+    raw: string;
+    address: number;
+    value: number;
+    compare?: number;
+}
+
+
+function applySubpixelEdgeAntiAliasing(
+    ctx: CanvasRenderingContext2D,
+    srcCanvas: HTMLCanvasElement,
+    srcX: number, srcY: number, srcW: number, srcH: number,
+    dstW: number, dstH: number
+): void {
+    // 1. First pass: render scaled image with high quality bilinear smoothing
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(srcCanvas, srcX, srcY, srcW, srcH, 0, 0, dstW, dstH);
+}
+
+function decodeGameGenie(code: string): NesGameGenieCode | null {
+    const clean = code.trim().toUpperCase().replace(/[^APZLGITYEOXUKSVN]/g, '');
+    if (clean.length !== 6 && clean.length !== 8) return null;
+
+    const lut: Record<string, number> = {
+        'A': 0x0, 'P': 0x1, 'Z': 0x2, 'L': 0x3,
+        'G': 0x4, 'I': 0x5, 'T': 0x6, 'Y': 0x7,
+        'E': 0x8, 'O': 0x9, 'X': 0xA, 'U': 0xB,
+        'K': 0xC, 'S': 0xD, 'V': 0xE, 'N': 0xF
+    };
+
+    const n = clean.split('').map(c => lut[c]);
+
+    if (clean.length === 6) {
+        const val = ((n[0] & 7) << 4) | ((n[5] & 8) << 4) | (n[1] & 7) | (n[0] & 8);
+        const addr = 0x8000 |
+            ((n[3] & 7) << 12) | ((n[2] & 8) << 12) |
+            ((n[4] & 7) << 8) | ((n[3] & 8) << 8) |
+            ((n[5] & 7) << 4) | ((n[4] & 8) << 4) |
+            (n[2] & 7) | (n[1] & 8);
+        return { raw: code, address: addr, value: val };
+    } else {
+        const val = ((n[0] & 7) << 4) | ((n[7] & 8) << 4) | (n[1] & 7) | (n[0] & 8);
+        const addr = 0x8000 |
+            ((n[3] & 7) << 12) | ((n[2] & 8) << 12) |
+            ((n[4] & 7) << 8) | ((n[3] & 8) << 8) |
+            ((n[5] & 7) << 4) | ((n[4] & 8) << 4) |
+            (n[2] & 7) | (n[1] & 8);
+        const cmp = ((n[6] & 7) << 4) | ((n[5] & 8) << 4) | (n[7] & 7) | (n[6] & 8);
+        return { raw: code, address: addr, value: val, compare: cmp };
+    }
+}
+
+
+class CheatModal extends Modal {
+    private isPSX: boolean;
+    private romKey: string;
+    private existingCheats: string[];
+    private onSave: (cheats: string[]) => void;
+
+    constructor(app: App, isPSX: boolean, romKey: string, existingCheats: string[], onSave: (cheats: string[]) => void) {
+        super(app);
+        this.isPSX = isPSX;
+        this.romKey = romKey;
+        this.existingCheats = existingCheats;
+        this.onSave = onSave;
+    }
+
+    onOpen() {
+        const { contentEl } = this;
+        contentEl.empty();
+        
+        contentEl.createEl('h2', { 
+            text: this.isPSX ? '🧙‍♂️ PS1 GameShark Cheat Codes' : '🧙‍♂️ NES Game Genie Cheat Codes' 
+        });
+
+        contentEl.createEl('p', {
+            text: this.isPSX 
+                ? 'Enter GameShark / Action Replay codes (one per line, e.g. 8009ABCD 0005):' 
+                : 'Enter Game Genie (e.g. GKKPPO) or RAM codes (e.g. 0072:09) one per line:'
+        });
+
+        const textarea = contentEl.createEl('textarea');
+        textarea.value = this.existingCheats.join('\n');
+        setCssStyles(textarea, {
+            width: '100%',
+            height: '160px',
+            background: 'var(--background-secondary)',
+            border: '1px solid var(--background-modifier-border)',
+            borderRadius: '6px',
+            padding: '10px',
+            color: 'var(--text-accent)',
+            fontFamily: 'monospace',
+            fontSize: '13px',
+            resize: 'vertical'
+        });
+
+        const btnRow = contentEl.createDiv();
+        setCssStyles(btnRow, { display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '14px' });
+
+        const clearBtn = btnRow.createEl('button', { text: 'Clear All' });
+        clearBtn.onclick = () => { textarea.value = ''; };
+
+        const saveBtn = btnRow.createEl('button', { cls: 'mod-cta', text: '💾 Apply Cheats' });
+        saveBtn.onclick = () => {
+            const rawLines = textarea.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            this.onSave(rawLines);
+            this.close();
+        };
+    }
+
+    onClose() {
+        const { contentEl } = this;
+        contentEl.empty();
+    }
+}
 
 const logoAnimationData = {"v":"5.8.1","fr":60,"ip":0,"op":240,"w":1500,"h":1500,"nm":"logo flap LOOPED CLOCK WIDGET","ddd":0,"assets":[],"layers":[{"ddd":0,"ind":1,"ty":4,"nm":"dot 3","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,26.51],[26.51,0],[0,-26.51],[-26.51,0]],"o":[[0,-26.51],[-26.51,0],[0,26.51],[26.51,0]],"v":[[48,0],[0,-48],[-48,0],[0,48]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[1152,752],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":120,"op":180,"st":-52,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"dot","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,26.51],[26.51,0],[0,-26.51],[-26.51,0]],"o":[[0,-26.51],[-26.51,0],[0,26.51],[26.51,0]],"v":[[48,0],[0,-48],[-48,0],[0,48]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[1152,752],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":60,"st":-52,"bm":0},{"ddd":0,"ind":3,"ty":4,"nm":"logo docked","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[750,750,0],"ix":2,"l":2},"a":{"a":0,"k":[600.5,355,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":0,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":6,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[522.5,136.5],[370,-127],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":9,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":12,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[-116.999,-161.5],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":15,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":18,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[522.5,136.5],[370,-127],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":21,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[545.25,180.25],[461,-177.5],[0.001,76],[-58.499,-194.75],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":24,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[-116.999,-161.5],[-407.999,-3.304],[-552,228.001]],"c":false}]},{"t":30,"s":[{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,-92.001]],"o":[[0,0],[0,0],[0,0],[0,0],[-100.231,57.304],[0,0]],"v":[[552,228],[552,-228],[0.001,76],[0.001,-228],[-407.999,-3.304],[-552,228.001]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":96,"ix":5},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[600.23,276],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[-68.053,0],[0,0],[0,-83.947],[68.053,0],[0,0],[0,68.053]],"o":[[0,0],[83.947,0],[0,83.947],[0,0],[-83.947,0],[0,-83.947]],"v":[[-400,-152],[400,-152],[552,0],[400,152],[-400,152],[-552,0]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.933333333333,0.933333333333,0.933333333333,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":96,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[600.23,504],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 2","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":240,"st":-61,"bm":0}],"markers":[]};
 
@@ -62,6 +180,34 @@ function createSvg<K extends keyof SVGElementTagNameMap>(
                 if (v !== undefined && v !== null) el.setAttribute(k, String(v));
             }
         }
+    }
+    return el;
+}
+
+function createDiv(o?: any): HTMLDivElement {
+    const doc = typeof document !== 'undefined' ? document : (typeof window !== 'undefined' ? window.document : null);
+    const win = (doc as any)?.win || (typeof window !== 'undefined' ? window : null);
+    const createFn = win && typeof win.createDiv === 'function' ? win.createDiv.bind(win) : (doc ? (doc as any)['createElement'].bind(doc) : null);
+    const el = createFn ? (win && typeof win.createDiv === 'function' ? createFn(o) : createFn('div')) : ({} as any);
+    if (typeof o === 'string') {
+        el.className = o;
+    } else if (o) {
+        if (o.cls) el.className = Array.isArray(o.cls) ? o.cls.join(' ') : o.cls;
+        if (o.text) el.textContent = o.text;
+    }
+    return el;
+}
+
+function createSpan(o?: any): HTMLSpanElement {
+    const doc = typeof document !== 'undefined' ? document : (typeof window !== 'undefined' ? window.document : null);
+    const win = (doc as any)?.win || (typeof window !== 'undefined' ? window : null);
+    const createFn = win && typeof win.createSpan === 'function' ? win.createSpan.bind(win) : (doc ? (doc as any)['createElement'].bind(doc) : null);
+    const el = createFn ? (win && typeof win.createSpan === 'function' ? createFn(o) : createFn('span')) : ({} as any);
+    if (typeof o === 'string') {
+        el.className = o;
+    } else if (o) {
+        if (o.cls) el.className = Array.isArray(o.cls) ? o.cls.join(' ') : o.cls;
+        if (o.text) el.textContent = o.text;
     }
     return el;
 }
@@ -1105,7 +1251,11 @@ const DEFAULT_SETTINGS: CanvasNesPluginSettings = {
         etherFloorLightIntensity: 0.85,
         etherSplashEmbers: true,
         etherSplashRatio: 0.30,
-        crtScreenShape: "vintage_bubble" // 'modern' | 'vintage_bubble'
+        crtScreenShape: "vintage_bubble", // 'modern' | 'vintage_bubble'
+        psxTextureSmoothing: true,
+        ps1EnhancedGraphics: true,
+        gameSpeed: 1.0,
+        romCheats: {}
     },
     sfxConfigs: {}
 };
@@ -1640,6 +1790,91 @@ class RetroAudioEngine {
 }
 
 class TetrisPanel {
+
+    public gameSpeed: number = 1.0;
+
+    public getActiveCheats(): string[] {
+        const currentRom = this.selectedVaultRomPath || (this.plugin.settings.activeSystem === 'psx' ? 'default_psx' : 'default_nes');
+        const romKey = path.basename(currentRom).toLowerCase();
+        const saved = (this.masterState as any).romCheats || {};
+        return saved[romKey] || [];
+    }
+
+    public setGameSpeed(speed: number): void {
+        this.gameSpeed = speed;
+        (this.masterState as any).gameSpeed = speed;
+        if (this.psxEngine) {
+            this.psxEngine.setSpeed(speed);
+        }
+        if (this.plugin && this.plugin.settings) {
+            this.plugin.settings.masterState = Object.assign({}, this.masterState);
+            this.plugin.saveSettings();
+        }
+    }
+
+    public applyNesCheats(): void {
+        if (!this.nes || !this.isRunning) return;
+        const cheats = this.getActiveCheats();
+        if (!cheats || cheats.length === 0) return;
+
+        for (const raw of cheats) {
+            const trimmed = raw.trim();
+            if (!trimmed) continue;
+
+            // Check RAM poke: 0072-01-09 or 0072:09
+            const ramMatch = trimmed.match(/^([0-9A-Fa-f]{4})[-:]([0-9A-Fa-f]{2})[-:]([0-9A-Fa-f]{2})$/) ||
+                             trimmed.match(/^([0-9A-Fa-f]{4})[:=]([0-9A-Fa-f]{2})$/);
+            if (ramMatch) {
+                const addr = parseInt(ramMatch[1], 16);
+                const val = parseInt(ramMatch[3] || ramMatch[2], 16);
+                if (this.nes.cpu && (this.nes.cpu as any).mem) {
+                    (this.nes.cpu as any).mem[addr & 0x07FF] = val;
+                }
+                continue;
+            }
+
+            // Game Genie code
+            const gg = decodeGameGenie(trimmed);
+            if (gg && this.nes.rom && (this.nes.rom as any).prg) {
+                const prg = (this.nes.rom as any).prg;
+                const offset = (gg.address - 0x8000) % prg.length;
+                if (offset >= 0 && offset < prg.length) {
+                    if (gg.compare === undefined || prg[offset] === gg.compare) {
+                        prg[offset] = gg.value;
+                    }
+                }
+            }
+        }
+    }
+
+        public openCheatModal(): void {
+        const isPSX = (this.plugin.settings.activeSystem === 'psx');
+        const currentRom = this.selectedVaultRomPath || (isPSX ? 'Default PS1 Game' : 'Default NES Game');
+        const romKey = path.basename(currentRom).toLowerCase();
+        const existingCheats = this.getActiveCheats();
+
+        const modal = new CheatModal(
+            this.plugin.app,
+            isPSX,
+            romKey,
+            existingCheats,
+            (rawLines) => {
+                if (!(this.masterState as any).romCheats) (this.masterState as any).romCheats = {};
+                (this.masterState as any).romCheats[romKey] = rawLines;
+
+                if (this.psxEngine) {
+                    this.psxEngine.setCheats(rawLines);
+                }
+                if (this.plugin && this.plugin.settings) {
+                    this.plugin.settings.masterState = Object.assign({}, this.masterState);
+                    this.plugin.saveSettings();
+                }
+                new Notice(`🧙‍♂️ Applied ${rawLines.length} cheat(s) for ${romKey}!`);
+            }
+        );
+        modal.open();
+    }
+
     private canvasView: any;
     private plugin: TetrisCanvasPlugin;
     private containerEl!: HTMLElement;
@@ -2370,35 +2605,31 @@ class TetrisPanel {
             return sec;
         };
 
-        // 1. Grid Resolution Slider (1x to 6x)
-        const resSliderContainer = createDiv();
-        setCssStyles(resSliderContainer, { display: 'flex' });
-        setCssStyles(resSliderContainer, { flexDirection: 'column' });
-        setCssStyles(resSliderContainer, { gap: '4px' });
+        
+        // 1. Grid Resolution Slider Card
+        const resSliderCard = createDiv();
+        resSliderCard.className = 'tetris-slider-card';
 
         const resHeaderRow = createDiv();
-        setCssStyles(resHeaderRow, { display: 'flex' });
-        setCssStyles(resHeaderRow, { justifyContent: 'space-between' });
-        setCssStyles(resHeaderRow, { alignItems: 'center' });
-        setCssStyles(resHeaderRow, { fontSize: '9px' });
-        setCssStyles(resHeaderRow, { color: '#a0a0a8' });
+        resHeaderRow.className = 'card-header';
 
         const resLabel = createSpan();
-        resLabel.innerText = 'Canvas Matrix Grid Resolution';
+        resLabel.className = 'card-title';
+        resLabel.innerText = 'CANVAS MATRIX GRID RESOLUTION';
 
         const resBadge = createSpan();
-        setCssStyles(resBadge, { color: '#00ff88', fontWeight: 'bold', fontFamily: 'monospace' });
+        resBadge.className = 'card-badge';
 
         resHeaderRow.appendChild(resLabel);
         resHeaderRow.appendChild(resBadge);
 
         const resMap: [number, number, string][] = [
-            [16, 15, '1x (16×15 — 240 nodes)'],
-            [32, 30, '2x (32×30 — 960 nodes)'],
-            [64, 60, '3x (64×60 — 3.8K nodes)'],
-            [128, 120, '4x (128×120 — 15.3K nodes)'],
-            [256, 240, '5x (256×240 — Native 1:1)'],
-            [512, 480, '6x (512×480 — Super-Res)']
+            [16, 15, '1x (16×15)'],
+            [32, 30, '2x (32×30)'],
+            [64, 60, '3x (64×60)'],
+            [128, 120, '4x (128×120)'],
+            [256, 240, '5x (Native 1:1)'],
+            [512, 480, '6x (Super-Res)']
         ];
 
         const resSlider = createEl('input');
@@ -2420,38 +2651,38 @@ class TetrisPanel {
             this.updateStatus();
         };
 
-        resSliderContainer.appendChild(resHeaderRow);
-        resSliderContainer.appendChild(resSlider);
+        const resDesc = createDiv();
+        resDesc.className = 'card-desc';
+        resDesc.innerText = 'Controls the Canvas node density and real-time physical pixel grid.';
 
-        // 2. Pixel Scale Slider (1x to 6x)
-        const pixelScaleSliderContainer = createDiv();
-        setCssStyles(pixelScaleSliderContainer, { display: 'flex' });
-        setCssStyles(pixelScaleSliderContainer, { flexDirection: 'column' });
-        setCssStyles(pixelScaleSliderContainer, { gap: '4px' });
+        resSliderCard.appendChild(resHeaderRow);
+        resSliderCard.appendChild(resDesc);
+        resSliderCard.appendChild(resSlider);
+
+        // 2. Pixel Scale Slider Card
+        const pixelScaleSliderCard = createDiv();
+        pixelScaleSliderCard.className = 'tetris-slider-card';
 
         const scaleHeaderRow = createDiv();
-        setCssStyles(scaleHeaderRow, { display: 'flex' });
-        setCssStyles(scaleHeaderRow, { justifyContent: 'space-between' });
-        setCssStyles(scaleHeaderRow, { alignItems: 'center' });
-        setCssStyles(scaleHeaderRow, { fontSize: '9px' });
-        setCssStyles(scaleHeaderRow, { color: '#a0a0a8' });
+        scaleHeaderRow.className = 'card-header';
 
         const scaleLabel = createSpan();
-        scaleLabel.innerText = 'Node Pixel Footprint Scale';
+        scaleLabel.className = 'card-title';
+        scaleLabel.innerText = 'NODE PIXEL FOOTPRINT SCALE';
 
         const scaleBadge = createSpan();
-        setCssStyles(scaleBadge, { color: '#00ff88', fontWeight: 'bold', fontFamily: 'monospace' });
+        scaleBadge.className = 'card-badge';
 
         scaleHeaderRow.appendChild(scaleLabel);
         scaleHeaderRow.appendChild(scaleBadge);
 
         const scaleMap: [number, string][] = [
-            [1, '1x (1px / node)'],
-            [2, '2x (2px / node)'],
-            [4, '3x (4px / node)'],
-            [8, '4x (8px / node)'],
-            [12, '5x (12px / node)'],
-            [16, '6x (16px / node)']
+            [1, '1x (1px)'],
+            [2, '2x (2px)'],
+            [4, '3x (4px)'],
+            [8, '4x (8px)'],
+            [12, '5x (12px)'],
+            [16, '6x (16px)']
         ];
 
         const pixelSlider = createEl('input');
@@ -2472,8 +2703,14 @@ class TetrisPanel {
             this.updateStatus();
         };
 
-        pixelScaleSliderContainer.appendChild(scaleHeaderRow);
-        pixelScaleSliderContainer.appendChild(pixelSlider);
+        const scaleDesc = createDiv();
+        scaleDesc.className = 'card-desc';
+        scaleDesc.innerText = 'Adjusts physical canvas node spacing and visual scaling dimensions.';
+
+        pixelScaleSliderCard.appendChild(scaleHeaderRow);
+        pixelScaleSliderCard.appendChild(scaleDesc);
+        pixelScaleSliderCard.appendChild(pixelSlider);
+
 
         const deltaSelect = createEl('select');
         deltaSelect.className = 'tetris-select';
@@ -2803,29 +3040,33 @@ class TetrisPanel {
         setCssStyles(overlayControlsGroup, { flexDirection: 'column' });
         setCssStyles(overlayControlsGroup, { gap: '6px' });
 
+        
         const ctrlBtn = createEl('button');
         ctrlBtn.className = 'tetris-btn secondary';
-        ctrlBtn.innerText = this.isControllerVisible ? '🎮 GAMEPAD CONTROLLER: ON' : '🎮 GAMEPAD CONTROLLER: OFF';
+        setCssStyles(ctrlBtn, { padding: '8px 10px', fontSize: '11px', whiteSpace: 'normal', lineHeight: '1.3' });
+        ctrlBtn.innerText = this.isControllerVisible ? '🎮 Gamepad Controller: ON' : '🎮 Gamepad Controller: OFF';
         ctrlBtn.onclick = () => {
             this.toggleControllerVisibility();
-            ctrlBtn.innerText = this.isControllerVisible ? '🎮 GAMEPAD CONTROLLER: ON' : '🎮 GAMEPAD CONTROLLER: OFF';
+            ctrlBtn.innerText = this.isControllerVisible ? '🎮 Gamepad Controller: ON' : '🎮 Gamepad Controller: OFF';
         };
 
         const crtBtn = createEl('button');
         crtBtn.className = 'tetris-btn secondary';
-        crtBtn.innerText = this.isCrtActive ? '📺 CRT SCANLINE SHADER: ON' : '📺 CRT SCANLINE SHADER: OFF';
+        setCssStyles(crtBtn, { padding: '8px 10px', fontSize: '11px', whiteSpace: 'normal', lineHeight: '1.3' });
+        crtBtn.innerText = this.isCrtActive ? '📺 CRT Scanlines: ON' : '📺 CRT Scanlines: OFF';
         crtBtn.onclick = () => {
             this.isCrtActive = !this.isCrtActive;
             if (this.crtOverlayEl) this.crtOverlayEl.classList.toggle('active', this.isCrtActive);
             if (this.overlayCanvas) this.overlayCanvas.classList.toggle('crt-curved', this.isCrtActive);
-            crtBtn.innerText = this.isCrtActive ? '📺 CRT SCANLINE SHADER: ON' : '📺 CRT SCANLINE SHADER: OFF';
+            crtBtn.innerText = this.isCrtActive ? '📺 CRT Scanlines: ON' : '📺 CRT Scanlines: OFF';
         };
 
         const screenShapeBtn = createEl('button');
         screenShapeBtn.className = 'tetris-btn secondary';
+        setCssStyles(screenShapeBtn, { padding: '8px 10px', fontSize: '11px', whiteSpace: 'normal', lineHeight: '1.3' });
         const updateShapeBtnText = () => {
             const isBubble = (this.masterState as any).crtScreenShape === 'vintage_bubble';
-            screenShapeBtn.innerText = isBubble ? '🕹️ SCREEN SHAPE: VINTAGE 1980s BUBBLE' : '📺 SCREEN SHAPE: MODERN FLAT CRT';
+            screenShapeBtn.innerText = isBubble ? '🕹️ Screen: Vintage Bubble CRT' : '📺 Screen: Flat Modern CRT';
         };
         updateShapeBtnText();
         screenShapeBtn.onclick = () => {
@@ -2837,13 +3078,147 @@ class TetrisPanel {
                 this.plugin.settings.masterState = Object.assign({}, this.masterState);
                 this.plugin.saveSettings();
             }
-            const isBubble = (this.masterState as any).crtScreenShape === 'vintage_bubble';
-            new Notice(isBubble ? '🕹️ Vintage 1980s Bubble CRT Shape Enabled (SMB3 Style)' : '📺 Modern Flat CRT Shape Enabled');
         };
 
         overlayControlsGroup.appendChild(ctrlBtn);
         overlayControlsGroup.appendChild(crtBtn);
         overlayControlsGroup.appendChild(screenShapeBtn);
+
+        
+        const smoothingBtn = createEl('button');
+        smoothingBtn.className = 'tetris-btn secondary';
+        setCssStyles(smoothingBtn, { padding: '8px 10px', fontSize: '11px', whiteSpace: 'normal', lineHeight: '1.3' });
+        const updateSmoothingText = () => {
+            const isSmooth = (this.masterState as any).psxTextureSmoothing !== false;
+            smoothingBtn.innerText = isSmooth ? '✨ PS1 Texture Smoothing: Bilinear (Smooth)' : '👾 PS1 Texture Smoothing: Crisp (Raw Pixels)';
+        };
+        updateSmoothingText();
+        smoothingBtn.onclick = () => {
+            const isSmooth = (this.masterState as any).psxTextureSmoothing !== false;
+            (this.masterState as any).psxTextureSmoothing = !isSmooth;
+            updateSmoothingText();
+            if (this.overlayCanvas) {
+                setCssStyles(this.overlayCanvas, {
+                    imageRendering: (!isSmooth) ? 'auto' : 'pixelated'
+                });
+            }
+            if (this.psxEngine) {
+                this.psxEngine.setTextureSmoothing(!isSmooth);
+            }
+            if (this.plugin && this.plugin.settings) {
+                this.plugin.settings.masterState = Object.assign({}, this.masterState);
+                this.plugin.saveSettings();
+            }
+            new Notice(!isSmooth ? '✨ PS1 Texture Smoothing: Bilinear Enabled' : '👾 PS1 Texture Smoothing: Crisp Pixels Enabled');
+        };
+        overlayControlsGroup.appendChild(smoothingBtn);
+
+        // Speed & Cheats Controls inside Advanced Settings
+        const speedAndCheatsGroup = createDiv();
+        setCssStyles(speedAndCheatsGroup, { display: 'flex', flexDirection: 'column', gap: '8px' });
+
+        const speedCard = createDiv();
+        speedCard.className = 'tetris-slider-card';
+
+        const speedHeader = createDiv();
+        speedHeader.className = 'card-header';
+        const speedTitle = createSpan();
+        speedTitle.className = 'card-title';
+        speedTitle.innerText = 'GAMEPLAY SPEED & SLOW-MOTION';
+        speedHeader.appendChild(speedTitle);
+        speedCard.appendChild(speedHeader);
+
+        
+        const speedSteps = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0, 4.0];
+        const speedStepperRow = createDiv();
+        setCssStyles(speedStepperRow, { display: 'flex', gap: '6px', alignItems: 'center', marginTop: '6px', width: '100%', boxSizing: 'border-box' });
+
+        const minusBtn = createEl('button');
+        minusBtn.className = 'tetris-btn secondary';
+        minusBtn.innerText = '➖';
+        setCssStyles(minusBtn, { width: '36px', minWidth: '36px', padding: '6px 4px', fontSize: '11px', fontWeight: 'bold' });
+
+        const speedDisplayBtn = createEl('button');
+        speedDisplayBtn.className = 'tetris-btn secondary';
+        setCssStyles(speedDisplayBtn, {
+            flex: '1',
+            minWidth: '0',
+            padding: '6px 8px',
+            fontSize: '11px',
+            fontFamily: 'monospace',
+            fontWeight: 'bold',
+            letterSpacing: '0.02em',
+            textAlign: 'center',
+            color: '#38bdf8',
+            background: 'rgba(15, 23, 42, 0.85)',
+            border: '1px solid rgba(56, 189, 248, 0.4)',
+            borderRadius: '5px',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+        });
+
+        const updateSpeedDisplay = () => {
+            const spd = this.gameSpeed || 1.0;
+            const isSlow = spd < 1.0;
+            const isFast = spd > 1.0;
+            const icon = isSlow ? '🐌 ' : (isFast ? '⚡ ' : '⏱️ ');
+            const label = (spd === 1.0) ? '1.0x NORMAL' : (isSlow ? `${spd.toFixed(2).replace(/\.00$/, '')}x SLOW` : `${spd.toFixed(2).replace(/\.00$/, '')}x FAST`);
+            speedDisplayBtn.innerText = `${icon}${label}`;
+        };
+        updateSpeedDisplay();
+
+
+        minusBtn.onclick = () => {
+            const cur = this.gameSpeed || 1.0;
+            const idx = speedSteps.findIndex(s => Math.abs(s - cur) < 0.01);
+            const newIdx = Math.max(0, (idx === -1 ? 3 : idx) - 1);
+            const nextSpeed = speedSteps[newIdx];
+            this.setGameSpeed(nextSpeed);
+            updateSpeedDisplay();
+            new Notice(`⏱️ Game Speed: ${nextSpeed}x`);
+        };
+
+        speedDisplayBtn.onclick = () => {
+            this.setGameSpeed(1.0);
+            updateSpeedDisplay();
+            new Notice('⏱️ Game Speed Reset to 1.0x Normal');
+        };
+
+        const plusBtn = createEl('button');
+        plusBtn.className = 'tetris-btn secondary';
+        plusBtn.innerText = '➕';
+        setCssStyles(plusBtn, { width: '36px', minWidth: '36px', padding: '6px 8px', fontSize: '12px', fontWeight: 'bold' });
+
+        plusBtn.onclick = () => {
+            const cur = this.gameSpeed || 1.0;
+            const idx = speedSteps.findIndex(s => Math.abs(s - cur) < 0.01);
+            const newIdx = Math.min(speedSteps.length - 1, (idx === -1 ? 3 : idx) + 1);
+            const nextSpeed = speedSteps[newIdx];
+            this.setGameSpeed(nextSpeed);
+            updateSpeedDisplay();
+            new Notice(`⏱️ Game Speed: ${nextSpeed}x`);
+        };
+
+        speedStepperRow.appendChild(minusBtn);
+        speedStepperRow.appendChild(speedDisplayBtn);
+        speedStepperRow.appendChild(plusBtn);
+        speedCard.appendChild(speedStepperRow);
+
+        const openCheatsBtn = createEl('button');
+        openCheatsBtn.className = 'tetris-btn secondary';
+        openCheatsBtn.innerText = '🧙‍♂️ OPEN CHEAT CODES MANAGER';
+        setCssStyles(openCheatsBtn, { padding: '9px 12px', fontSize: '12px', fontWeight: 'bold' });
+        openCheatsBtn.onclick = () => {
+            this.openCheatModal();
+        };
+
+        speedAndCheatsGroup.appendChild(speedCard);
+        speedAndCheatsGroup.appendChild(openCheatsBtn);
+
+
+
+
 
         const advContent = createDiv();
         advContent.className = 'tetris-advanced-content';
@@ -2863,8 +3238,9 @@ class TetrisPanel {
 
         advContent.appendChild(makeSection('ROM / GAME SELECTOR', romSelectContainer));
         advContent.appendChild(makeSection('DISPLAY & CONTROLLER OVERLAYS', overlayControlsGroup));
-        advContent.appendChild(makeSection('GRID RESOLUTION', resSliderContainer));
-        advContent.appendChild(makeSection('PIXEL SCALE', pixelScaleSliderContainer));
+        advContent.appendChild(makeSection('GAME SPEED & CHEAT CODES', speedAndCheatsGroup));
+        advContent.appendChild(makeSection('GRID RESOLUTION', resSliderCard));
+        advContent.appendChild(makeSection('PIXEL SCALE', pixelScaleSliderCard));
 
         this.containerEl.appendChild(advContent);
 
@@ -2998,6 +3374,7 @@ class TetrisPanel {
         actionBar.appendChild(powerBtn);
         actionBar.appendChild(resetBtn);
         actionBar.appendChild(saveStateBtn);
+
         actionBar.appendChild(loadStateBtn);
         actionBar.appendChild(muteBtn);
         actionBar.appendChild(minimizeBtn);
@@ -5913,16 +6290,14 @@ class TetrisPanel {
 
         this.overlayCtx.clearRect(0, 0, w, h);
 
-        // ── GPU ACCELERATED FAST PATH: ALWAYS 1-SHOT BLIT ───────
+                        // ── GPU ACCELERATED FAST PATH: ALWAYS 1-SHOT BLIT ───────
         if (this.isRunning && (this.selectedVaultRomPath || this.customRomString)) {
             if (this.plugin.settings.activeSystem === 'psx' && this.psxEngine) {
                 const psxCanvas = this.psxEngine.getCanvas();
                 if (psxCanvas) {
-                    this.overlayCtx.imageSmoothingEnabled = false;
                     this.overlayCtx.fillStyle = '#000000';
                     this.overlayCtx.fillRect(0, 0, w, h);
 
-                    // Authentic PS1 4:3 Fullscreen Edge-to-Edge Fill:
                     const srcW = psxCanvas.width;
                     const srcH = psxCanvas.height;
                     const cropY = (srcH >= 220) ? Math.round(srcH * (8 / 240)) : 0;
@@ -5930,10 +6305,11 @@ class TetrisPanel {
                     const activeW = srcW - cropX * 2;
                     const activeH = srcH - cropY * 2;
 
-                    this.overlayCtx.drawImage(
+                    applySubpixelEdgeAntiAliasing(
+                        this.overlayCtx,
                         psxCanvas,
                         cropX, cropY, activeW, activeH,
-                        0, 0, w, h
+                        w, h
                     );
                     return;
                 }
@@ -9787,9 +10163,9 @@ private updateDummyNode(preventSelect = false) {
         const padLeft = baseLeft + this.controllerOffset.x;
         const padTop = baseTop + this.controllerOffset.y;
 
-        // P0: Bottom Center of NES screen / CRT frame
+        // P0: Bottom Center of NES screen / CRT frame (tucked into bottom bezel)
         const p0x = minX + w / 2;
-        const p0y = minY + h;
+        const p0y = minY + h - 14;
 
         const effScale = 0.975 * this.controllerScale;
         const localX = isPSX ? 220 : 112; // Center for PS1, left for NES
@@ -10077,6 +10453,12 @@ private updateDummyNode(preventSelect = false) {
                         this.psxScreenMaterial.map = tex;
                         this.psxScreenMaterial.needsUpdate = true;
                     }
+                },
+                {
+                    textureSmoothing: (this.masterState as any).psxTextureSmoothing !== false,
+                    enhancedGraphics: (this.masterState as any).ps1EnhancedGraphics !== false,
+                    speed: this.gameSpeed || 1.0,
+                    cheats: this.getActiveCheats()
                 }
             );
 
@@ -10222,9 +10604,9 @@ private updateDummyNode(preventSelect = false) {
             window.addEventListener('keyup', this.onKeyUp, { capture: true } as any);
 
             let lastFrameTime = performance.now();
-            const frameInterval = 1000 / 60.0988;
-
             const loop = (now: number) => {
+                const speedMult = this.gameSpeed || 1.0;
+                const frameInterval = (1000 / 60.0988) / speedMult;
                 if (!this.isRunning) return;
                 this.rafId = window.requestAnimationFrame(loop);
 
@@ -10235,6 +10617,7 @@ private updateDummyNode(preventSelect = false) {
                     } else {
                         lastFrameTime += frameInterval;
                     }
+                    this.applyNesCheats();
                     this.nes.frame();
                 }
                 
