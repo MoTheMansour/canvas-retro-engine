@@ -211,12 +211,14 @@ export class PsxEngine {
                 bios: biosFiles,
                 retroarchConfig: {
                     'audio_sync': 'true',
-                    'audio_latency': '64',
+                    'audio_rate_control': 'true',
+                    'audio_rate_control_delta': '0.005',
                     'audio_max_timing_skew': '0.05',
-                    'audio_out_rate': '48000',
-                    'audio_resampler': 'linear',
+                    'audio_latency': '128',
+                    'audio_out_rate': '44100',
+                    'audio_resampler': 'sinc',
+                    'audio_resampler_quality': '1',
                     'video_vsync': 'true',
-                    'video_max_swapchain_images': '2',
                     'video_crop_overscan': 'true',
                     'video_scale_integer': 'false',
                     'video_aspect_ratio_auto': 'false',
@@ -225,13 +227,15 @@ export class PsxEngine {
                 },
                 retroarchCoreConfig: {
                     'pcsx_rearmed_show_bios_bootlogo': 'enabled',
-                    'pcsx_rearmed_dithering': this.enhancedGraphics ? 'disabled' : 'enabled',
-                    'pcsx_rearmed_neon_enhancement_enable': this.enhancedGraphics ? 'enabled' : 'disabled',
-                    'pcsx_rearmed_neon_enhancement_no_main': this.enhancedGraphics ? 'enabled' : 'disabled',
+                    'pcsx_rearmed_dithering': 'disabled',
+                    'pcsx_rearmed_neon_enhancement_enable': 'disabled',
+                    'pcsx_rearmed_neon_enhancement_no_main': 'disabled',
                     'pcsx_rearmed_spu_interpolation': 'simple',
                     'pcsx_rearmed_spu_reverb': 'enabled',
                     'pcsx_rearmed_frameskip': '0',
-                    'pcsx_rearmed_async_cd': 'async',
+                    'pcsx_rearmed_frameskip_threshold': '0',
+                    'pcsx_rearmed_async_cd': 'sync',
+                    'pcsx_rearmed_cd_access_time': 'fast',
                     'pcsx_rearmed_region': 'auto',
                     'pcsx_rearmed_pad_black_borders': 'disabled'
                 }
@@ -271,12 +275,15 @@ export class PsxEngine {
         }
     }
 
-    public async loadState(customBuffer?: ArrayBuffer | null): Promise<boolean> {
+    public async loadState(customBuffer?: ArrayBuffer | Uint8Array | Buffer | null): Promise<boolean> {
         if (!this.nostalgistInstance) return false;
         const targetBuffer = customBuffer || this.savedStateBuffer;
         if (!targetBuffer) return false;
         try {
-            const blob = new Blob([targetBuffer]);
+            const raw = (targetBuffer instanceof Uint8Array)
+                ? targetBuffer
+                : ((targetBuffer instanceof ArrayBuffer) ? new Uint8Array(targetBuffer) : new Uint8Array((targetBuffer as any).buffer || targetBuffer));
+            const blob = new Blob([raw]);
             await this.nostalgistInstance.loadState(blob);
             return true;
         } catch (e) {
@@ -380,29 +387,46 @@ export class PsxEngine {
     public sendInput(buttonNum: number, isDown: boolean) {
         if (!this.nostalgistInstance) return;
         
-        // Map our button numbers to the default RetroArch Libretro keyboard keys
-        const keyMap: Record<number, string> = {
-            0: 'KeyZ', // 0 = Cross (mapped to K in main.ts) -> Libretro B (Z)
-            1: 'KeyA', // 1 = Square (mapped to J in main.ts) -> Libretro Y (A)
-            8: 'KeyX', // 8 = Circle (mapped to L in main.ts) -> Libretro A (X)
-            9: 'KeyS', // 9 = Triangle (mapped to I in main.ts) -> Libretro X (S)
-            10: 'KeyQ', // 10 = L1 (mapped to U in main.ts) -> Libretro L
-            11: 'Digit1', // 11 = L2 (mapped to E in main.ts) -> Libretro L2
-            12: 'KeyW', // 12 = R1 (mapped to Y/R/U in main.ts) -> Libretro R
-            13: 'Digit2', // 13 = R2 (mapped to O in main.ts) -> Libretro R2
-            2: 'ShiftRight', 3: 'Enter', // Select and Start
-            4: 'ArrowUp', 5: 'ArrowDown', 6: 'ArrowLeft', 7: 'ArrowRight',
+        // Accurate Libretro RetroPad mapping:
+        // 0: Cross (✕) -> Libretro B (KeyZ)
+        // 1: Square (□) -> Libretro Y (KeyA)
+        // 8: Circle (○) -> Libretro A (KeyX)
+        // 9: Triangle (△) -> Libretro X (KeyS)
+        // 10: L1 -> Libretro L1 (KeyQ)
+        // 11: L2 -> Libretro L2 (Digit1)
+        // 12: R1 -> Libretro R1 (KeyW)
+        // 13: R2 -> Libretro R2 (Digit2)
+        // 2: Select -> Libretro Select (ShiftRight)
+        // 3: Start -> Libretro Start (Enter)
+        // 4, 5, 6, 7: D-Pad Up, Down, Left, Right
+        const keyMap: Record<number, { code: string; key: string; keyCode: number }> = {
+            0: { code: 'KeyZ', key: 'z', keyCode: 90 },
+            1: { code: 'KeyA', key: 'a', keyCode: 65 },
+            8: { code: 'KeyX', key: 'x', keyCode: 88 },
+            9: { code: 'KeyS', key: 's', keyCode: 83 },
+            10: { code: 'KeyQ', key: 'q', keyCode: 81 },
+            11: { code: 'Digit1', key: '1', keyCode: 49 },
+            12: { code: 'KeyW', key: 'w', keyCode: 87 },
+            13: { code: 'Digit2', key: '2', keyCode: 50 },
+            2: { code: 'ShiftRight', key: 'Shift', keyCode: 16 },
+            3: { code: 'Enter', key: 'Enter', keyCode: 13 },
+            4: { code: 'ArrowUp', key: 'ArrowUp', keyCode: 38 },
+            5: { code: 'ArrowDown', key: 'ArrowDown', keyCode: 40 },
+            6: { code: 'ArrowLeft', key: 'ArrowLeft', keyCode: 37 },
+            7: { code: 'ArrowRight', key: 'ArrowRight', keyCode: 39 },
         };
-        const code = keyMap[buttonNum];
-        if (!code) return;
+        const mapping = keyMap[buttonNum];
+        if (!mapping) return;
 
         // Dispatch synthetic KeyboardEvent to document so Emscripten natively catches it
         const event = new KeyboardEvent(isDown ? 'keydown' : 'keyup', {
-            code: code,
-            key: code.replace('Key', '').replace('Arrow', ''),
+            code: mapping.code,
+            key: mapping.key,
+            which: mapping.keyCode,
+            keyCode: mapping.keyCode,
             bubbles: true,
             cancelable: true
-        });
+        } as any);
         document.dispatchEvent(event);
     }
 

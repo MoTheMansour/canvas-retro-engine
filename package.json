@@ -1,6 +1,6 @@
 {
   "name": "canvas-retro-engine",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Play 8-bit NES and 32-bit PlayStation 1 games directly on Canvas with interactive 3D console hardware, CRT screen shaders, and tactile gamepad overlays.",
   "main": "main.js",
   "scripts": {

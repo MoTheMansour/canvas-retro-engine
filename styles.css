@@ -2541,3 +2541,141 @@
   gap: 6px;
   margin-bottom: 8px;
 }
+
+/* ── RETRO ENGINE STARTER HUB MODAL ──────────────────────────────────── */
+.retro-get-roms-modal {
+  padding: 18px 22px !important;
+  color: #e2e8f0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.retro-get-roms-desc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+.retro-get-roms-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.retro-get-roms-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+}
+
+.retro-get-roms-card:hover {
+  border-color: rgba(56, 189, 248, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(56, 189, 248, 0.2);
+}
+
+.retro-get-roms-card.card-launchbox:hover {
+  border-color: rgba(255, 215, 0, 0.6);
+  box-shadow: 0 12px 30px rgba(255, 215, 0, 0.2);
+}
+
+.retro-get-roms-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.retro-get-roms-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.retro-get-roms-card-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #f8fafc;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.retro-get-roms-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-launchbox .retro-get-roms-badge {
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd700;
+  border-color: rgba(255, 215, 0, 0.35);
+}
+
+.retro-get-roms-card p {
+  margin: 0;
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.retro-get-roms-btn {
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #f1f5f9;
+  transition: all 0.18s ease;
+}
+
+.retro-get-roms-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+}
+
+.retro-get-roms-btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+  width: 100%;
+}
+
+.retro-get-roms-btn-row .retro-get-roms-btn {
+  flex: 1;
+  text-align: center;
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.retro-get-roms-btn.mod-cta {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+}
+
+.retro-get-roms-btn.mod-cta:hover {
+  background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+  box-shadow: 0 6px 16px rgba(56, 189, 248, 0.6);
+}
