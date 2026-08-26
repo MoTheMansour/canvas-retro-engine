@@ -1,12 +1,22 @@
 # Canvas Retro Engine 🕹️
 
-[![Release](https://img.shields.io/badge/Release-v1.2.0-blue.svg?style=for-the-badge)](https://github.com/Momansour97/canvas-retro-engine)
+> **Play 8-bit NES and 32-bit PlayStation 1 games directly on the Obsidian Canvas with interactive 3D console hardware, tactile mechanical controls, vintage CRT TV shaders, physical gamepad support, and live interactive controller overlays.**
+
+[![Release](https://img.shields.io/badge/Release-v1.2.0-blue.svg?style=for-the-badge)](https://github.com/MoTheMansour/canvas-retro-engine/releases/tag/1.2.0)
 [![Obsidian](https://img.shields.io/badge/Obsidian-v1.0.0+-7C3AED?style=for-the-badge&logo=obsidian)](https://obsidian.md)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 
-Play 8-bit NES and 32-bit PlayStation 1 games directly on the Obsidian Canvas with interactive 3D console hardware, tactile mechanical controls, vintage CRT TV shaders, physical gamepad support, and live interactive controller overlays.
-
 ---
+
+## 🕹️ Overview
+
+**Canvas Retro Engine** brings the magic of retro gaming hardware right into your Obsidian canvas workspace. Whether you're researching game design, taking notes on retro classics, or relaxing between deep thought sessions, Canvas Retro Engine offers a hardware-accurate, tactile 3D emulation experience with zero external software required.
+
+- **🎮 8-bit NES & 32-bit PlayStation 1**: Full high-performance emulation with pristine 60 FPS gameplay and synchronized audio.
+- **✨ Interactive 3D Consoles**: Physically manipulable Three.js hardware with opening disc lids, inserted cartridges, and jewel case box art.
+- **📺 Authentic CRT TV Experience**: Scanlines, curvature distortion, RGB phosphors, and screen glass shaders.
+- **🕹️ Tactile Controls**: Physical USB/Bluetooth gamepad support, live on-screen controller indentation, and full keyboard keybindings.
+
 
 ## ✨ What's New in v1.2.0
 
